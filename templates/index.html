@@ -6,107 +6,103 @@
     <link rel="stylesheet" href="/static/style.css">
 </head>
 
-<body class="page-home">
-<div class="page">
+<body>
 
-    <!-- HEADER -->
-    <header class="header">
-        <div class="logo">
-            <img src="/static/logo_fw.png" alt="FastWork" class="logo-img">
-            <span class="logo-text">FastWork</span>
-        </div>
-        <nav class="nav">
-            <a href="/jobs">Jobs</a>
-            <a href="/post-job">Poster un job</a>
-            <a href="/admin/login">Admin</a>
-        </nav>
-    </header>
+<header class="header">
+    <div class="logo">
+        <img src="/static/logo_fw.png" alt="FastWork" height="35">
+        <span>FastWork</span>
+    </div>
+
+    <nav class="nav-links">
+        <a href="/jobs">Chercher un job</a>
+        <a href="/post-job">Poster un job</a>
+    </nav>
+</header>
+
+<main class="page">
 
     <!-- HERO SECTION -->
-    <main>
-        <section class="hero">
+    <section class="hero">
+        <div class="hero-text">
+            <p class="badge">Version test · Plateforme locale</p>
 
-            <h2 class="hero-subtitle">
-                Nouveau Plateforme test — version développeur locale
-            </h2>
-
-            <h1 class="hero-title">
-                Trouve un job <span class="text-green">aujourd’hui</span>,<br>
-                sois payé <span class="text-blue">ce soir</span>.
+            <h1>
+                Trouve un job aujourd’hui,<br>
+                sois payé ce soir.
             </h1>
 
-            <p class="hero-text">
+            <p class="subtitle">
                 FastWork connecte les travailleurs disponibles avec des jobs simples :
-                déménagement, nettoyage, montage de meubles, jardinage, aide en entrepôt…
+                déménagement, nettoyage, montage de meubles, aide en entrepôt, jardinage, et plus.
             </p>
 
             <div class="hero-buttons">
-                <a href="/jobs" class="btn-primaire">Je cherche un job</a>
-                <a href="/post-job" class="btn-secondaire">Je poste un job</a>
+                <a href="/jobs" class="primary-btn">Je cherche un job</a>
+                <a href="/post-job" class="secondary-btn">Je poste un job</a>
             </div>
 
-            <p class="hero-note">
-                Version locale pour test — la vraie plateforme viendra après.
+            <ul class="hero-list">
+                <li>📍 Jobs locaux (version test)</li>
+                <li>⏱ Missions de quelques heures ou une journée</li>
+                <li>💵 Paiement en fin de job</li>
+            </ul>
+        </div>
+
+        <div class="hero-card">
+            <h2>Jobs du jour (exemples)</h2>
+
+            <ul class="jobs-list">
+                <li>
+                    <strong>Aide en entrepôt</strong> — 6h · 120$<br>
+                    <small>Tri et chargement léger.</small>
+                </li>
+                <li>
+                    <strong>Déménagement</strong> — 1 journée · 180$<br>
+                    <small>Aide à porter cartons & meubles.</small>
+                </li>
+                <li>
+                    <strong>Nettoyage Airbnb</strong> — 4h · 90$<br>
+                    <small>Ménage rapide après départ des invités.</small>
+                </li>
+            </ul>
+
+            <p class="note">
+                * Jobs affichés uniquement pour la démo.
             </p>
+        </div>
+    </section>
 
-        </section>
+    <!-- HOW IT WORKS -->
+    <section class="how-it-works">
+        <h2>Comment ça marche ?</h2>
 
-
-        <!-- JOBS DU JOUR -->
-        <section class="daily-jobs">
-            <div class="daily-card">
-                <h3>Jobs du jour (exemple)</h3>
-                <p>Aperçu de ce que FastWork pourra proposer :</p>
-
-                <ul class="daily-list">
-                    <li>📦 Aide en entrepôt — 6h $120</li>
-                    <li>🚚 Déménagement — 1 journée $180</li>
-                    <li>🧽 Nettoyage AirBnb — 4h $90</li>
-                </ul>
-
-                <p class="daily-note">
-                    Paiement en fin de journée • Exemples pour la démo.
-                </p>
+        <div class="steps">
+            <div class="step">
+                <span class="step-number">1</span>
+                <h3>Choisis un job</h3>
+                <p>Consulte la liste et sélectionne une mission qui t’arrange.</p>
             </div>
-        </section>
 
-
-        <!-- JOBS DEMO -->
-        <section class="jobs-demo">
-            <h2 class="section-title">Jobs disponibles (démo)</h2>
-            <p>Exemple de liste de jobs. Plus tard ce sera connecté à une base de données.</p>
-
-            <div class="jobs-grid">
-
-                <div class="job-card">
-                    <h3>Aide déménageur</h3>
-                    <p>📍 Portland • Aujourd’hui</p>
-                    <p class="job-price">$180 / jour</p>
-                    <p class="job-type">Client vérifié • Cash ou Zelle</p>
-                    <a href="/jobs" class="btn-mini">Je suis intéressé</a>
-                </div>
-
-                <div class="job-card">
-                    <h3>Nettoyage maison</h3>
-                    <p>📍 Beaverton • Demain matin</p>
-                    <p class="job-price">$110 / mission</p>
-                    <p class="job-type">Matériel fourni sur place</p>
-                    <a href="/jobs" class="btn-mini">Je suis intéressé</a>
-                </div>
-
-                <div class="job-card">
-                    <h3>Montage de meubles</h3>
-                    <p>📍 Gresham • Cette semaine</p>
-                    <p class="job-price">$95 / mission</p>
-                    <p class="job-type">Client particulier</p>
-                    <a href="/jobs" class="btn-mini">Je suis intéressé</a>
-                </div>
-
+            <div class="step">
+                <span class="step-number">2</span>
+                <h3>Contacte le client</h3>
+                <p>Vous validez ensemble l’heure, le lieu et la rémunération.</p>
             </div>
-        </section>
 
-    </main>
+            <div class="step">
+                <span class="step-number">3</span>
+                <h3>Travaille & sois payé</h3>
+                <p>Tu fais la mission, tu es payé en fin de job. Simple.</p>
+            </div>
+        </div>
+    </section>
 
-</div>
+</main>
+
+<footer class="footer">
+    <p>© 2025 FastWork · Version démo · Tous droits réservés</p>
+</footer>
+
 </body>
 </html>
