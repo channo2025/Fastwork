@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Espace admin · Jobs publiés</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="page-admin">
+<div class="page">
+
+    <header>
+        <div class="logo">
+            <div class="logo-badge">FW</div>
+            <div>
+                <div class="logo-text">FastWork</div>
+                <div class="tagline">Quick jobs. Real cash.</div>
+            </div>
+        </div>
+
+        <div class="cta">
+            <a href="/jobs" class="back-btn">&larr; Retour à la liste publique</a>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div>
+                <h1 class="hero-title">Espace admin · <span>Jobs publiés</span></h1>
+                <p class="hero-subtitle">
+                    Voici tous les jobs enregistrés dans la base FastWork.
+                </p>
+            </div>
+
+            <div>
+                <a href="/post-job" class="primary-btn">+ Poster un nouveau job</a>
+            </div>
+        </section>
+
+        <section class="jobs-section">
+            <h2>Jobs en base</h2>
+
+            {% if jobs %}
+                <div class="jobs-grid">
+                    {% for job in jobs %}
+                        <article class="job-card">
+                            <div class="job-top-row">
+                                <div>
+                                    <div class="job-title">{{ job.title }}</div>
+                                    {% if job.badge %}
+                                        <div class="job-badge">{{ job.badge }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="job-meta">
+                                📍 {{ job.location }}<br>
+                                ⏰ {{ job.hours }}
+                            </div>
+
+                            <div class="job-price">
+                                {{ job.price }}
+                            </div>
+
+                            <div class="job-footer">
+                                <span>{{ job.client }}</span>
+                                <a href="/job/{{ job.id }}" class="ghost-btn">
+                                    Voir la fiche publique
+                                </a>
+                            </div>
+                        </article>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p>Aucun job pour le moment.</p>
+            {% endif %}
+        </section>
+    </main>
+
+</div>
+</body>
+</html>

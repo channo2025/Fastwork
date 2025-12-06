@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ job.title }} – FastWork</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="page">
+<div class="page">
+
+    <header class="site-header">
+        <div class="logo">
+            <div class="logo-badge">FW</div>
+            <div>
+                <div class="logo-text">FastWork</div>
+                <div class="tagline">Quick jobs. Real cash.</div>
+            </div>
+        </div>
+
+        <nav class="main-nav">
+            <a href="/jobs" class="nav-link">← Back to jobs</a>
+            <a href="/post-job" class="nav-link">Post a job</a>
+        </nav>
+    </header>
+
+    <main>
+
+        <!-- HEADER / SUMMARY -->
+        <section class="job-detail-hero">
+            <h1 class="hero-title">{{ job.title }}</h1>
+
+            <p class="hero-subtitle">
+                📍 {{ job.location }} • {{ job.hours }} • ${{ job.price }}
+            </p>
+
+            {% if job.badge %}
+                <div class="job-badge-large">{{ job.badge }}</div>
+            {% endif %}
+        </section>
+
+        <!-- BODY -->
+        <section class="job-detail-body">
+
+            <div class="job-detail-block">
+                <h2>Job description</h2>
+                <p>
+                    {% if job.description %}
+                        {{ job.description }}
+                    {% else %}
+                        No description provided for this job yet.
+                    {% endif %}
+                </p>
+            </div>
+
+            <div class="job-detail-block">
+                <h2>Client information</h2>
+                <ul class="job-detail-list">
+                    <li>
+                        <strong>Client type:</strong>
+                        {% if job.client %}
+                            {{ job.client }}
+                        {% else %}
+                            Not specified
+                        {% endif %}
+                    </li>
+                    <li>
+                        <strong>Contact email:</strong>
+                        {% if job.contact_email %}
+                            {{ job.contact_email }}
+                        {% else %}
+                            Not provided
+                        {% endif %}
+                    </li>
+                    <li>
+                        <strong>Contact phone:</strong>
+                        {% if job.contact_phone %}
+                            {{ job.contact_phone }}
+                        {% else %}
+                            Not provided
+                        {% endif %}
+                    </li>
+                </ul>
+            </div>
+
+            <div class="job-detail-actions">
+                <a href="/job/{{ job.id }}/apply" class="primary-btn">
+                    I’m interested in this job
+                </a>
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+</body>
+</html>

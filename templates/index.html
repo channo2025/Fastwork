@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>FastWork – Trouve un job aujourd’hui</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body class="page-home">
+<div class="page">
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="logo">
+            <img src="/static/logo_fw.png" alt="FastWork" class="logo-img">
+            <span class="logo-text">FastWork</span>
+        </div>
+        <nav class="nav">
+            <a href="/jobs">Jobs</a>
+            <a href="/post-job">Poster un job</a>
+            <a href="/admin/login">Admin</a>
+        </nav>
+    </header>
+
+    <!-- HERO SECTION -->
+    <main>
+        <section class="hero">
+
+            <h2 class="hero-subtitle">
+                Nouveau Plateforme test — version développeur locale
+            </h2>
+
+            <h1 class="hero-title">
+                Trouve un job <span class="text-green">aujourd’hui</span>,<br>
+                sois payé <span class="text-blue">ce soir</span>.
+            </h1>
+
+            <p class="hero-text">
+                FastWork connecte les travailleurs disponibles avec des jobs simples :
+                déménagement, nettoyage, montage de meubles, jardinage, aide en entrepôt…
+            </p>
+
+            <div class="hero-buttons">
+                <a href="/jobs" class="btn-primaire">Je cherche un job</a>
+                <a href="/post-job" class="btn-secondaire">Je poste un job</a>
+            </div>
+
+            <p class="hero-note">
+                Version locale pour test — la vraie plateforme viendra après.
+            </p>
+
+        </section>
+
+
+        <!-- JOBS DU JOUR -->
+        <section class="daily-jobs">
+            <div class="daily-card">
+                <h3>Jobs du jour (exemple)</h3>
+                <p>Aperçu de ce que FastWork pourra proposer :</p>
+
+                <ul class="daily-list">
+                    <li>📦 Aide en entrepôt — 6h $120</li>
+                    <li>🚚 Déménagement — 1 journée $180</li>
+                    <li>🧽 Nettoyage AirBnb — 4h $90</li>
+                </ul>
+
+                <p class="daily-note">
+                    Paiement en fin de journée • Exemples pour la démo.
+                </p>
+            </div>
+        </section>
+
+
+        <!-- JOBS DEMO -->
+        <section class="jobs-demo">
+            <h2 class="section-title">Jobs disponibles (démo)</h2>
+            <p>Exemple de liste de jobs. Plus tard ce sera connecté à une base de données.</p>
+
+            <div class="jobs-grid">
+
+                <div class="job-card">
+                    <h3>Aide déménageur</h3>
+                    <p>📍 Portland • Aujourd’hui</p>
+                    <p class="job-price">$180 / jour</p>
+                    <p class="job-type">Client vérifié • Cash ou Zelle</p>
+                    <a href="/jobs" class="btn-mini">Je suis intéressé</a>
+                </div>
+
+                <div class="job-card">
+                    <h3>Nettoyage maison</h3>
+                    <p>📍 Beaverton • Demain matin</p>
+                    <p class="job-price">$110 / mission</p>
+                    <p class="job-type">Matériel fourni sur place</p>
+                    <a href="/jobs" class="btn-mini">Je suis intéressé</a>
+                </div>
+
+                <div class="job-card">
+                    <h3>Montage de meubles</h3>
+                    <p>📍 Gresham • Cette semaine</p>
+                    <p class="job-price">$95 / mission</p>
+                    <p class="job-type">Client particulier</p>
+                    <a href="/jobs" class="btn-mini">Je suis intéressé</a>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+</div>
+</body>
+</html>

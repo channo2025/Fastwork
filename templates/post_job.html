@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Post a job – FastWork</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body class="page-admin">
+<div class="page">
+
+    <header class="site-header">
+        <div class="logo">
+            <div class="logo-badge">FW</div>
+            <div>
+                <div class="logo-text">FastWork</div>
+                <div class="tagline">Quick jobs. Real cash.</div>
+            </div>
+        </div>
+
+        <nav class="main-nav">
+            <a href="/admin/jobs" class="nav-link">Admin – Jobs</a>
+            <a href="/admin/applications" class="nav-link">Applications</a>
+            <a href="/jobs" class="nav-link">Public jobs</a>
+        </nav>
+    </header>
+
+    <main>
+
+        <section class="hero">
+            <h1 class="hero-title">Post a new job</h1>
+            <p class="hero-subtitle">
+                Fill in the details below to publish a job on FastWork.
+            </p>
+        </section>
+
+        <section class="job-card-detail">
+
+            <form class="apply-form" method="post" action="/post-job">
+
+                <!-- TITLE -->
+                <div class="form-row">
+                    <label for="title">Job title</label>
+                    <input
+                        id="title"
+                        name="title"
+                        type="text"
+                        placeholder="Ex: Moving helper, house cleaning, dishwashing"
+                        required
+                    >
+                </div>
+
+                <!-- LOCATION -->
+                <div class="form-row">
+                    <label for="location">City / Area</label>
+                    <input
+                        id="location"
+                        name="location"
+                        type="text"
+                        placeholder="Ex: Portland, Beaverton, Gresham"
+                        required
+                    >
+                </div>
+
+                <!-- PRICE -->
+                <div class="form-row">
+                    <label for="price">Pay ($)</label>
+                    <input
+                        id="price"
+                        name="price"
+                        type="number"
+                        min="0"
+                        placeholder="Ex: 150"
+                        required
+                    >
+                    <small>Enter a number only (no $ sign).</small>
+                </div>
+
+                <!-- HOURS / DATE -->
+                <div class="form-row">
+                    <label for="hours">Date / Schedule</label>
+                    <input
+                        id="hours"
+                        name="hours"
+                        type="text"
+                        placeholder="Ex: Saturday 9am–3pm, Today 2pm–6pm"
+                        required
+                    >
+                </div>
+
+                <!-- BADGE -->
+                <div class="form-row">
+                    <label for="badge">Badge (optional)</label>
+                    <input
+                        id="badge"
+                        name="badge"
+                        type="text"
+                        placeholder="Ex: Today, Urgent, Premium client"
+                    >
+                </div>
+
+                <!-- CLIENT TYPE -->
+                <div class="form-row">
+                    <label for="client">Client type (optional)</label>
+                    <input
+                        id="client"
+                        name="client"
+                        type="text"
+                        placeholder="Ex: Individual, Small business, Restaurant"
+                    >
+                </div>
+
+                <!-- DESCRIPTION -->
+                <div class="form-row">
+                    <label for="description">Job description</label>
+                    <textarea
+                        id="description"
+                        name="description"
+                        rows="5"
+                        placeholder="Describe the tasks, physical effort, dress code, language, etc."
+                        required
+                    ></textarea>
+                </div>
+
+                <hr>
+
+                <h2>Client contact information</h2>
+
+                <!-- CONTACT EMAIL -->
+                <div class="form-row">
+                    <label for="contact_email">Client email</label>
+                    <input
+                        id="contact_email"
+                        name="contact_email"
+                        type="email"
+                        placeholder="Ex: client@example.com"
+                    >
+                </div>
+
+                <!-- CONTACT PHONE -->
+                <div class="form-row">
+                    <label for="contact_phone">Client phone</label>
+                    <input
+                        id="contact_phone"
+                        name="contact_phone"
+                        type="text"
+                        placeholder="Ex: +1 503 000 0000"
+                    >
+                </div>
+
+                <!-- CONTACT SMS TOGGLE -->
+                <div class="form-row checkbox-row">
+                    <label>
+                        <input
+                            type="checkbox"
+                            name="contact_sms"
+                            value="1"
+                        >
+                        Client accepts to receive SMS for new applications
+                    </label>
+                </div>
+
+                <div class="form-row">
+                    <button type="submit" class="primary-btn">
+                        Publish job
+                    </button>
+                </div>
+
+            </form>
+
+        </section>
+
+    </main>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Application sent – FastWork</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="page-apply">
+<div class="page">
+
+<main>
+
+    <section class="success-hero">
+        <h1>Application sent ✅</h1>
+        <p class="success-subtitle">
+            Your application for <strong>{{ job.title }}</strong> has been sent to the client.
+        </p>
+    </section>
+
+    <section class="success-body">
+        {% if application %}
+            <p>
+                We shared the following information with the client:
+            </p>
+            <ul class="success-list">
+                <li><strong>Name:</strong> {{ application.full_name }}</li>
+                <li><strong>Phone:</strong> {{ application.phone }}</li>
+                <li><strong>Email:</strong> {{ application.email }}</li>
+                <li><strong>Experience:</strong> {{ application.experience or application.message }}</li>
+            </ul>
+        {% endif %}
+
+        <a href="/jobs" class="primary-btn">
+            Back to jobs
+        </a>
+    </section>
+
+</main>
+
+</div>
+</body>
+</html>
