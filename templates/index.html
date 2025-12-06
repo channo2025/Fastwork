@@ -2,557 +2,503 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>FastWork – Find or Offer Quick Jobs Near You</title>
+  <title>FastWork – Digital Task Platform</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta
-    name="description"
-    content="FastWork is a digital platform that connects people who need help with workers available for quick tasks near them."
-  />
 
-  <!-- Basic styling (you can replace later with your own CSS file) -->
   <style>
-    :root {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-        sans-serif;
-      color-scheme: light;
-    }
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-    body {
-      background: #f5f5f7;
-      color: #111827;
-      line-height: 1.6;
-    }
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
-    header,
-    main,
-    footer {
-      max-width: 1080px;
-      margin: 0 auto;
-      padding: 1.5rem;
-    }
+:root {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  color-scheme: light;
+  --fw-bg: #050816;
+  --fw-bg-soft: #0b1020;
+  --fw-card: #0f172a;
+  --fw-border: rgba(148, 163, 184, 0.35);
+  --fw-text: #e5e7eb;
+  --fw-muted: #9ca3af;
+  --fw-accent: #f97316;
+  --fw-accent-soft: rgba(249, 115, 22, 0.15);
+  --fw-accent-2: #ec4899;
+}
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+body {
+  min-height: 100vh;
+  background: radial-gradient(circle at top left, #1e293b 0, #020617 50%);
+  color: var(--fw-text);
+  line-height: 1.6;
+}
+a {
+  text-decoration: none;
+  color: inherit;
+}
+header,
+main,
+footer {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
 
-    /* Top nav */
-    .nav {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0.75rem 0;
-    }
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      font-weight: 700;
-      font-size: 1.25rem;
-    }
-    .logo-mark {
-      width: 28px;
-      height: 28px;
-      border-radius: 999px;
-      background: linear-gradient(135deg, #f97316, #ef4444);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #fff;
-      font-size: 0.75rem;
-    }
-    .nav-links {
-      display: flex;
-      gap: 1.25rem;
-      font-size: 0.95rem;
-    }
-    .nav-links a {
-      opacity: 0.8;
-    }
-    .nav-links a:hover {
-      opacity: 1;
-    }
+/* Glass effect wrapper */
+header,
+main {
+  backdrop-filter: blur(18px);
+}
 
-    /* Hero */
-    .hero {
-      display: grid;
-      grid-template-columns: minmax(0, 2fr) minmax(0, 1.6fr);
-      gap: 2rem;
-      align-items: center;
-      padding: 2.5rem 0 2rem;
-    }
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      padding: 0.25rem 0.7rem;
-      border-radius: 999px;
-      background: #fee2e2;
-      color: #b91c1c;
-      font-size: 0.75rem;
-      font-weight: 600;
-      margin-bottom: 0.75rem;
-    }
-    .hero-title {
-      font-size: clamp(2.1rem, 3.2vw, 2.8rem);
-      line-height: 1.05;
-      margin-bottom: 1rem;
-      font-weight: 800;
-      letter-spacing: -0.03em;
-    }
-    .hero-subtitle {
-      font-size: 1rem;
-      max-width: 34rem;
-      color: #4b5563;
-      margin-bottom: 1.5rem;
-    }
-    .hero-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.75rem;
-      margin-bottom: 0.8rem;
-    }
-    .btn {
-      border-radius: 999px;
-      padding: 0.7rem 1.4rem;
-      font-size: 0.95rem;
-      font-weight: 600;
-      border: 1px solid transparent;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.4rem;
-    }
-    .btn-primary {
-      background: linear-gradient(135deg, #f97316, #ef4444);
-      color: #fff;
-    }
-    .btn-outline {
-      background: #fff;
-      border-color: #e5e7eb;
-      color: #111827;
-    }
-    .hero-note {
-      font-size: 0.85rem;
-      color: #6b7280;
-    }
+/* Top nav */
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  margin-top: 0.6rem;
+  border-radius: 999px;
+  background: linear-gradient(
+      135deg,
+      rgba(15, 23, 42, 0.92),
+      rgba(15, 23, 42, 0.86)
+    );
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.85);
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+.logo-mark {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  background: radial-gradient(circle at 20% 20%, #fef3c7, #f97316);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #111827;
+  font-size: 0.75rem;
+  box-shadow: 0 8px 18px rgba(248, 113, 22, 0.65);
+}
+.nav-links {
+  display: flex;
+  gap: 1.4rem;
+  font-size: 0.9rem;
+}
+.nav-links a {
+  opacity: 0.8;
+}
+.nav-links a:hover {
+  opacity: 1;
+  color: var(--fw-accent);
+}
 
-    .hero-card {
-      background: #ffffff;
-      border-radius: 1.25rem;
-      padding: 1.5rem;
-      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.18);
-      border: 1px solid #e5e7eb;
-    }
-    .hero-card-title {
-      font-weight: 700;
-      margin-bottom: 0.5rem;
-      font-size: 1rem;
-    }
-    .hero-card-sub {
-      font-size: 0.85rem;
-      color: #6b7280;
-      margin-bottom: 0.9rem;
-    }
-    .stat-row {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 0.5rem;
-      font-size: 0.85rem;
-    }
-    .stat-value {
-      font-weight: 700;
-      color: #111827;
-    }
-    .pill-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.4rem;
-      margin-top: 0.75rem;
-    }
-    .pill {
-      font-size: 0.78rem;
-      padding: 0.25rem 0.6rem;
-      border-radius: 999px;
-      background: #f3f4f6;
-      color: #4b5563;
-    }
+/* Hero */
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 2.1fr) minmax(0, 1.6fr);
+  gap: 2.5rem;
+  align-items: center;
+  padding: 2.6rem 0 2rem;
+}
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.8rem;
+  border-radius: 999px;
+  background: rgba(34, 197, 94, 0.12);
+  color: #bbf7d0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-bottom: 0.9rem;
+  border: 1px solid rgba(34, 197, 94, 0.4);
+}
+.hero-title {
+  font-size: clamp(2.4rem, 3.6vw, 3rem);
+  line-height: 1.05;
+  margin-bottom: 1rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+.hero-subtitle {
+  font-size: 1rem;
+  max-width: 36rem;
+  color: var(--fw-muted);
+  margin-bottom: 1.7rem;
+}
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+  margin-bottom: 1rem;
+}
+.btn {
+  border-radius: 999px;
+  padding: 0.75rem 1.7rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border: 1px solid transparent;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--fw-accent), var(--fw-accent-2));
+  color: #111827;
+  box-shadow: 0 14px 30px rgba(236, 72, 153, 0.55);
+}
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 18px 40px rgba(236, 72, 153, 0.7);
+}
+.btn-outline {
+  background: rgba(15, 23, 42, 0.9);
+  border-color: rgba(148, 163, 184, 0.5);
+  color: var(--fw-text);
+}
+.btn-outline:hover {
+  background: rgba(15, 23, 42, 0.7);
+}
+.hero-note {
+  font-size: 0.85rem;
+  color: var(--fw-muted);
+}
 
-    /* Sections */
-    section {
-      padding: 2.5rem 0;
-    }
-    section h2 {
-      font-size: 1.6rem;
-      margin-bottom: 0.8rem;
-    }
-    section p.section-intro {
-      font-size: 0.98rem;
-      color: #4b5563;
-      max-width: 42rem;
-      margin-bottom: 1.5rem;
-    }
+/* HERO CARD */
+.hero-card {
+  background: radial-gradient(circle at top left, #1e293b, #020617);
+  border-radius: 1.4rem;
+  padding: 1.5rem 1.6rem;
+  box-shadow: 0 24px 55px rgba(15, 23, 42, 0.95);
+  border: 1px solid rgba(148, 163, 184, 0.5);
+  position: relative;
+  overflow: hidden;
+}
+.hero-card::before {
+  content: "";
+  position: absolute;
+  inset: -40%;
+  opacity: 0.3;
+  background: radial-gradient(circle at top right, #f97316, transparent 55%);
+}
+.hero-card-title {
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+  font-size: 0.98rem;
+}
+.hero-card-sub {
+  font-size: 0.85rem;
+  color: var(--fw-muted);
+  margin-bottom: 1rem;
+}
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.4rem;
+  font-size: 0.83rem;
+}
+.stat-value {
+  font-weight: 700;
+  color: #fefce8;
+}
+.pill-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.75rem;
+}
+.pill {
+  font-size: 0.78rem;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.9);
+  color: var(--fw-muted);
+  border: 1px solid rgba(148, 163, 184, 0.4);
+}
 
-    .two-col {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 1.7rem;
-    }
-    .card {
-      background: #ffffff;
-      border-radius: 1rem;
-      padding: 1.1rem 1.2rem;
-      border: 1px solid #e5e7eb;
-      font-size: 0.93rem;
-    }
-    .card h3 {
-      font-size: 1.05rem;
-      margin-bottom: 0.4rem;
-    }
-    .card ul {
-      margin-left: 1.1rem;
-      margin-top: 0.25rem;
-    }
-    .card ul li {
-      margin-bottom: 0.25rem;
-    }
+/* Sections */
+section {
+  padding: 2.7rem 0;
+}
+section h2 {
+  font-size: 1.6rem;
+  margin-bottom: 0.6rem;
+}
+section p.section-intro {
+  font-size: 0.95rem;
+  color: var(--fw-muted);
+  max-width: 42rem;
+  margin-bottom: 1.5rem;
+}
 
-    .task-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 1rem;
-    }
-    .task-tile {
-      background: #ffffff;
-      border-radius: 0.9rem;
-      padding: 0.9rem 1rem;
-      border: 1px solid #e5e7eb;
-      font-size: 0.9rem;
-    }
-    .task-tile span.icon {
-      font-size: 1.1rem;
-      margin-right: 0.3rem;
-    }
-    .task-tile strong {
-      display: block;
-      margin-bottom: 0.15rem;
-    }
-    .task-tile p {
-      font-size: 0.82rem;
-      color: #6b7280;
-    }
+.two-col {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.8rem;
+}
+.card {
+  background: rgba(15, 23, 42, 0.95);
+  border-radius: 1rem;
+  padding: 1.2rem 1.3rem;
+  border: 1px solid var(--fw-border);
+  font-size: 0.93rem;
+  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.65);
+}
+.card h3 {
+  font-size: 1.05rem;
+  margin-bottom: 0.4rem;
+}
+.card ul {
+  margin-left: 1.1rem;
+  margin-top: 0.35rem;
+}
+.card ul li {
+  margin-bottom: 0.3rem;
+}
 
-    .why-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1.1rem;
-    }
-    .tagline {
-      margin-top: 0.6rem;
-      font-size: 0.9rem;
-      color: #4b5563;
-    }
+/* TASKS GRID */
+.task-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.1rem;
+}
+.task-tile {
+  background: rgba(15, 23, 42, 0.95);
+  border-radius: 0.9rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--fw-border);
+  font-size: 0.9rem;
+}
+.task-tile span.icon {
+  font-size: 1.1rem;
+  margin-right: 0.3rem;
+}
+.task-tile strong {
+  display: block;
+  margin-bottom: 0.2rem;
+}
+.task-tile p {
+  font-size: 0.82rem;
+  color: var(--fw-muted);
+}
 
-    .faq-item {
-      margin-bottom: 0.9rem;
-    }
-    .faq-item h3 {
-      font-size: 0.98rem;
-      margin-bottom: 0.2rem;
-    }
-    .faq-item p {
-      font-size: 0.9rem;
-      color: #4b5563;
-    }
+.why-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 1.1rem;
+}
+.tagline {
+  margin-top: 0.9rem;
+  font-size: 0.9rem;
+  color: var(--fw-muted);
+}
 
-    footer {
-      padding-bottom: 2.5rem;
-      font-size: 0.8rem;
-      color: #9ca3af;
-      text-align: center;
-    }
+/* FAQ */
+.faq-item {
+  margin-bottom: 1rem;
+}
+.faq-item h3 {
+  font-size: 0.98rem;
+  margin-bottom: 0.25rem;
+}
+.faq-item p {
+  font-size: 0.9rem;
+  color: var(--fw-muted);
+}
 
-    /* Responsive */
-    @media (max-width: 768px) {
-      .hero {
-        grid-template-columns: 1fr;
-      }
-      .two-col {
-        grid-template-columns: 1fr;
-      }
-      .nav-links {
-        display: none;
-      }
-    }
+/* Footer */
+footer {
+  padding-bottom: 2.6rem;
+  font-size: 0.8rem;
+  color: var(--fw-muted);
+  text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  header,
+  main,
+  footer {
+    padding-inline: 1rem;
+  }
+  .hero {
+    grid-template-columns: 1fr;
+  }
+  .hero {
+    padding-top: 2.1rem;
+  }
+  .two-col {
+    grid-template-columns: 1fr;
+  }
+  .nav {
+    border-radius: 1rem;
+  }
+  .nav-links {
+    display: none;
+  }
+}
   </style>
 </head>
+
 <body>
-  <!-- HEADER / NAV -->
-  <header>
-    <nav class="nav">
-      <div class="logo">
-        <div class="logo-mark">FW</div>
-        <span>FastWork</span>
-      </div>
-      <div class="nav-links">
-        <a href="#how-it-works">How it works</a>
-        <a href="#tasks">Tasks</a>
-        <a href="#why">Why FastWork</a>
-        <a href="#faq">FAQ</a>
-      </div>
-    </nav>
 
-    <!-- HERO -->
-    <section class="hero">
-      <div>
-        <div class="hero-badge">
-          <span>✔</span> Digital task platform
-        </div>
-        <h1 class="hero-title">
-          The easiest platform to find or offer quick jobs near you.
-        </h1>
-        <p class="hero-subtitle">
-          Post a task or find a job in just a few clicks. No resume, no
-          interview &mdash; just people who need help and people ready to work.
-        </p>
-        <div class="hero-actions">
-          <a href="#how-it-works" class="btn btn-primary">
-            Find a worker
-          </a>
-          <a href="#how-it-works" class="btn btn-outline">
-            Find a job
-          </a>
-        </div>
-        <p class="hero-note">
-          Accessible to everyone: students, parents, freelancers, part-time
-          workers, and more.
-        </p>
-      </div>
+<header>
+  <nav class="nav">
+    <div class="logo">
+      <div class="logo-mark">FW</div>
+      <span>FastWork</span>
+    </div>
+    <div class="nav-links">
+      <a href="#how-it-works">How it works</a>
+      <a href="#tasks">Tasks</a>
+      <a href="#why">Why FastWork</a>
+      <a href="#faq">FAQ</a>
+    </div>
+  </nav>
 
-      <div>
-        <div class="hero-card">
-          <div class="hero-card-title">Example task</div>
-          <div class="hero-card-sub">
-            “Need help moving 6 boxes from the garage to the second floor.”
-          </div>
-          <div class="stat-row">
-            <span>Location</span>
-            <span class="stat-value">North Portland, OR</span>
-          </div>
-          <div class="stat-row">
-            <span>Time</span>
-            <span class="stat-value">Today, 4:00 PM</span>
-          </div>
-          <div class="stat-row">
-            <span>Budget</span>
-            <span class="stat-value">$45</span>
-          </div>
-          <div class="pill-list">
-            <span class="pill">Moving help</span>
-            <span class="pill">1–2 hours</span>
-            <span class="pill">No resume</span>
-          </div>
-        </div>
-      </div>
-    </section>
-  </header>
-
-  <main>
-    <!-- HOW IT WORKS -->
-    <section id="how-it-works">
-      <h2>How does FastWork work?</h2>
-      <p class="section-intro">
-        FastWork is a digital platform that connects people who need help with
-        reliable workers available for quick tasks.
+  <section class="hero">
+    <div>
+      <div class="hero-badge"><span>✔</span> Digital task platform</div>
+      <h1 class="hero-title">
+        The easiest platform to find or offer quick jobs near you.
+      </h1>
+      <p class="hero-subtitle">
+        Post a task or find a job in just a few clicks. No resume, no interview — just people who need help and people ready to work.
       </p>
 
-      <div class="two-col">
-        <div class="card">
-          <h3>For clients</h3>
-          <p>Get help quickly for everyday tasks.</p>
-          <ul>
-            <li>Post a task: cleaning, moving help, gardening, assembly, etc.</li>
-            <li>Set the location, schedule, and budget.</li>
-            <li>Browse nearby worker profiles and pick the right person.</li>
-            <li>The task gets done at the requested time.</li>
-          </ul>
-        </div>
-
-        <div class="card">
-          <h3>For workers</h3>
-          <p>Earn money on your own schedule.</p>
-          <ul>
-            <li>Create your profile in a few minutes.</li>
-            <li>Select your skills and the area where you can work.</li>
-            <li>Receive task requests near you on the platform.</li>
-            <li>Accept the job, complete it, and get paid.</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <!-- TASKS -->
-    <section id="tasks">
-      <h2>What kind of tasks can you find on FastWork?</h2>
-      <p class="section-intro">
-        FastWork offers all types of simple everyday tasks that make life
-        easier, both for the person requesting help and the person doing the
-        job.
-      </p>
-
-      <div class="task-grid">
-        <div class="task-tile">
-          <span class="icon">🌿</span>
-          <strong>Gardening & outdoor help</strong>
-          <p>Lawn mowing, leaf removal, plant care, basic yard work.</p>
-        </div>
-        <div class="task-tile">
-          <span class="icon">🧼</span>
-          <strong>Home cleaning & organizing</strong>
-          <p>General cleaning, tidying up, garage or closet organization.</p>
-        </div>
-        <div class="task-tile">
-          <span class="icon">📦</span>
-          <strong>Moving help</strong>
-          <p>Lifting boxes, loading and unloading, small moving assistance.</p>
-        </div>
-        <div class="task-tile">
-          <span class="icon">🪑</span>
-          <strong>Furniture assembly</strong>
-          <p>IKEA assembly, simple furniture setup, light installations.</p>
-        </div>
-        <div class="task-tile">
-          <span class="icon">🐶</span>
-          <strong>Pet care</strong>
-          <p>Dog walking, pet sitting, feeding and basic care.</p>
-        </div>
-        <div class="task-tile">
-          <span class="icon">🚗</span>
-          <strong>Car cleaning</strong>
-          <p>Exterior wash and quick interior cleaning at home.</p>
-        </div>
-        <div class="task-tile">
-          <span class="icon">🎉</span>
-          <strong>Event assistance</strong>
-          <p>Setup, serving, and clean-up for small events or gatherings.</p>
-        </div>
-        <div class="task-tile">
-          <span class="icon">💻</span>
-          <strong>Small digital tasks</strong>
-          <p>Simple flyers, basic social media help, micro-tasks.</p>
-        </div>
+      <div class="hero-actions">
+        <a href="#tasks" class="btn btn-primary">Find a worker</a>
+        <a href="#tasks" class="btn btn-outline">Find a job</a>
       </div>
 
-      <p class="tagline">
-        FastWork is accessible to everyone: students, parents, freelancers,
-        part-time workers, or anyone who wants to earn extra money.
-      </p>
-    </section>
+      <p class="hero-note">Accessible to everyone.</p>
+    </div>
 
-    <!-- WHY FASTWORK -->
-    <section id="why">
-      <h2>Why use FastWork?</h2>
-      <p class="section-intro">
-        FastWork makes it simple for clients to get help and for workers to earn
-        money, without the complexity of traditional hiring.
-      </p>
+    <div>
+      <div class="hero-card">
+        <div class="hero-card-title">Example task</div>
+        <div class="hero-card-sub">
+          “Need help moving 6 boxes from the garage to the second floor.”
+        </div>
 
-      <div class="why-grid">
-        <div class="card">
-          <h3>For clients</h3>
-          <ul>
-            <li>Find someone quickly for everyday tasks.</li>
-            <li>Post a task in less than 2 minutes.</li>
-            <li>See available workers near your location.</li>
-            <li>Chat on the platform before confirming.</li>
-          </ul>
+        <div class="stat-row">
+          <span>Location</span>
+          <span class="stat-value">North Portland, OR</span>
         </div>
-        <div class="card">
-          <h3>For workers</h3>
-          <ul>
-            <li>Work when you want, on your own schedule.</li>
-            <li>Accept only the tasks you are comfortable with.</li>
-            <li>Earn money fast with simple jobs.</li>
-            <li>No resume or formal experience required to start.</li>
-          </ul>
+
+        <div class="stat-row">
+          <span>Time</span>
+          <span class="stat-value">Today, 4:00 PM</span>
         </div>
-        <div class="card">
-          <h3>Digital & scalable</h3>
-          <ul>
-            <li>Everything happens online, no physical office.</li>
-            <li>Works city by city and can grow to multiple locations.</li>
-            <li>Modern, platform-based model (not a traditional job center).</li>
-          </ul>
+
+        <div class="stat-row">
+          <span>Budget</span>
+          <span class="stat-value">$45</span>
+        </div>
+
+        <div class="pill-list">
+          <span class="pill">Moving help</span>
+          <span class="pill">1–2 hours</span>
+          <span class="pill">No resume</span>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
+</header>
 
-    <!-- REVENUE MODEL -->
-    <section id="revenue">
-      <h2>How does FastWork generate revenue?</h2>
-      <p class="section-intro">
-        FastWork stays simple and transparent. The platform earns money through:
-      </p>
+<main>
 
-      <div class="two-col">
-        <div class="card">
-          <h3>Core revenue</h3>
-          <ul>
-            <li>Small connection fees on each task.</li>
-            <li>Optional boost options for worker profiles.</li>
-          </ul>
-        </div>
-        <div class="card">
-          <h3>Future options</h3>
-          <ul>
-            <li>Premium subscriptions for clients or workers.</li>
-            <li>Integrated online payments with small commissions.</li>
-          </ul>
-        </div>
-      </div>
-    </section>
+<section id="how-it-works">
+  <h2>How does FastWork work?</h2>
+  <p class="section-intro">
+    FastWork is a digital platform that connects people who need help with reliable workers available for quick tasks.
+  </p>
 
-    <!-- FAQ -->
-    <section id="faq">
-      <h2>Frequently Asked Questions</h2>
+  <div class="two-col">
+    <div class="card">
+      <h3>For clients</h3>
+      <ul>
+        <li>Post a task in a few seconds.</li>
+        <li>Choose a worker.</li>
+        <li>Get the job done fast.</li>
+      </ul>
+    </div>
 
-      <div class="faq-item">
-        <h3>Is FastWork a job center?</h3>
-        <p>
-          No. FastWork is not a physical job center. It is a digital platform
-          where everything happens online, from posting tasks to finding workers.
-        </p>
-      </div>
+    <div class="card">
+      <h3>For workers</h3>
+      <ul>
+        <li>Create your profile.</li>
+        <li>Receive task requests.</li>
+        <li>Accept, complete, get paid.</li>
+      </ul>
+    </div>
+  </div>
+</section>
 
-      <div class="faq-item">
-        <h3>Who can use FastWork?</h3>
-        <p>
-          Everyone. Clients, workers, students, families, freelancers &mdash;
-          anyone who needs help or wants to earn extra money with simple tasks.
-        </p>
-      </div>
+<section id="tasks">
+  <h2>Available tasks</h2>
+  <p class="section-intro">Find or offer everyday help tasks.</p>
 
-      <div class="faq-item">
-        <h3>Do I need a resume?</h3>
-        <p>
-          No. You can start receiving task requests without a resume or formal
-          interview. Your profile, skills, and reviews will help clients choose
-          you.
-        </p>
-      </div>
-    </section>
-  </main>
+  <div class="task-grid">
+    <div class="task-tile"><span class="icon">🌿</span><strong>Gardening</strong><p>Lawn mowing, leaf removal, plant care.</p></div>
+    <div class="task-tile"><span class="icon">🧼</span><strong>Cleaning</strong><p>General home cleaning, organizing.</p></div>
+    <div class="task-tile"><span class="icon">📦</span><strong>Moving help</strong><p>Lift boxes, load/unload.</p></div>
+    <div class="task-tile"><span class="icon">🪑</span><strong>Furniture assembly</strong><p>IKEA assembly.</p></div>
+    <div class="task-tile"><span class="icon">🐶</span><strong>Pet care</strong><p>Dog walking, sitting.</p></div>
+    <div class="task-tile"><span class="icon">🚗</span><strong>Car cleaning</strong><p>Exterior wash.</p></div>
+    <div class="task-tile"><span class="icon">🎉</span><strong>Event help</strong><p>Setup & clean-up.</p></div>
+    <div class="task-tile"><span class="icon">💻</span><strong>Digital tasks</strong><p>Flyers, social media.</p></div>
+  </div>
+</section>
 
-  <footer>
-    <p>© <span id="year"></span> FastWork. All rights reserved.</p>
-  </footer>
+<section id="why">
+  <h2>Why FastWork?</h2>
+  <p class="section-intro">Fast, simple, modern.</p>
 
-  <script>
-    // Simple script to show current year in the footer
-    document.getElementById("year").textContent = new Date().getFullYear();
-  </script>
+  <div class="why-grid">
+    <div class="card"><h3>Fast</h3><p>Find help instantly.</p></div>
+    <div class="card"><h3>Simple</h3><p>No resume needed.</p></div>
+    <div class="card"><h3>Flexible</h3><p>Work on your schedule.</p></div>
+  </div>
+</section>
+
+<section id="faq">
+  <h2>FAQ</h2>
+
+  <div class="faq-item">
+    <h3>Is FastWork a job center?</h3>
+    <p>No, it is a digital platform where everything happens online.</p>
+  </div>
+
+  <div class="faq-item">
+    <h3>Who can use FastWork?</h3>
+    <p>Everyone.</p>
+  </div>
+
+  <div class="faq-item">
+    <h3>Do I need a resume?</h3>
+    <p>No.</p>
+  </div>
+
+</section>
+
+</main>
+
+<footer>
+  <p>© <span id="year"></span> FastWork. All rights reserved.</p>
+</footer>
+
+<script>
+document.getElementById("year").textContent = new Date().getFullYear();
+</script>
+
 </body>
 </html>
