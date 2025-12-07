@@ -1,19 +1,351 @@
-<main class="container">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>JobDash – Quick jobs. Real money.</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- HERO SECTION -->
-  <section class="hero-section">
-    <div class="hero-text">
+  <style>
+    :root {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+      --primary: #3B82F6;
+      --primary-light: #EFF6FF;
+      --primary-dark: #1E3A8A;
+      --surface: #FFFFFF;
+      --soft-bg: #F3F4F6;
+      --text-main: #111827;
+      --text-muted: #6B7280;
+      --border: #E5E7EB;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: linear-gradient(to bottom right, var(--primary-light), var(--soft-bg));
+      min-height: 100vh;
+      color: var(--text-main);
+    }
+
+    a { text-decoration: none; color: inherit; }
+
+    header, main, footer {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 1.5rem;
+    }
+
+    /* NAV / HEADER */
+
+    .nav-wrapper {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 1.5rem;
+      padding: 1.3rem;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+      margin-top: 1rem;
+    }
+
+    .nav-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: .7rem;
+    }
+
+    .logo-block {
+      display: flex;
+      align-items: center;
+      gap: .7rem;
+    }
+
+    .logo-mark {
+      width: 45px;
+      height: 45px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .9rem;
+      box-shadow: 0 8px 18px rgba(59,130,246,0.35);
+    }
+
+    .logo-text span:first-child {
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+
+    .logo-text span:last-child {
+      font-size: .8rem;
+      color: var(--text-muted);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.4rem;
+      font-size: .9rem;
+    }
+
+    .nav-links a { color: var(--text-muted); }
+    .nav-links a:hover { color: var(--primary); }
+
+    .nav-bottom {
+      font-size: .78rem;
+      color: var(--text-muted);
+      margin-top: .3rem;
+    }
+
+    /* HERO */
+
+    .hero {
+      display: grid;
+      grid-template-columns: 2fr 1.3fr;
+      gap: 2.2rem;
+      padding: 2.5rem 0 2.5rem;
+      align-items: center;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      padding: .25rem .8rem;
+      border-radius: 999px;
+      font-size: .75rem;
+      font-weight: 600;
+      border: 1px solid var(--primary);
+      margin-bottom: 1rem;
+    }
+
+    .hero-title {
+      font-size: clamp(2.3rem, 3.4vw, 3rem);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      margin-bottom: .8rem;
+      color: var(--primary-dark);
+    }
+
+    .hero-subtitle {
+      font-size: .98rem;
+      color: var(--text-muted);
+      max-width: 34rem;
+      margin-bottom: 1.4rem;
+    }
+
+    .hero-note {
+      font-size: .85rem;
+      color: var(--text-muted);
+      margin-top: .7rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: .8rem;
+    }
+
+    .btn {
+      padding: .75rem 1.7rem;
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: .95rem;
+      border: none;
+      cursor: pointer;
+      transition: .15s ease;
+      border: 1px solid transparent;
+      display: inline-block;
+      text-align: center;
+    }
+
+    .btn-primary {
+      background: linear-gradient(to right, var(--primary), var(--primary-dark));
+      color: white;
+      box-shadow: 0 14px 32px rgba(59,130,246,.35);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 18px 40px rgba(59,130,246,.45);
+    }
+
+    .btn-outline {
+      background: white;
+      color: var(--text-main);
+      border: 1px solid var(--border);
+    }
+
+    .btn-outline:hover { background: var(--soft-bg); }
+
+    .hero-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 1.3rem;
+      border-radius: 1.2rem;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+      font-size: .9rem;
+    }
+
+    .hero-card h2 {
+      font-size: .95rem;
+      margin-bottom: .5rem;
+    }
+
+    .hero-card p {
+      color: var(--text-muted);
+      margin-bottom: .7rem;
+    }
+
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: .35rem;
+      font-size: .85rem;
+    }
+
+    .stat-value { font-weight: 700; }
+
+    .pill {
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      padding: .28rem .75rem;
+      border-radius: 999px;
+      font-size: .78rem;
+      border: 1px solid var(--primary);
+    }
+
+    .pill-row {
+      margin-top: .6rem;
+      display: flex;
+      gap: .4rem;
+      flex-wrap: wrap;
+    }
+
+    /* SECTIONS */
+
+    section {
+      padding: 2.3rem 0;
+    }
+
+    h2.section-title {
+      font-size: 1.45rem;
+      margin-bottom: .45rem;
+      color: var(--primary-dark);
+    }
+
+    .section-intro {
+      font-size: .95rem;
+      max-width: 40rem;
+      color: var(--text-muted);
+      margin-bottom: 1.4rem;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.4rem;
+    }
+
+    .card {
+      background: var(--surface);
+      padding: 1.1rem 1.25rem;
+      border-radius: 1rem;
+      border: 1px solid var(--border);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+      font-size: .9rem;
+    }
+
+    .card h3 {
+      margin-bottom: .4rem;
+      font-size: 1.05rem;
+    }
+
+    .card ul {
+      margin-left: 1rem;
+      margin-top: .35rem;
+      margin-bottom: .35rem;
+    }
+
+    .card li { margin-bottom: .2rem; }
+
+    .highlight {
+      margin-top: .6rem;
+      font-weight: 600;
+    }
+
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+    }
+
+    footer {
+      text-align: center;
+      padding-bottom: 2.3rem;
+      font-size: .8rem;
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 800px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+      .nav-top {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: .8rem;
+      }
+      .nav-links {
+        flex-wrap: wrap;
+      }
+      .two-col {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="nav-wrapper">
+    <div class="nav-top">
+      <div class="logo-block">
+        <div class="logo-mark">JD</div>
+        <div class="logo-text">
+          <span>JobDash</span>
+          <span>Quick jobs. Real money.</span>
+        </div>
+      </div>
+
+      <nav class="nav-links">
+        <a href="#how-it-works">How it works</a>
+        <a href="#why-jobdash">Why JobDash</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+    </div>
+
+    <div class="nav-bottom">
+      A simple digital work portal to connect local people who need help.
+    </div>
+  </div>
+
+  <section class="hero">
+    <div>
+      <div class="hero-badge">Digital work platform</div>
+
       <h1 class="hero-title">Find quick jobs near you.</h1>
 
       <p class="hero-subtitle">
-        <strong>JobDash</strong> is a digital platform that connects people who need help 
-        with local workers ready to earn money fast. No resume. No interview. 
-        Just quick jobs and real money.
+        <strong>JobDash</strong> is a digital platform that connects people who need help with local workers
+        ready to earn money fast. No resume. No interview. Just quick jobs and real money.
       </p>
 
-      <div class="hero-buttons">
-        <a href="#how-it-works" class="btn-primary">I need a worker</a>
-        <a href="#how-it-works" class="btn-secondary">I'm looking for a job</a>
+      <div class="hero-actions">
+        <a href="#how-it-works" class="btn btn-primary">I need a worker</a>
+        <a href="#how-it-works" class="btn btn-outline">I'm looking for a job</a>
       </div>
 
       <p class="hero-note">
@@ -22,38 +354,42 @@
     </div>
 
     <div class="hero-card">
-      <h2 class="card-title">Example task</h2>
+      <h2>Example task</h2>
       <p>“Need help unloading groceries and organizing my kitchen.”</p>
 
-      <div class="task-info">
-        <p><strong>Location:</strong> North Portland, OR</p>
-        <p><strong>Time:</strong> Today, 5:00 PM</p>
-        <p><strong>Budget:</strong> $40</p>
+      <div class="stat-row">
+        <span>Location</span><span class="stat-value">North Portland, OR</span>
+      </div>
+      <div class="stat-row">
+        <span>Time</span><span class="stat-value">Today, 5:00 PM</span>
+      </div>
+      <div class="stat-row">
+        <span>Budget</span><span class="stat-value">$40</span>
       </div>
 
-      <div class="tags">
-        <span class="tag">Cleaning</span>
-        <span class="tag">1–2 hours</span>
-        <span class="tag">No resume</span>
+      <div class="pill-row">
+        <span class="pill">Cleaning</span>
+        <span class="pill">1–2 hours</span>
+        <span class="pill">No resume</span>
       </div>
     </div>
   </section>
+</header>
 
+<main>
   <!-- HOW IT WORKS -->
-  <section id="how-it-works" class="section">
+  <section id="how-it-works">
     <h2 class="section-title">How does JobDash work?</h2>
-
-    <p class="section-description">
-      <strong>JobDash is a digital work portal</strong> that makes it simple for people 
-      to find help or find work instantly. It functions like a modern job center — 
-      but <strong>100% online</strong>, fast and easy.
+    <p class="section-intro">
+      <strong>JobDash is a digital work portal</strong> that makes it simple for people to find help or find work instantly.
+      It functions like a modern job center — but <strong>100% online</strong>, fast and easy.
     </p>
 
-    <div class="two-columns">
+    <div class="two-col">
       <div class="card">
-        <h3 class="card-title">For workers</h3>
+        <h3>For workers</h3>
         <p>Earn money quickly by doing simple tasks in your area.</p>
-
+        <p>You can:</p>
         <ul>
           <li>Create a profile in minutes</li>
           <li>Choose the tasks you can do</li>
@@ -62,7 +398,7 @@
           <li>Get paid right after the work</li>
         </ul>
 
-        <p><strong>Common tasks include:</strong></p>
+        <p class="highlight">Common tasks include:</p>
         <ul>
           <li>Cleaning</li>
           <li>Moving help</li>
@@ -79,9 +415,9 @@
       </div>
 
       <div class="card">
-        <h3 class="card-title">For clients</h3>
+        <h3>For clients</h3>
         <p>Get reliable help fast.</p>
-
+        <p>You can:</p>
         <ul>
           <li>Post a job in less than 1 minute</li>
           <li>Choose a worker available nearby</li>
@@ -89,7 +425,7 @@
           <li>Receive help the same day</li>
         </ul>
 
-        <p><strong>Examples:</strong></p>
+        <p class="highlight">Examples:</p>
         <ul>
           <li>“Help me move 6 boxes”</li>
           <li>“Clean my kitchen”</li>
@@ -102,17 +438,49 @@
   </section>
 
   <!-- WHY JOBDASH -->
-  <section id="why-jobdash" class="section">
+  <section id="why-jobdash">
     <h2 class="section-title">Why choose JobDash?</h2>
+    <p class="section-intro">
+      JobDash is designed to be simple, fast and fair for everyone — workers and clients.
+    </p>
 
-    <div class="grid">
-      <div class="card"><h3>Instant local help</h3><p>Access local workers fast.</p></div>
-      <div class="card"><h3>No complicated steps</h3><p>No resumes, no paperwork.</p></div>
-      <div class="card"><h3>Fair & flexible</h3><p>Perfect for small tasks & quick jobs.</p></div>
-      <div class="card"><h3>Built for the community</h3><p>Ideal for newcomers & students.</p></div>
-      <div class="card"><h3>100% digital</h3><p>Works like a modern job center.</p></div>
-      <div class="card"><h3>Human-first</h3><p>Simple and human connection.</p></div>
+    <div class="why-grid">
+      <div class="card">
+        <h3>Instant local help</h3>
+        <p>Instant access to local workers for small tasks and quick jobs.</p>
+      </div>
+      <div class="card">
+        <h3>No complicated steps</h3>
+        <p>No paperwork, no long forms, no resume required.</p>
+      </div>
+      <div class="card">
+        <h3>Fair & flexible</h3>
+        <p>Perfect for quick tasks, flexible schedules and everyday people.</p>
+      </div>
+      <div class="card">
+        <h3>Built for the community</h3>
+        <p>Helps newcomers, students, parents and anyone who needs extra income.</p>
+      </div>
+      <div class="card">
+        <h3>100% digital</h3>
+        <p>Works like a modern job center, but fully online and easy to use.</p>
+      </div>
+      <div class="card">
+        <h3>Human-first</h3>
+        <p>JobDash makes work simple and human again.</p>
+      </div>
     </div>
   </section>
-
 </main>
+
+<footer>
+  <p><strong>JobDash — Quick jobs. Real money.</strong></p>
+  <p>© <span id="year"></span> JobDash. All rights reserved.</p>
+</footer>
+
+<script>
+  document.getElementById("year").textContent = new Date().getFullYear();
+</script>
+
+</body>
+</html>
