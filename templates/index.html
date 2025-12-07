@@ -8,34 +8,41 @@
   <style>
     :root {
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      --primary: #3B82F6;
-      --primary-light: #EFF6FF;
-      --primary-dark: #1E3A8A;
+
+      --bg: #FDF7ED;          /* fond crème */
+      --bg-soft: #F6EEE2;
       --surface: #FFFFFF;
-      --soft-bg: #F3F4F6;
+      --primary: #2563EB;     /* bleu pour accents */
+      --primary-soft: #E0ECFF;
       --text-main: #111827;
       --text-muted: #6B7280;
       --border: #E5E7EB;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
+
     body {
-      background: linear-gradient(to bottom right, var(--primary-light), var(--soft-bg));
+      background: var(--bg);
       min-height: 100vh;
       color: var(--text-main);
     }
 
     a { text-decoration: none; color: inherit; }
 
-    header, main, footer { max-width: 1120px; margin: 0 auto; padding: 1.2rem; }
+    header, main, footer {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 1.2rem;
+    }
 
-    /* NAV */
+    /* NAV / HEADER */
+
     .nav-wrapper {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 1.2rem;
       padding: 0.9rem 1.2rem;
-      box-shadow: 0 8px 18px rgba(0,0,0,0.06);
+      box-shadow: 0 8px 18px rgba(15,23,42,0.06);
       margin-top: 0.7rem;
     }
 
@@ -43,7 +50,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: .5rem;
+      margin-bottom: .45rem;
     }
 
     .logo-block {
@@ -53,25 +60,25 @@
     }
 
     .logo-mark {
-      width: 42px;
-      height: 42px;
+      width: 40px;
+      height: 40px;
       border-radius: 999px;
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-      color: white;
+      background: radial-gradient(circle at 30% 20%, #FFFFFF 0, #93C5FD 20%, #1D4ED8 70%);
+      color: #0B1120;
       font-weight: 800;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: .85rem;
-      box-shadow: 0 8px 18px rgba(59,130,246,0.35);
+      box-shadow: 0 10px 24px rgba(15,23,42,0.22);
     }
 
     .logo-text span:first-child {
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       font-weight: 700;
     }
     .logo-text span:last-child {
-      font-size: .75rem;
+      font-size: .78rem;
       color: var(--text-muted);
     }
 
@@ -79,77 +86,93 @@
       display: flex;
       gap: 1.2rem;
       font-size: .9rem;
+      color: var(--text-muted);
     }
-    .nav-links a:hover { color: var(--primary); }
+    .nav-links a:hover { color: var(--text-main); }
 
     .nav-bottom {
-      font-size: .78rem;
+      font-size: .8rem;
       color: var(--text-muted);
-      margin-top: .2rem;
+      margin-top: .15rem;
     }
 
     /* HERO */
+
     .hero {
       display: grid;
-      grid-template-columns: 2fr 1.3fr;
+      grid-template-columns: 2fr 1.2fr;
       gap: 2rem;
-      padding: 1.8rem 0;
+      padding: 1.9rem 0;
       align-items: center;
     }
 
     .hero-badge {
-      display: inline-block;
-      background: var(--primary-light);
-      color: var(--primary-dark);
-      padding: .22rem .7rem;
+      display: inline-flex;
+      align-items: center;
+      gap: .35rem;
+      background: var(--bg-soft);
+      color: var(--text-main);
+      padding: .22rem .8rem;
       border-radius: 999px;
-      font-size: .7rem;
-      font-weight: 600;
-      border: 1px solid var(--primary);
-      margin-bottom: .8rem;
+      font-size: .72rem;
+      border: 1px solid rgba(148,163,184,0.4);
+      margin-bottom: .9rem;
+    }
+
+    .hero-badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #22C55E;
     }
 
     .hero-title {
       font-size: clamp(2.1rem, 3vw, 2.7rem);
       font-weight: 800;
-      line-height: 1.08;
-      margin-bottom: .55rem;
-      color: var(--primary-dark);
+      line-height: 1.07;
+      letter-spacing: -0.02em;
+      margin-bottom: .6rem;
     }
 
     .hero-subtitle {
       font-size: .95rem;
       color: var(--text-muted);
-      max-width: 33rem;
+      max-width: 34rem;
       margin-bottom: 1.2rem;
     }
 
-    .hero-actions { display: flex; gap: .7rem; }
+    .hero-actions {
+      display: flex;
+      gap: .7rem;
+    }
 
     .btn {
-      padding: .65rem 1.5rem;
+      padding: .7rem 1.6rem;
       border-radius: 999px;
       font-weight: 600;
       font-size: .9rem;
       cursor: pointer;
-      transition: .15s ease;
       border: 1px solid transparent;
-      display: inline-block;
-      text-align: center;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .4rem;
+      transition: .15s ease;
     }
 
     .btn-primary {
-      background: linear-gradient(to right, var(--primary), var(--primary-dark));
-      color: white;
-      box-shadow: 0 10px 26px rgba(59,130,246,.35);
+      background: #111827;
+      color: #F9FAFB;
+      box-shadow: 0 10px 26px rgba(15,23,42,0.22);
     }
     .btn-primary:hover { transform: translateY(-1px); }
 
-    .btn-outline {
-      background: white;
+    .btn-ghost {
+      background: transparent;
+      border-color: rgba(148,163,184,0.5);
       color: var(--text-main);
-      border: 1px solid var(--border);
     }
+    .btn-ghost:hover { background: rgba(148,163,184,0.12); }
 
     .hero-note {
       font-size: .8rem;
@@ -159,42 +182,60 @@
 
     .hero-card {
       background: var(--surface);
-      border: 1px solid var(--border);
-      padding: 1rem;
       border-radius: 1rem;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+      border: 1px solid var(--border);
+      padding: 1rem 1.1rem;
+      box-shadow: 0 10px 24px rgba(15,23,42,0.08);
       font-size: .85rem;
     }
 
+    .hero-card h3 {
+      font-size: .95rem;
+      margin-bottom: .4rem;
+    }
+
+    .hero-card p {
+      margin-bottom: .4rem;
+      color: var(--text-muted);
+    }
+
+    .hero-meta {
+      margin-top: .4rem;
+      margin-bottom: .5rem;
+    }
+    .hero-meta p { margin-bottom: .3rem; }
+
     .pill-row {
-      margin-top: .5rem;
+      margin-top: .4rem;
       display: flex;
-      gap: .35rem;
       flex-wrap: wrap;
+      gap: .35rem;
     }
 
     .pill {
-      background: var(--primary-light);
-      color: var(--primary-dark);
-      padding: .25rem .6rem;
+      padding: .23rem .65rem;
       border-radius: 999px;
+      background: var(--primary-soft);
+      border: 1px solid #BFDBFE;
       font-size: .75rem;
-      border: 1px solid var(--primary);
+      color: #1E3A8A;
     }
 
     /* SECTIONS */
-    section { padding: 1.9rem 0; }
+
+    section.section {
+      padding: 1.8rem 0;
+    }
 
     h2.section-title {
       font-size: 1.35rem;
-      margin-bottom: .3rem;
-      color: var(--primary-dark);
+      margin-bottom: .35rem;
     }
 
     .section-intro {
-      font-size: .92rem;
-      max-width: 40rem;
+      font-size: .9rem;
       color: var(--text-muted);
+      max-width: 40rem;
       margin-bottom: 1.2rem;
     }
 
@@ -206,19 +247,32 @@
 
     .card {
       background: var(--surface);
-      padding: .9rem 1.05rem;
       border-radius: .9rem;
       border: 1px solid var(--border);
-      box-shadow: 0 6px 16px rgba(0,0,0,0.05);
-      font-size: .85rem;
+      padding: 1rem 1.1rem;
+      box-shadow: 0 6px 18px rgba(15,23,42,0.06);
+      font-size: .86rem;
     }
 
     .card h3 {
-      margin-bottom: .4rem;
       font-size: 1rem;
+      margin-bottom: .35rem;
     }
 
-    .highlight { margin-top: .5rem; font-weight: 600; }
+    .card p { color: var(--text-muted); margin-bottom: .3rem; }
+
+    .card ul {
+      margin-left: 1.1rem;
+      margin-bottom: .4rem;
+    }
+
+    .card li { margin-bottom: .22rem; }
+
+    .highlight {
+      margin-top: .4rem;
+      font-weight: 600;
+      color: var(--text-main);
+    }
 
     .why-grid {
       display: grid;
@@ -233,10 +287,18 @@
       color: var(--text-muted);
     }
 
-    @media (max-width: 800px) {
-      .hero { grid-template-columns: 1fr; }
-      .two-col { grid-template-columns: 1fr; }
-      .nav-top { flex-direction: column; gap: .7rem; align-items: flex-start; }
+    @media (max-width: 840px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+      .two-col {
+        grid-template-columns: 1fr;
+      }
+      .nav-top {
+        flex-direction: column;
+        gap: .6rem;
+        align-items: flex-start;
+      }
     }
   </style>
 </head>
@@ -253,20 +315,24 @@
           <span>Quick jobs. Real money.</span>
         </div>
       </div>
-
       <nav class="nav-links">
         <a href="#how-it-works">How it works</a>
         <a href="#why-jobdash">Why JobDash</a>
         <a href="#faq">FAQ</a>
       </nav>
     </div>
-
-    <div class="nav-bottom">A simple digital work portal to connect local people who need help.</div>
+    <div class="nav-bottom">
+      A simple digital work portal to connect local people who need help.
+    </div>
   </div>
 
   <section class="hero">
     <div>
-      <div class="hero-badge">Digital work platform</div>
+      <div class="hero-badge">
+        <span class="hero-badge-dot"></span>
+        <span>Digital work platform</span>
+      </div>
+
       <h1 class="hero-title">Find quick jobs near you.</h1>
 
       <p class="hero-subtitle">
@@ -276,19 +342,23 @@
 
       <div class="hero-actions">
         <a href="#how-it-works" class="btn btn-primary">I need a worker</a>
-        <a href="#how-it-works" class="btn btn-outline">I'm looking for a job</a>
+        <a href="#how-it-works" class="btn btn-ghost">I'm looking for a job</a>
       </div>
 
-      <p class="hero-note">Accessible to everyone: students, newcomers, part-time workers, parents, and more.</p>
+      <p class="hero-note">
+        Accessible to everyone: students, newcomers, part-time workers, parents, and more.
+      </p>
     </div>
 
     <div class="hero-card">
       <h3>Example task</h3>
       <p>“Need help unloading groceries and organizing my kitchen.”</p>
 
-      <p><strong>Location:</strong> North Portland, OR</p>
-      <p><strong>Time:</strong> Today, 5:00 PM</p>
-      <p><strong>Budget:</strong> $40</p>
+      <div class="hero-meta">
+        <p><strong>Location:</strong> North Portland, OR</p>
+        <p><strong>Time:</strong> Today, 5:00 PM</p>
+        <p><strong>Budget:</strong> $40</p>
+      </div>
 
       <div class="pill-row">
         <span class="pill">Cleaning</span>
@@ -301,11 +371,11 @@
 
 <main>
   <!-- HOW IT WORKS -->
-  <section id="how-it-works">
+  <section id="how-it-works" class="section">
     <h2 class="section-title">How does JobDash work?</h2>
     <p class="section-intro">
-      <strong>JobDash is a digital work portal</strong> that makes it simple for people to find help or find work instantly.
-      Like a modern job center — but <strong>100% online</strong>, fast and easy.
+      <strong>JobDash is a digital work portal</strong> that makes it simple for people to find help
+      or find work instantly. Like a modern job center — but <strong>100% online</strong>, fast and easy.
     </p>
 
     <div class="two-col">
@@ -322,10 +392,9 @@
 
         <p class="highlight">Popular tasks:</p>
         <ul>
-          <li>Cleaning</li>
+          <li>Cleaning &amp; dishwashing</li>
           <li>Moving help</li>
           <li>Laundry &amp; folding</li>
-          <li>Dishwashing</li>
           <li>Yard work</li>
           <li>Babysitting</li>
         </ul>
@@ -339,7 +408,7 @@
         <ul>
           <li>Post a task in 1 minute</li>
           <li>Choose a worker nearby</li>
-          <li>Set your budget & time</li>
+          <li>Set your budget &amp; time</li>
           <li>Get help the same day</li>
         </ul>
 
@@ -356,16 +425,34 @@
   </section>
 
   <!-- WHY JOBDASH -->
-  <section id="why-jobdash">
+  <section id="why-jobdash" class="section">
     <h2 class="section-title">Why choose JobDash?</h2>
 
     <div class="why-grid">
-      <div class="card"><h3>Instant local help</h3><p>Find workers fast.</p></div>
-      <div class="card"><h3>No complicated steps</h3><p>No resumes or paperwork.</p></div>
-      <div class="card"><h3>Fair & flexible</h3><p>Perfect for small tasks.</p></div>
-      <div class="card"><h3>Built for community</h3><p>Great for newcomers.</p></div>
-      <div class="card"><h3>100% digital</h3><p>Modern and simple.</p></div>
-      <div class="card"><h3>Human-first</h3><p>Work made easy.</p></div>
+      <div class="card">
+        <h3>Instant local help</h3>
+        <p>Find workers quickly for small tasks and everyday needs.</p>
+      </div>
+      <div class="card">
+        <h3>No complicated steps</h3>
+        <p>No resumes, no paperwork, no long forms.</p>
+      </div>
+      <div class="card">
+        <h3>Fair &amp; flexible</h3>
+        <p>Perfect for short shifts, small budgets and quick jobs.</p>
+      </div>
+      <div class="card">
+        <h3>Built for community</h3>
+        <p>Great for newcomers, students, parents and more.</p>
+      </div>
+      <div class="card">
+        <h3>100% digital</h3>
+        <p>Works like a modern job center, but fully online.</p>
+      </div>
+      <div class="card">
+        <h3>Human-first</h3>
+        <p>JobDash makes work simple and human again.</p>
+      </div>
     </div>
   </section>
 </main>
