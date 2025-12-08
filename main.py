@@ -240,6 +240,38 @@ def admin_applications(request: Request, session: Session = Depends(get_session)
     statement = select(Application, Job).where(Application.job_id == Job.id)
     rows = session.exec(statement).all()
 
+@app.get("/post-job", response_class=HTMLResponse)
+async def get_post_job(request: Request):
+    return templates.TemplateResponse("post_job.html", {"request": request})
+
+
+@app.post("/post-job", response_class=HTMLResponse)
+async def submit_post_job(
+    request: Request,
+    title: str = Form(...),
+    location: str = Form(...),
+    budget: str = Form(None),
+    date: str = Form(None),
+    duration: str = Form(None),
+    category: str = Form(None),
+    details: str = Form(None),
+    name: str = Form(None),
+    email: str = Form(None),
+):
+    job = {
+        "title": title,
+        "location": location,
+        "budget": budget,
+        "details": details,
+    }
+    return templates.TemplateResponse(
+        "post_job_success.html",
+        {
+            "request": request,
+            "job": job,
+        },
+    )
+
     applications = []
     for application, job in rows:
         applications.append(
@@ -260,4 +292,4 @@ def admin_applications(request: Request, session: Session = Depends(get_session)
             "request": request,
             "applications": applications,
         },
-    )
+    ) 
