@@ -1,284 +1,112 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Post a job – JobDash</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post a Job – JobDash</title>
 
     <style>
-        * {
-            box-sizing: border-box;
+        body {
+            background: #f7f7f7;
+            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
         }
 
-        body {
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-            background: linear-gradient(180deg, #e5f0ff 0%, #f9fafb 40%, #ffffff 100%);
-            color: #0f172a;
+        .container {
+            max-width: 850px;
+            margin: 40px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
-        /* HEADER (même style que la home) */
-
-        header {
-            padding: 16px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-            backdrop-filter: blur(12px);
-            background: rgba(229, 240, 255, 0.9);
-            border-bottom: 1px solid #dbe3f5;
-        }
-
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .logo-circle {
-            width: 36px;
-            height: 36px;
-            border-radius: 999px;
-            background: radial-gradient(circle at 30% 20%, #ffffff, #bfdbfe);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            color: #1d4ed8;
-        }
-
-        .brand-name {
-            font-weight: 700;
-            font-size: 1.1rem;
-            color: #0f172a;
-        }
-
-        .brand-tag {
-            font-size: 0.8rem;
-            color: #4b5563;
-            margin-top: 2px;
-        }
-
-        nav a {
-            color: #0f172a;
-            text-decoration: none;
-            margin-left: 20px;
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-
-        nav a:hover {
-            color: #1d4ed8;
-        }
-
-        /* PAGE */
-
-        .page-wrapper {
-            max-width: 960px;
-            margin: 32px auto 60px;
-            padding: 0 16px;
-        }
-
-        .page-title {
-            font-size: 1.8rem;
-            margin-bottom: 8px;
-        }
-
-        .page-subtitle {
-            font-size: 0.98rem;
-            color: #4b5563;
-            margin-bottom: 24px;
-        }
-
-        .form-card {
-            background: #fff7ed;
-            border-radius: 20px;
-            padding: 22px 20px 20px;
-            border: 1px solid #fed7aa;
-            box-shadow: 0 14px 30px rgba(15, 23, 42, 0.08);
-        }
-
-        form {
-            display: grid;
-            gap: 14px;
-        }
+        h1 { font-size: 2rem; margin-bottom: 5px; }
+        p { color: #555; }
 
         label {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: #78350f;
+            font-weight: bold;
+            margin-top: 15px;
+            display: block;
         }
 
-        input[type="text"],
-        input[type="number"],
-        input[type="datetime-local"],
-        textarea,
-        select {
-            margin-top: 4px;
+        input, textarea, select {
             width: 100%;
-            padding: 9px 10px;
-            border-radius: 10px;
-            border: 1px solid #fed7aa;
-            font-size: 0.9rem;
-            font-family: inherit;
-            background: #fff;
-        }
-
-        textarea {
-            min-height: 80px;
-            resize: vertical;
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 12px;
-        }
-
-        .submit-row {
+            padding: 12px;
             margin-top: 8px;
-            display: flex;
-            justify-content: flex-end;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            font-size: 1rem;
         }
 
-        button[type="submit"] {
-            border-radius: 999px;
-            border: none;
-            padding: 10px 22px;
-            background: #ea580c;
+        textarea { resize: vertical; height: 120px; }
+
+        .row {
+            display: flex;
+            gap: 20px;
+        }
+        .row div { flex: 1; }
+
+        button {
+            margin-top: 20px;
+            background: #d9534f;
             color: white;
-            font-size: 0.96rem;
-            font-weight: 600;
+            border: none;
+            padding: 14px 22px;
+            border-radius: 10px;
+            font-size: 1rem;
             cursor: pointer;
         }
-
-        button[type="submit"]:hover {
-            background: #c2410c;
-        }
-
-        .success-message {
-            margin-top: 18px;
-            padding: 14px 14px 12px;
-            border-radius: 16px;
-            background: #ecfdf5;
-            border: 1px solid #bbf7d0;
-            color: #166534;
-            font-size: 0.9rem;
-        }
-
-        .success-title {
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .success-details {
-            font-size: 0.88rem;
-            color: #14532d;
-        }
-
-        @media (max-width: 768px) {
-            header {
-                padding: 12px 16px;
-            }
-            .page-wrapper {
-                margin-top: 20px;
-            }
-        }
+        button:hover { opacity: 0.8; }
     </style>
 </head>
 
 <body>
+<div class="container">
+    <h1>Post a job</h1>
+    <p>Describe the help you need so local workers can see your task and contact you.</p>
 
-<header>
-    <div class="brand">
-        <div class="logo-circle">JD</div>
-        <div>
-            <div class="brand-name">JobDash</div>
-            <div class="brand-tag">Jobcenter online</div>
-        </div>
-    </div>
+    <form action="/post-job" method="post">
 
-    <nav>
-        <a href="/">Home</a>
-        <a href="/#how">How it works</a>
-        <a href="/post-job">Post a job</a>
-        <a href="/#faq">FAQ</a>
-    </nav>
-</header>
+        <label for="title">Job title</label>
+        <input type="text" id="title" name="title" placeholder="Example: Cleaning help for a small apartment">
 
-<div class="page-wrapper">
-    <h1 class="page-title">Post a job</h1>
-    <p class="page-subtitle">
-        Describe the help you need so local workers can see your task and contact you.
-    </p>
+        <label for="description">What do you need help with?</label>
+        <textarea id="description" name="description" placeholder="Describe the task..."></textarea>
 
-    <div class="form-card">
-        <form method="post" action="/post-job">
+        <div class="row">
             <div>
-                <label for="title">Job title</label>
-                <input type="text" id="title" name="title" placeholder="Example: Cleaning help for a small apartment" required />
+                <label for="location">Location</label>
+                <input type="text" id="location" name="location" placeholder="North Portland, OR">
             </div>
 
             <div>
-                <label for="details">What do you need help with?</label>
-                <textarea id="details" name="details" placeholder="Describe the task, what needs to be done, and any important details." required></textarea>
-            </div>
-
-            <div class="form-row">
-                <div>
-                    <label for="location">Location</label>
-                    <input type="text" id="location" name="location" placeholder="North Portland, OR" required />
-                </div>
-
-                <div>
-                    <label for="budget">Budget (USD)</label>
-                    <input type="number" id="budget" name="budget" min="10" step="1" placeholder="45" required />
-                </div>
-            </div>
-
-            <div class="form-row">
-                <div>
-                    <label for="datetime">When?</label>
-                    <input type="datetime-local" id="datetime" name="datetime" required />
-                </div>
-
-                <div>
-                    <label for="category">Task type</label>
-                    <select id="category" name="category" required>
-                        <option value="">Choose a category</option>
-                        <option value="Cleaning">Cleaning</option>
-                        <option value="Moving help">Moving help</option>
-                        <option value="Yard work">Yard work</option>
-                        <option value="Dishwashing">Dishwashing</option>
-                        <option value="Other">Other</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="submit-row">
-                <button type="submit">Post this job</button>
-            </div>
-        </form>
-
-        {% if submitted %}
-        <div class="success-message">
-            <div class="success-title">✅ Your job has been posted (demo).</div>
-            <div class="success-details">
-                <strong>{{ title }}</strong> – {{ location }} – Budget: ${{ budget }}<br/>
-                Category: {{ category }} • When: {{ datetime }}<br/>
-                Details: {{ details }}
-            </div>
-            <div style="margin-top:6px; font-size:0.82rem;">
-                In the next version, this job will appear on the homepage in "Available tasks near you".
+                <label for="budget">Budget (USD)</label>
+                <input type="number" id="budget" name="budget" placeholder="45">
             </div>
         </div>
-        {% endif %}
-    </div>
+
+        <div class="row">
+            <div>
+                <label for="when">When?</label>
+                <input type="datetime-local" id="when" name="when">
+            </div>
+
+            <div>
+                <label for="task_type">Task type</label>
+                <select id="task_type" name="task_type">
+                    <option value="">Choose a category</option>
+                    <option value="Cleaning">Cleaning</option>
+                    <option value="Moving">Moving</option>
+                    <option value="Yard work">Yard work</option>
+                    <option value="Dishwashing">Dishwashing</option>
+                </select>
+            </div>
+        </div>
+
+        <button type="submit">Post this job</button>
+    </form>
 </div>
-
 </body>
 </html>
