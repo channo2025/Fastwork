@@ -1,136 +1,53 @@
-from typing import Optional, List
-from datetime import datetime
-
-from fastapi import FastAPI, Request, Form, Depends
-from fastapi.responses import HTMLResponse
-from fastapi.staticfiles import StaticFiles
+from fastapi import FastAPI, Request, Form
+from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
-
-from sqlmodel import SQLModel, Field, Session, create_engine, select
-
-
-# -----------------------------
-# CONFIG BDD
-# -----------------------------
-
-DATABASE_URL = "sqlite:///fastwork_db.db"
-engine = create_engine(DATABASE_URL, echo=False)
-
-
-# -----------------------------
-# MODÈLE JOB
-# -----------------------------
-
-class Job(SQLModel, table=True):
-    id: Optional[int] = Field(default=None, primary_key=True)
-    title: str
-    details: str
-    location: str
-    budget: float
-    datetime: str          # on garde en texte pour l’instant
-    category: str
-    created_at: datetime = Field(default_factory=datetime.utcnow)
-
-
-# -----------------------------
-# FONCTIONS BDD
-# -----------------------------
-
-def create_db_and_tables() -> None:
-    SQLModel.metadata.create_all(engine)
-
-
-def get_session():
-    with Session(engine) as session:
-        yield session
-
-
-# -----------------------------
-# CONFIG FASTAPI + TEMPLATES
-# -----------------------------
+from fastapi.staticfiles import StaticFiles
 
 app = FastAPI()
 
-app.mount("/static", StaticFiles(directory="static"), name="static")
+# Templates & static files
 templates = Jinja2Templates(directory="templates")
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
-@app.on_event("startup")
-def on_startup():
-    create_db_and_tables()
-
-
-# -----------------------------
-# ROUTE HOME (index.html)
-# -----------------------------
-
+# ---------------------------
+# HOME PAGE
+# ---------------------------
 @app.get("/", response_class=HTMLResponse)
-async def home(request: Request, session: Session = Depends(get_session)):
-    # Plus tard, on pourra afficher les vrais jobs ici
-    statement = select(Job).order_by(Job.created_at.desc())
-    jobs: List[Job] = session.exec(statement).all()
-
-    return templates.TemplateResponse(
-        "index.html",
-        {
-            "request": request,
-            "jobs": jobs,
-        },
-    )
+async def home(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
 
 
-# -----------------------------
-# ROUTES POST A JOB
-# -----------------------------
-
-# GET : afficher le formulaire
+# ---------------------------
+# POST A JOB PAGE (GET)
+# ---------------------------
 @app.get("/post-job", response_class=HTMLResponse)
-async def show_post_job(request: Request):
-    return templates.TemplateResponse(
-        "post_job.html",
-        {
-            "request": request,
-            "submitted": False,
-        },
-    )
+async def post_job_page(request: Request):
+    return templates.TemplateResponse("post_job.html", {"request": request})
 
 
-# POST : traiter le formulaire
-@app.post("/post-job", response_class=HTMLResponse)
-async def submit_post_job(
+# ---------------------------
+# POST A JOB (FORM SUBMISSION)
+# ---------------------------
+@app.post("/post-job")
+async def post_job_submit(
     request: Request,
     title: str = Form(...),
-    details: str = Form(...),
+    description: str = Form(...),
     location: str = Form(...),
-    budget: float = Form(...),
-    datetime_value: str = Form(alias="datetime"),
-    category: str = Form(...),
-    session: Session = Depends(get_session),
+    budget: str = Form(...),
+    when: str = Form(...),
+    category: str = Form(...)
 ):
-    # Enregistrer le job en BDD
-    job = Job(
-        title=title,
-        details=details,
-        location=location,
-        budget=budget,
-        datetime=datetime_value,
-        category=category,
-    )
-    session.add(job)
-    session.commit()
-    session.refresh(job)
+    # For now, we just print it (later we'll save to database)
+    print("\n--- NEW JOB RECEIVED ---")
+    print("Title:", title)
+    print("Description:", description)
+    print("Location:", location)
+    print("Budget:", budget)
+    print("When:", when)
+    print("Category:", category)
+    print("-------------------------\n")
 
-    # Ré-afficher la page avec message de succès
-    return templates.TemplateResponse(
-        "post_job.html",
-        {
-            "request": request,
-            "submitted": True,
-            "title": title,
-            "details": details,
-            "location": location,
-            "budget": budget,
-            "datetime": datetime_value,
-            "category": category,
-        },
-    )
+    # Redirect user back to home after posting
+    return RedirectResponse(url="/", status_code=303)
