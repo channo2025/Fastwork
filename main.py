@@ -27,7 +27,7 @@ class Job(SQLModel, table=True):
     details: str
     location: str
     budget: float
-    datetime: str          # simple string pour l’instant
+    datetime: str          # on garde en texte pour l’instant
     category: str
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
@@ -61,18 +61,15 @@ def on_startup():
 
 
 # -----------------------------
-# ROUTES PAGES
+# ROUTE HOME (index.html)
 # -----------------------------
 
-# Home: index.html
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request, session: Session = Depends(get_session)):
-    # On récupère les jobs les plus récents (pour plus tard si tu veux les afficher)
+    # Plus tard, on pourra afficher les vrais jobs ici
     statement = select(Job).order_by(Job.created_at.desc())
     jobs: List[Job] = session.exec(statement).all()
 
-    # index.html n’a pas besoin des jobs pour l’instant,
-    # mais on les passe quand même si tu veux les utiliser plus tard.
     return templates.TemplateResponse(
         "index.html",
         {
@@ -82,7 +79,11 @@ async def home(request: Request, session: Session = Depends(get_session)):
     )
 
 
-# GET : afficher le formulaire Post a Job
+# -----------------------------
+# ROUTES POST A JOB
+# -----------------------------
+
+# GET : afficher le formulaire
 @app.get("/post-job", response_class=HTMLResponse)
 async def show_post_job(request: Request):
     return templates.TemplateResponse(
@@ -94,7 +95,7 @@ async def show_post_job(request: Request):
     )
 
 
-# POST : traiter le formulaire Post a Job
+# POST : traiter le formulaire
 @app.post("/post-job", response_class=HTMLResponse)
 async def submit_post_job(
     request: Request,
@@ -106,7 +107,7 @@ async def submit_post_job(
     category: str = Form(...),
     session: Session = Depends(get_session),
 ):
-    # On enregistre le job dans la BDD
+    # Enregistrer le job en BDD
     job = Job(
         title=title,
         details=details,
@@ -119,7 +120,7 @@ async def submit_post_job(
     session.commit()
     session.refresh(job)
 
-    # On renvoie la même page avec le message de succès
+    # Ré-afficher la page avec message de succès
     return templates.TemplateResponse(
         "post_job.html",
         {
@@ -131,19 +132,5 @@ async def submit_post_job(
             "budget": budget,
             "datetime": datetime_value,
             "category": category,
-        },
-    )
-
-
-# (Optionnel) Liste des jobs sur une autre page si tu veux plus tard
-@app.get("/jobs", response_class=HTMLResponse)
-async def list_jobs(request: Request, session: Session = Depends(get_session)):
-    statement = select(Job).order_by(Job.created_at.desc())
-    jobs: List[Job] = session.exec(statement).all()
-    return templates.TemplateResponse(
-        "jobs.html",  # tu pourras créer ce template plus tard
-        {
-            "request": request,
-            "jobs": jobs,
         },
     )
