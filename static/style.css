@@ -91,3 +91,14 @@ body {
     color: white;
     backdrop-filter: blur(6px);
 }
+.sub-label {
+    display: inline-block;
+    background: white;
+    color: #005acb;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 12px;
+    margin-top: -8px;
+    margin-left: 5px; /* rapproche du logo */
+}
