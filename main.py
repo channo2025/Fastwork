@@ -292,4 +292,41 @@ async def submit_post_job(
             "request": request,
             "applications": applications,
         },
-    ) 
+    )
+
+    @app.get("/post-job", response_class=HTMLResponse)
+async def show_post_job(request: Request):
+    return templates.TemplateResponse(
+        "post_job.html",
+        {
+            "request": request,
+            "submitted": False,
+        },
+    )
+
+
+@app.post("/post-job", response_class=HTMLResponse)
+async def submit_post_job(
+    request: Request,
+    title: str = Form(...),
+    details: str = Form(...),
+    location: str = Form(...),
+    budget: float = Form(...),
+    datetime: str = Form(...),
+    category: str = Form(...),
+):
+    # Ici pour l'instant on ne sauvegarde pas encore dans la base.
+    # On affiche juste un message de succès avec les infos.
+    return templates.TemplateResponse(
+        "post_job.html",
+        {
+            "request": request,
+            "submitted": True,
+            "title": title,
+            "details": details,
+            "location": location,
+            "budget": budget,
+            "datetime": datetime,
+            "category": category,
+        },
+    )
