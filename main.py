@@ -9,13 +9,23 @@ app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
+# Liste en mémoire pour stocker les jobs postés
+jobs = []
+
 
 # ---------------------------
 # HOME PAGE
 # ---------------------------
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+    # On envoie la liste des jobs au template
+    return templates.TemplateResponse(
+        "index.html",
+        {
+            "request": request,
+            "jobs": jobs,   # <--- important
+        },
+    )
 
 
 # ---------------------------
@@ -33,13 +43,26 @@ async def get_post_job(request: Request):
 async def submit_post_job(request: Request):
     form = await request.form()
 
-    # Juste pour vérifier dans les logs Render (plus tard)
+    # On crée un job à partir du formulaire
+    new_job = {
+        "title": form.get("title", "").strip(),
+        "description": form.get("description", "").strip(),
+        "location": form.get("location", "").strip(),
+        "budget": form.get("budget", "").strip(),
+        "when": form.get("when", "").strip(),
+        "task_type": form.get("task_type", "").strip(),
+    }
+
+    # On l'ajoute à la liste (en haut de la liste)
+    if new_job["title"]:
+        jobs.insert(0, new_job)
+
     print("\n===== NEW JOB POSTED =====")
-    for key, value in form.items():
-        print(f"{key}: {value}")
+    for k, v in new_job.items():
+        print(f"{k}: {v}")
     print("==========================\n")
 
-    # On renvoie une petite page de confirmation
+    # Page de confirmation
     html = """
     <!DOCTYPE html>
     <html>

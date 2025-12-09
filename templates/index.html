@@ -1,36 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
     <title>JobDash – Find quick jobs near you</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <style>
-        * {
-            box-sizing: border-box;
+        body {
             margin: 0;
-            padding: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: #f5f5f5;
+            color: #111827;
         }
 
-        body {
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-            background: linear-gradient(180deg, #e5f0ff 0%, #f9fafb 40%, #ffffff 100%);
-            color: #0f172a;
+        .page {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 24px 16px 60px;
         }
 
         /* HEADER */
-
-        header {
-            padding: 16px 40px;
+        .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-            backdrop-filter: blur(12px);
-            background: rgba(229, 240, 255, 0.9);
-            border-bottom: 1px solid #dbe3f5;
+            margin-bottom: 24px;
         }
 
         .brand {
@@ -39,190 +33,150 @@
             gap: 10px;
         }
 
-        .logo-circle {
-            width: 36px;
-            height: 36px;
+        .badge-logo {
+            width: 40px;
+            height: 40px;
             border-radius: 999px;
-            background: radial-gradient(circle at 30% 20%, #ffffff, #bfdbfe);
+            background: #2563eb;
+            color: #fff;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 700;
-            color: #1d4ed8;
         }
 
-        .brand-name {
+        .brand-text-title {
             font-weight: 700;
-            font-size: 1.1rem;
-            color: #0f172a;
         }
 
-        .brand-tag {
+        .brand-text-sub {
             font-size: 0.8rem;
-            color: #4b5563;
-            margin-top: 2px;
+            color: #6b7280;
         }
 
-        nav a {
-            color: #0f172a;
-            text-decoration: none;
-            margin-left: 20px;
+        .nav {
+            display: flex;
+            gap: 18px;
             font-size: 0.9rem;
-            font-weight: 500;
         }
 
-        nav a:hover {
-            color: #1d4ed8;
+        .nav a {
+            text-decoration: none;
+            color: #4b5563;
+        }
+
+        .nav a:hover {
+            text-decoration: underline;
         }
 
         /* HERO */
-
-        .hero-wrapper {
-            padding: 40px 16px 20px;
-            display: flex;
-            justify-content: center;
-        }
-
         .hero {
-            max-width: 960px;
-            width: 100%;
             background: linear-gradient(135deg, #2563eb, #1d4ed8);
-            border-radius: 24px;
-            padding: 40px 32px 36px;
-            color: #ffffff;
-            box-shadow: 0 18px 45px rgba(15, 23, 42, 0.25);
+            border-radius: 26px;
+            padding: 32px 32px 36px;
+            color: white;
+            box-shadow: 0 18px 40px rgba(37, 99, 235, 0.35);
+            margin-bottom: 32px;
         }
 
-        .hero-label {
-            font-size: 0.78rem;
+        .hero-badge {
             display: inline-block;
-            padding: 4px 10px;
+            padding: 6px 14px;
             border-radius: 999px;
-            background: rgba(15, 23, 42, 0.25);
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            margin-bottom: 14px;
+            background: rgba(15, 23, 42, 0.35);
+            font-size: 0.8rem;
+            margin-bottom: 16px;
         }
 
         .hero h1 {
             font-size: 2.4rem;
-            line-height: 1.2;
-            margin-bottom: 14px;
+            margin: 0 0 10px;
         }
 
-        .hero-text {
-            font-size: 1rem;
-            max-width: 540px;
-            margin-bottom: 22px;
-            color: #e5e7eb;
+        .hero p {
+            margin: 0 0 20px;
+            max-width: 520px;
+            font-size: 0.98rem;
         }
 
         .hero-buttons {
             display: flex;
+            flex-wrap: wrap;
             gap: 12px;
-            margin-bottom: 16px;
-        }
-
-        .btn {
-            border-radius: 999px;
-            padding: 11px 22px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            border: none;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
+            margin-bottom: 10px;
         }
 
         .btn-primary {
-            background: #ffffff;
+            padding: 12px 24px;
+            border-radius: 999px;
+            border: none;
+            background: white;
             color: #1d4ed8;
+            font-weight: 600;
+            cursor: pointer;
         }
 
         .btn-secondary {
+            padding: 12px 24px;
+            border-radius: 999px;
+            border: 1px solid #cbd5f5;
             background: transparent;
-            border: 1.5px solid rgba(255, 255, 255, 0.7);
-            color: #ffffff;
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
         }
 
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .hero-small {
+        .hero-subfoot {
             font-size: 0.85rem;
-            color: #e5e7eb;
-        }
-
-        /* GENERIC SECTIONS */
-
-        .section {
-            max-width: 960px;
-            margin: 0 auto 60px;
-            padding: 0 16px;
-        }
-
-        .section h2 {
-            font-size: 1.6rem;
-            margin-bottom: 10px;
-            color: #0f172a;
-        }
-
-        .section p {
-            font-size: 0.98rem;
-            color: #4b5563;
+            color: #dbeafe;
         }
 
         /* AVAILABLE TASKS */
-
-        .tasks-intro {
-            margin-bottom: 16px;
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin: 10px 0 4px;
         }
 
-        .task-row {
+        .section-sub {
+            font-size: 0.9rem;
+            color: #6b7280;
+            margin-bottom: 18px;
+        }
+
+        .tasks-list {
             display: flex;
-            flex-wrap: wrap;
-            gap: 16px;
-            margin-top: 8px;
+            flex-direction: column;
+            gap: 14px;
         }
 
         .task-card {
-            flex: 1 1 280px;
-            background: #ffffff;
-            border-radius: 18px;
-            padding: 16px;
-            border: 1px solid #e5e7eb;
-            box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
-            display: flex;
-            gap: 14px;
-            align-items: stretch;
-        }
-
-        .task-image {
-            width: 110px;
-            border-radius: 14px;
-            background: radial-gradient(circle at 30% 20%, #ffffff, #fee2e2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 32px;
-        }
-
-        .task-body {
-            flex: 1;
+            background: white;
+            border-radius: 16px;
+            padding: 16px 18px;
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
             display: flex;
             flex-direction: column;
             gap: 6px;
         }
 
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+
         .task-title {
             font-weight: 600;
-            font-size: 1rem;
-            color: #0f172a;
+        }
+
+        .task-budget {
+            font-weight: 600;
+            color: #16a34a;
         }
 
         .task-meta {
-            font-size: 0.88rem;
+            font-size: 0.85rem;
             color: #6b7280;
         }
 
@@ -235,184 +189,118 @@
 
         .tag {
             font-size: 0.78rem;
-            padding: 4px 8px;
+            padding: 4px 10px;
             border-radius: 999px;
             background: #eff6ff;
             color: #1d4ed8;
         }
 
-        .task-cta {
-            margin-top: 8px;
+        .empty-text {
+            font-size: 0.9rem;
+            color: #6b7280;
+            font-style: italic;
         }
 
-        .task-cta button {
-            border-radius: 999px;
-            border: 1px solid #1d4ed8;
-            background: #eff6ff;
-            color: #1d4ed8;
-            font-size: 0.85rem;
-            font-weight: 600;
-            padding: 6px 12px;
-            cursor: pointer;
-        }
-
-        /* HOW IT WORKS */
-
-        .card-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 16px;
-            margin-top: 18px;
-        }
-
-        .card {
-            flex: 1 1 260px;
-            background: #ffffff;
-            border-radius: 18px;
-            padding: 18px 20px;
-            border: 1px solid #e5e7eb;
-            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.06);
-        }
-
-        .card h3 {
-            font-size: 1.05rem;
-            margin-bottom: 8px;
-            color: #0f172a;
-        }
-
-        .card ul {
-            padding-left: 18px;
-            font-size: 0.95rem;
-            color: #4b5563;
-        }
-
-        @media (max-width: 768px) {
-            header {
-                padding: 12px 16px;
-            }
+        @media (max-width: 700px) {
             .hero {
-                border-radius: 20px;
-                padding: 26px 18px 24px;
+                border-radius: 0;
+                margin-left: -16px;
+                margin-right: -16px;
             }
-            .hero h1 {
-                font-size: 1.9rem;
-            }
-            .task-card {
+
+            .header {
                 flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
             }
-            .task-image {
-                width: 100%;
-                height: 90px;
+
+            .nav {
+                font-size: 0.85rem;
             }
         }
     </style>
 </head>
-
 <body>
-
+<div class="page">
     <!-- HEADER -->
-    <header>
+    <header class="header">
         <div class="brand">
-            <div class="logo-circle">JD</div>
+            <div class="badge-logo">JD</div>
             <div>
-                <div class="brand-name">JobDash</div>
-                <div class="brand-tag">Jobcenter online</div>
+                <div class="brand-text-title">JobDash</div>
+                <div class="brand-text-sub">Jobcenter online</div>
             </div>
         </div>
 
-        <nav>
+        <nav class="nav">
             <a href="#how">How it works</a>
-            <a href="#why">Why JobDash</a>
+            <a href="#tasks">Tasks</a>
             <a href="/post-job">Post a job</a>
             <a href="#faq">FAQ</a>
         </nav>
     </header>
 
     <!-- HERO -->
-    <div class="hero-wrapper">
-        <section class="hero">
-            <div class="hero-label">Digital job portal</div>
+    <section class="hero">
+        <div class="hero-badge">Digital job portal</div>
+        <h1>Find quick jobs near you.</h1>
+        <p>
+            JobDash connects people who need help with local workers ready to earn money fast.
+            No resume. No interview. Just quick jobs and real money.
+        </p>
 
-            <h1>Find quick jobs near you.</h1>
+        <div class="hero-buttons">
+            <button class="btn-primary">I need a worker</button>
+            <button class="btn-secondary">I'm looking for a job</button>
+        </div>
 
-            <p class="hero-text">
-                JobDash connects people who need help with local workers ready to earn
-                money fast. No resume. No interview. Just quick jobs and real money.
-            </p>
-
-            <div class="hero-buttons">
-                <button class="btn btn-primary">I need a worker</button>
-                <button class="btn btn-secondary">I'm looking for a job</button>
-            </div>
-
-            <p class="hero-small">
-                Accessible to everyone: students, newcomers, part-time workers, parents, and more.
-            </p>
-        </section>
-    </div>
+        <div class="hero-subfoot">
+            Accessible to everyone: students, newcomers, part-time workers, parents, and more.
+        </div>
+    </section>
 
     <!-- AVAILABLE TASKS -->
-    <section id="tasks" class="section">
-        <h2>Available tasks near you</h2>
-        <p class="tasks-intro">
-            Here is an example of a JobDash task. In the future, this section will show real jobs posted by people in your area.
+    <section id="tasks">
+        <h2 class="section-title">Available tasks near you</h2>
+        <p class="section-sub">
+            Here are the latest jobs posted on JobDash.
         </p>
 
-        <div class="task-row">
-            <article class="task-card">
-                <div class="task-image">🧹</div>
+        {% if jobs and jobs|length > 0 %}
+            <div class="tasks-list">
+                {% for job in jobs %}
+                    <article class="task-card">
+                        <div class="task-header">
+                            <div class="task-title">{{ job.title }}</div>
+                            {% if job.budget %}
+                                <div class="task-budget">${{ job.budget }}</div>
+                            {% endif %}
+                        </div>
 
-                <div class="task-body">
-                    <div class="task-title">Cleaning help for a small apartment</div>
-                    <div class="task-meta">
-                        North Portland, OR • Today, 5:00 PM • Budget: $45
-                    </div>
+                        {% if job.description %}
+                            <div class="task-meta">{{ job.description }}</div>
+                        {% endif %}
 
-                    <div class="task-tags">
-                        <span class="tag">Cleaning</span>
-                        <span class="tag">1–2 hours</span>
-                        <span class="tag">No resume</span>
-                    </div>
+                        <div class="task-meta">
+                            {% if job.location %}{{ job.location }}{% else %}Location not specified{% endif %}
+                            {% if job.when %} · {{ job.when }}{% endif %}
+                        </div>
 
-                    <div class="task-cta">
-                        <button>I'm interested</button>
-                    </div>
-                </div>
-            </article>
-        </div>
-    </section>
-
-    <!-- HOW IT WORKS -->
-    <section id="how" class="section">
-        <h2>How does JobDash work?</h2>
-        <p>
-            JobDash is a digital work portal that lets people find help or find work instantly.
-            Like a modern job center — but 100% online, fast and easy.
-        </p>
-
-        <div class="card-row">
-            <div class="card">
-                <h3>For workers</h3>
-                <ul>
-                    <li>Create a simple profile in minutes</li>
-                    <li>Choose the tasks you can do</li>
-                    <li>Pick jobs near your area</li>
-                    <li>Contact clients or get contacted</li>
-                    <li>Get paid quickly after the work</li>
-                </ul>
+                        <div class="task-tags">
+                            {% if job.task_type %}
+                                <span class="tag">{{ job.task_type }}</span>
+                            {% endif %}
+                            <span class="tag">Posted just now</span>
+                        </div>
+                    </article>
+                {% endfor %}
             </div>
-
-            <div class="card">
-                <h3>For clients</h3>
-                <ul>
-                    <li>Post a task in less than 1 minute</li>
-                    <li>Choose a local worker who can help</li>
-                    <li>Set your budget and time</li>
-                    <li>Get help the same day for everyday tasks</li>
-                </ul>
-            </div>
-        </div>
+        {% else %}
+            <p class="empty-text">
+                No tasks yet. Be the first one to <a href="/post-job">post a job</a> on JobDash.
+            </p>
+        {% endif %}
     </section>
-
+</div>
 </body>
 </html>
