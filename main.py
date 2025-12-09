@@ -138,3 +138,9 @@ async def submit_post_job(request: Request):
     </html>
     """
     return HTMLResponse(content=html, status_code=200)
+@app.get("/tasks", response_class=HTMLResponse)
+def tasks(request: Request):
+    return templates.TemplateResponse(
+        "tasks.html",
+        {"request": request, "tasks": tasks_data}
+    )
