@@ -6,24 +6,25 @@ from datetime import datetime
 
 app = FastAPI()
 
-# Static and templates
+# ---------- STATIC & TEMPLATES ----------
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
-# TEMP JOB STORAGE (in-memory)
+# ---------- TEMP STORAGE FOR JOBS ----------
+# (pour l'instant, on garde les jobs en mémoire)
 tasks_data = []
 
 
-# HOME PAGE
+# ---------- HOME PAGE ----------
 @app.get("/", response_class=HTMLResponse)
 def home(request: Request):
     return templates.TemplateResponse(
-        "index.html", 
+        "index.html",
         {"request": request, "tasks": tasks_data}
     )
 
 
-# TASK LIST PAGE
+# ---------- TASKS LIST PAGE (/tasks) ----------
 @app.get("/tasks", response_class=HTMLResponse)
 def tasks(request: Request):
     return templates.TemplateResponse(
@@ -32,14 +33,14 @@ def tasks(request: Request):
     )
 
 
-# POST JOB FORM PAGE
+# ---------- POST JOB FORM (GET) ----------
 @app.get("/post-job", response_class=HTMLResponse)
 def post_job_page(request: Request):
     return templates.TemplateResponse("post_job.html", {"request": request})
 
 
-# HANDLE FORM SUBMISSION
-@app.post("/post-job")
+# ---------- POST JOB FORM (POST) ----------
+@app.post("/post-job", response_class=HTMLResponse)
 def submit_job(
     request: Request,
     title: str = Form(...),
@@ -49,8 +50,11 @@ def submit_job(
     when: str = Form(...),
     task_type: str = Form(...)
 ):
+    # Simple ID pour plus tard (détails)
+    job_id = len(tasks_data) + 1
 
     tasks_data.append({
+        "id": job_id,
         "title": title,
         "description": description,
         "location": location,
