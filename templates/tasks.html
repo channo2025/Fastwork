@@ -8,166 +8,58 @@
         body {
             margin: 0;
             font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-            background: #f5f7fb;
-            color: #0f172a;
+            background: #f3f4f6;
+            color: #111827;
         }
 
-        header {
-            position: sticky;
-            top: 0;
-            z-index: 10;
-            background: rgba(245, 247, 251, 0.9);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(148, 163, 184, 0.3);
-        }
-
-        .nav-bar {
-            max-width: 1100px;
+        .page {
+            max-width: 960px;
             margin: 0 auto;
-            padding: 14px 20px;
+            padding: 32px 16px 64px;
+        }
+
+        .header {
             display: flex;
-            align-items: center;
             justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
         }
 
         .brand {
             display: flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: 600;
-            font-size: 18px;
-            color: #0f172a;
+            flex-direction: column;
         }
 
-        .brand-badge {
-            width: 34px;
-            height: 34px;
-            border-radius: 999px;
-            background: linear-gradient(135deg, #2563eb, #1d4ed8);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #ffffff;
+        .brand-title {
             font-weight: 700;
-            font-size: 14px;
+            font-size: 20px;
         }
 
-        nav a {
-            margin-left: 20px;
+        .brand-sub {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        .nav a {
+            margin-left: 16px;
             font-size: 14px;
+            color: #4b5563;
             text-decoration: none;
-            color: #475569;
         }
 
-        nav a:hover {
-            color: #1d4ed8;
-        }
-
-        main {
-            max-width: 1100px;
-            margin: 32px auto;
-            padding: 0 20px 40px;
+        .nav a:hover {
+            text-decoration: underline;
         }
 
         h1 {
-            font-size: 26px;
-            margin-bottom: 4px;
+            font-size: 28px;
+            margin-bottom: 8px;
         }
 
         .subtitle {
             font-size: 14px;
-            color: #64748b;
-            margin-bottom: 24px;
-        }
-
-        .tasks-list {
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-        }
-
-        .task-card {
-            background: #ffffff;
-            border-radius: 14px;
-            padding: 16px 18px;
-            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
-            display: flex;
-            align-items: flex-start;
-            justify-content: space-between;
-            gap: 12px;
-        }
-
-        .task-main {
-            flex: 1;
-        }
-
-        .task-title {
-            font-weight: 600;
-            font-size: 16px;
-            margin-bottom: 4px;
-            color: #0f172a;
-        }
-
-        .task-desc {
-            font-size: 14px;
-            color: #64748b;
-            margin-bottom: 6px;
-        }
-
-        .task-meta {
-            font-size: 13px;
             color: #6b7280;
-        }
-
-        .task-tags {
-            margin-top: 8px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-        }
-
-        .tag {
-            font-size: 11px;
-            padding: 4px 8px;
-            border-radius: 999px;
-            background: #e0edff;
-            color: #1d4ed8;
-        }
-
-        .tag-soft {
-            background: #e5e7eb;
-            color: #4b5563;
-        }
-
-        .task-right {
-            text-align: right;
-            min-width: 100px;
-        }
-
-        .task-budget {
-            font-weight: 600;
-            color: #16a34a;
-            margin-bottom: 8px;
-        }
-
-        .task-time {
-            font-size: 12px;
-            color: #9ca3af;
-            margin-bottom: 8px;
-        }
-
-        .btn-small {
-            font-size: 13px;
-            padding: 6px 14px;
-            border-radius: 999px;
-            border: none;
-            cursor: pointer;
-            background: #2563eb;
-            color: #ffffff;
-        }
-
-        .btn-small:hover {
-            background: #1d4ed8;
+            margin-bottom: 24px;
         }
 
         .empty {
@@ -183,60 +75,150 @@
         .empty a:hover {
             text-decoration: underline;
         }
+
+        .tasks-list {
+            margin-top: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .task-card {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 16px 20px;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .task-main {
+            max-width: 70%;
+        }
+
+        .task-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .task-desc {
+            font-size: 14px;
+            color: #4b5563;
+            margin-bottom: 6px;
+        }
+
+        .task-meta {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        .task-chip-row {
+            margin-top: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .chip {
+            font-size: 11px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: #eff6ff;
+            color: #1d4ed8;
+        }
+
+        .task-right {
+            text-align: right;
+        }
+
+        .task-budget {
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .detail-btn {
+            display: inline-block;
+            font-size: 13px;
+            padding: 6px 14px;
+            border-radius: 999px;
+            border: 1px solid #1d4ed8;
+            color: #1d4ed8;
+            background: white;
+            text-decoration: none;
+        }
+
+        .detail-btn:hover {
+            background: #1d4ed8;
+            color: white;
+        }
+
+        @media (max-width: 640px) {
+            .task-card {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .task-main {
+                max-width: 100%;
+            }
+
+            .task-right {
+                text-align: left;
+            }
+        }
     </style>
 </head>
 <body>
-<header>
-    <div class="nav-bar">
+<div class="page">
+    <header class="header">
         <div class="brand">
-            <div class="brand-badge">JD</div>
-            <div>
-                JobDash
-                <div style="font-size: 11px; font-weight: 400; color:#94a3b8;">Jobcenter online</div>
-            </div>
+            <span class="brand-title">JD JobDash</span>
+            <span class="brand-sub">Jobcenter online</span>
         </div>
-        <nav>
+        <nav class="nav">
             <a href="/">Home</a>
-            <a href="/tasks">Tasks</a>
+            <a href="/tasks"><strong>Tasks</strong></a>
             <a href="/post-job">Post a job</a>
-            <a href="/#faq">FAQ</a>
+            <a href="#faq">FAQ</a>
         </nav>
-    </div>
-</header>
+    </header>
 
-<main>
-    <h1>All tasks</h1>
-    <p class="subtitle">Here are all the jobs currently posted on JobDash.</p>
+    <main>
+        <h1>All tasks</h1>
+        <p class="subtitle">Here are all the jobs currently posted on JobDash.</p>
 
-    <div class="tasks-list">
-        {% if tasks and tasks|length > 0 %}
-            {% for task in tasks %}
-                <div class="task-card">
-                    <div class="task-main">
-                        <div class="task-title">{{ task.title }}</div>
-                        <div class="task-desc">{{ task.description }}</div>
-                        <div class="task-meta">
-                            {{ task.location }} • {{ task.when }}
-                        </div>
-                        <div class="task-tags">
-                            <span class="tag">{{ task.task_type }}</span>
-                            <span class="tag-soft">Posted just now</span>
-                        </div>
-                    </div>
-                    <div class="task-right">
-                        <div class="task-budget">${{ task.budget }}</div>
-                        <div class="task-time">Fixed-price task</div>
-                        <button class="btn-small">View details</button>
-                    </div>
-                </div>
-            {% endfor %}
-        {% else %}
+        {% if not tasks %}
             <p class="empty">
                 No tasks yet. Be the first to
                 <a href="/post-job">post a job</a>.
             </p>
+        {% else %}
+            <div class="tasks-list">
+                {% for task in tasks %}
+                    <article class="task-card">
+                        <div class="task-main">
+                            <div class="task-title">{{ task.title }}</div>
+                            <div class="task-desc">{{ task.description }}</div>
+                            <div class="task-meta">
+                                {{ task.location }} • {{ task.when }}
+                            </div>
+                            <div class="task-chip-row">
+                                <span class="chip">{{ task.task_type }}</span>
+                                <span class="chip">Posted {{ task.created_at }}</span>
+                            </div>
+                        </div>
+                        <div class="task-right">
+                            <div class="task-budget">${{ task.budget }}</div>
+                            <a href="/jobs/{{ task.id }}" class="detail-btn">
+                                View details
+                            </a>
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
         {% endif %}
-    </div>
-</main>
+    </main>
+</div>
 </body>
 </html>

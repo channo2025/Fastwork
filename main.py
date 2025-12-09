@@ -6,54 +6,59 @@ from datetime import datetime
 
 app = FastAPI()
 
-# Fichiers statiques (si tu as un dossier /static)
+# --------- Templates & static ---------
+templates = Jinja2Templates(directory="templates")
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-# Dossier des templates HTML
-templates = Jinja2Templates(directory="templates")
-
-# --------- STOCKAGE SIMPLE EN MÉMOIRE ----------
-# (Les jobs disparaissent si Render redémarre)
+# --------- SIMPLE IN-MEMORY STORAGE ---------
+# (Les jobs restent tant que le serveur ne redémarre pas)
 tasks_data = []
 
 
-# ------------ HOME PAGE ------------------------
+# --------- HOME PAGE ---------
 @app.get("/", response_class=HTMLResponse)
-def home(request: Request):
-    # On montre les jobs les plus récents en bas de la page
-    latest_tasks = list(reversed(tasks_data))[:5]
-
+async def home(request: Request):
+    """
+    Page d'accueil : hero bleu + section "Available tasks near you".
+    On envoie la liste des jobs à index.html.
+    """
     return templates.TemplateResponse(
         "index.html",
         {
             "request": request,
-            "tasks": latest_tasks,
+            "tasks": tasks_data,
         },
     )
 
 
-# ------------ PAGE TOUTES LES TÂCHES -----------
+# --------- TASKS PAGE (liste complète) ---------
 @app.get("/tasks", response_class=HTMLResponse)
-def tasks_page(request: Request):
+async def tasks_page(request: Request):
+    """
+    Page /tasks : affiche tous les jobs postés sur JobDash.
+    """
     return templates.TemplateResponse(
         "tasks.html",
         {
             "request": request,
-            "tasks": tasks_data,   # ⚠️ important : on envoie bien tasks_data
+            "tasks": tasks_data,
         },
     )
 
 
-# ------------ FORMULAIRE POST A JOB ------------
+# --------- PAGE POST A JOB (GET) ---------
 @app.get("/post-job", response_class=HTMLResponse)
-def show_post_job_form(request: Request):
+async def post_job_form(request: Request):
+    """
+    Affiche le formulaire pour poster un job.
+    """
     return templates.TemplateResponse(
         "post_job.html",
         {"request": request},
     )
 
 
-# ------------ TRAITEMENT DU FORMULAIRE ---------
+# --------- TRAITEMENT POST A JOB (POST) ---------
 @app.post("/post-job", response_class=HTMLResponse)
 async def submit_job(
     request: Request,
@@ -64,7 +69,10 @@ async def submit_job(
     when: str = Form(...),
     task_type: str = Form(...),
 ):
-    # Créer un ID simple
+    """
+    Récupère les données du formulaire, crée un job en mémoire,
+    l'ajoute dans tasks_data, puis affiche la page de confirmation.
+    """
     job_id = len(tasks_data) + 1
 
     job = {
@@ -80,9 +88,8 @@ async def submit_job(
 
     tasks_data.append(job)
 
-    # Page de confirmation (garde le nom que tu utilises déjà)
     return templates.TemplateResponse(
-        "job_posted.html",   # si ton fichier s’appelle thank_you.html, change ici
+        "job_posted.html",  # ta page "Job posted 🎉"
         {
             "request": request,
             "job": job,
@@ -90,11 +97,17 @@ async def submit_job(
     )
 
 
-# ------------ DÉTAIL D’UN JOB ------------------
-@app.get("/tasks/{job_id}", response_class=HTMLResponse)
-def job_detail(job_id: int, request: Request):
-    job = next((j for j in tasks_data if j["id"] == job_id), None)
+# --------- JOB DETAIL PAGE (/jobs/{job_id}) ---------
+@app.get("/jobs/{job_id}", response_class=HTMLResponse)
+async def job_detail(request: Request, job_id: int):
+    """
+    Page de détails pour un job spécifique.
+    URL : /jobs/1, /jobs/2, etc.
+    """
+    job = next((task for task in tasks_data if task["id"] == job_id), None)
+
     if not job:
+        # Si l'ID n'existe pas → 404
         raise HTTPException(status_code=404, detail="Job not found")
 
     return templates.TemplateResponse(
