@@ -1,3 +1,5 @@
+from typing import Optional
+
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
@@ -18,12 +20,39 @@ jobs = []
 # ---------------------------
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
-    # On envoie la liste des jobs au template
     return templates.TemplateResponse(
         "index.html",
         {
             "request": request,
-            "jobs": jobs,   # <--- important
+            "jobs": jobs,   # liste complète des jobs pour la section "Available tasks"
+        },
+    )
+
+
+# ---------------------------
+# TASKS PAGE (LISTE COMPLÈTE + FILTRES)
+# ---------------------------
+@app.get("/tasks", response_class=HTMLResponse)
+async def tasks_page(request: Request, task_type: Optional[str] = None):
+    # Filtrer par type si ?task_type=Cleaning par ex.
+    if task_type:
+        filtered_jobs = [
+            job for job in jobs
+            if job.get("task_type", "").lower() == task_type.lower()
+        ]
+    else:
+        filtered_jobs = jobs
+
+    # Liste de tous les types disponibles (pour les boutons de filtre)
+    task_types = sorted({job["task_type"] for job in jobs if job.get("task_type")})
+
+    return templates.TemplateResponse(
+        "tasks.html",
+        {
+            "request": request,
+            "jobs": filtered_jobs,
+            "selected_type": task_type,
+            "task_types": task_types,
         },
     )
 
