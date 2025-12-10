@@ -1,115 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>About – JobDash</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <style>
-    body {
-      margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: radial-gradient(circle at top left, #3b82f6 0%, #0b2b6d 40%, #020617 100%);
-      color: #111827;
-    }
-    .page { min-height: 100vh; }
-    .shell { max-width: 1120px; margin: 0 auto; padding: 24px 16px 40px; }
-
-    .top-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 24px;
-      color: #f9fafb;
-    }
-    .brand { display: flex; align-items: center; gap: 10px; }
-    .brand-badge {
-      width: 40px; height: 40px; border-radius: 999px;
-      background: white; display: flex; align-items: center; justify-content: center;
-      font-weight: 700; color: #1d4ed8; font-size: 14px;
-    }
-    .brand-text-title { font-weight: 700; }
-    .brand-text-sub { font-size: 12px; opacity: 0.9; }
-    .nav { display: flex; gap: 24px; font-size: 14px; }
-    .nav a { color: #e5e7eb; text-decoration: none; }
-    .nav a:hover { text-decoration: underline; }
-
-    .card {
-      background: #f9fafb;
-      border-radius: 24px;
-      padding: 28px 24px 24px;
-      box-shadow: 0 22px 60px rgba(15, 23, 42, 0.45);
-    }
-    h1 { font-size: 26px; margin-top: 0; }
-    p { font-size: 14px; color: #4b5563; line-height: 1.6; }
-    ul { font-size: 14px; color: #4b5563; }
-
-    .footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 18px;
-      font-size: 12px;
-      color: #9ca3af;
-    }
-    .footer-nav { display: flex; gap: 14px; }
-    .footer-nav a { color: #9ca3af; text-decoration: none; }
-    .footer-nav a:hover { text-decoration: underline; }
-
-    @media (max-width: 768px) {
-      .top-bar { flex-direction: column; align-items: flex-start; gap: 10px; }
-      .card { padding: 22px 16px; }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About – JobDash</title>
+    <link rel="stylesheet" href="/static/styles.css">
 </head>
+
 <body>
-<div class="page">
-  <div class="shell">
-    <header class="top-bar">
-      <div class="brand">
-        <div class="brand-badge">JD</div>
-        <div>
-          <div class="brand-text-title">JobDash</div>
-          <div class="brand-text-sub">Jobcenter online – quick cash jobs</div>
-        </div>
-      </div>
-      <nav class="nav">
-        <a href="/">Home</a>
-        <a href="/tasks">Tasks</a>
-        <a href="/post-job">Post a job</a>
-        <a href="/about">About</a>
-      </nav>
+    <header class="header">
+        <a href="/" class="logo">JD JobDash</a>
+        <nav class="nav">
+            <a href="/">Home</a>
+            <a href="/tasks">Tasks</a>
+            <a href="/post-job">Post a job</a>
+            <a href="/about">About</a>
+        </nav>
     </header>
 
-    <main class="card">
-      <h1>About JobDash</h1>
-      <p>
-        JobDash is a simple online jobcenter for everyday tasks like cleaning,
-        moving help, yard work and shopping. It is designed for newcomers,
-        students and busy families who need fast help and prefer flexible work.
-      </p>
-      <p>
-        Our goal is to make it easy for people to:
-      </p>
-      <ul>
-        <li>Post small local jobs in a few clicks;</li>
-        <li>Find quick work without a long CV or interview;</li>
-        <li>Get paid directly by the client (cash or app) once the job is done.</li>
-      </ul>
-      <p>
-        JobDash is not an employer. We simply connect people who need help
-        with local independent workers.
-      </p>
+    <main class="page-container">
+        <section class="content-card">
+            <h1>About JobDash</h1>
+            <p>
+                JobDash is your online jobcenter for fast, simple, real-life tasks. 
+                Our mission is to connect people who need help with everyday jobs 
+                to local workers who are ready to work and get paid quickly.
+            </p>
 
-      <footer class="footer">
-        <span>© 2026 JobDash. All rights reserved.</span>
-        <div class="footer-nav">
-          <a href="/privacy">Privacy Policy</a>
-          <a href="/terms">Terms of Use</a>
-          <a href="/contact">Contact</a>
-        </div>
-      </footer>
+            <h2>Why JobDash?</h2>
+            <p>
+                Many people need help with small tasks — moving, cleaning, yard work, 
+                shopping, packing, delivery, and more. At the same time, thousands of 
+                workers, students, newcomers, and busy families need flexible ways to earn money.
+            </p>
+            <p>
+                JobDash brings these two needs together in one place: fast jobs, fast pay.
+            </p>
+
+            <h2>Who can use JobDash?</h2>
+            <ul>
+                <li><strong>Workers:</strong> Anyone who wants quick local jobs, cash pay, and no interview.</li>
+                <li><strong>Employers:</strong> Individuals or small businesses who need help for short tasks.</li>
+                <li><strong>Newcomers:</strong> People new to the USA who need simple jobs to start earning immediately.</li>
+            </ul>
+
+            <h2>How it works</h2>
+            <ol>
+                <li>Post a job — location, category, pay, description.</li>
+                <li>Workers see tasks near them and apply.</li>
+                <li>Workers get paid directly once the job is done.</li>
+            </ol>
+
+            <p>
+                JobDash is fast, friendly, and designed to support local communities. 
+                We believe everyone deserves access to simple work opportunities 
+                without complicated hiring processes.
+            </p>
+
+            <h2>Our vision</h2>
+            <p>
+                To become the most trusted platform for quick day-jobs across the USA, 
+                supporting workers and helping families get things done.
+            </p>
+
+            <p style="margin-top: 20px;"><strong>Thank you for using JobDash.</strong></p>
+        </section>
     </main>
-  </div>
-</div>
+
+    <footer class="footer">
+      <span>© 2026 JobDash. All rights reserved.</span>
+      <div class="footer-nav">
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Use</a>
+        <a href="/contact">Contact</a>
+      </div>
+    </footer>
 </body>
 </html>
