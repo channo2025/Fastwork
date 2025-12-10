@@ -1,62 +1,63 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div class="page-container">
-  <h1 class="page-title">Contact</h1>
+<div class="contact-container">
+  
+  <h1>Contact</h1>
 
-  <p>
-    If you have questions about JobDash Online, partnership ideas, or need help with the Platform,
-    you can reach us using the information below.
+  <p class="contact-text">
+    If you have questions, need help with the platform, or want to suggest improvements,
+    you can contact us anytime at:
   </p>
 
-  <h2>Email</h2>
-  <p>
-    The best way to contact us is by email:<br>
-    <a href="mailto:hello@jobdashonline.com">hello@jobdashonline.com</a>
+  <a class="contact-email" href="mailto:hello@jobdashonline.com">
+    hello@jobdashonline.com
+  </a>
+
+  <p class="contact-note">
+    We usually reply within 24–48 hours.
   </p>
 
-  <h2>For general questions</h2>
-  <ul>
-    <li>How to post a job</li>
-    <li>How to describe your task</li>
-    <li>Basic questions about using the Platform</li>
-  </ul>
-
-  <h2>For feedback and suggestions</h2>
-  <p>
-    We are still improving JobDash Online. If you have ideas to make the platform better for
-    workers or employers, we would love to hear from you.
-  </p>
-
-  <p><strong>JobDash Online – local jobs, quick cash, simple connection.</strong></p>
 </div>
 
 <style>
-.page-container {
-    max-width: 900px;
-    margin: auto;
-    padding: 40px 20px;
+.contact-container {
+    max-width: 700px;
+    margin: 80px auto;
+    background: rgba(255,255,255,0.15);
+    padding: 40px;
+    border-radius: 20px;
     color: white;
+    text-align: center;
+    backdrop-filter: blur(3px);
 }
-.page-title {
+
+.contact-container h1 {
     font-size: 32px;
-    font-weight: 700;
     margin-bottom: 20px;
 }
-h2 {
-    margin-top: 25px;
-    font-size: 22px;
-}
-p, ul {
-    font-size: 17px;
+
+.contact-text {
+    font-size: 18px;
+    margin-bottom: 30px;
     line-height: 1.6;
 }
-ul {
-    margin-left: 20px;
-}
-a {
+
+.contact-email {
+    font-size: 20px;
+    font-weight: 600;
     color: #cfe4ff;
+    text-decoration: none;
+}
+
+.contact-email:hover {
     text-decoration: underline;
+}
+
+.contact-note {
+    margin-top: 30px;
+    font-size: 16px;
+    opacity: 0.8;
 }
 </style>
 
