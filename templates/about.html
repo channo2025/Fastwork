@@ -1,52 +1,81 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>About JobDash Online</title>
-  <link rel="stylesheet" href="/static/style.css">
-</head>
+{% extends "base.html" %}
+{% block content %}
 
-<body>
-  <div class="page-container">
+<div class="page-container">
+  <h1 class="page-title">About JobDash Online</h1>
 
-    <h1>About JobDash Online</h1>
+  <p>
+    JobDash Online is your simple, fast jobcenter for real-life tasks.
+    Our mission is to connect people who need help with everyday jobs
+    to local workers who are ready to work and get paid quickly.
+  </p>
 
-    <p><strong>JobDash Online</strong> is your digital jobcenter for fast, simple, real-life tasks.  
-    Our mission is to connect people who need help with everyday jobs to reliable local workers looking to earn money quickly.</p>
+  <h2>What is JobDash Online?</h2>
+  <p>
+    JobDash Online is an online platform where people can post short,
+    local tasks such as cleaning, moving help, yard work, shopping, and more.
+    Workers can browse available tasks and choose the ones that fit their schedule.
+  </p>
 
-    <h2>Why JobDash Online?</h2>
-    <p>Every day, people need help with cleaning, moving, shopping, yard work, packing, delivery and more.  
-    At the same time, thousands of workers — newcomers, students, part-timers, and busy families — need flexible ways to earn money instantly.</p>
+  <h2>Why we created JobDash Online</h2>
+  <p>
+    Many people in the community need help with small tasks, and at the same time
+    many workers, newcomers, students and busy parents need flexible ways to earn
+    extra money. JobDash Online brings these two needs together:
+  </p>
+  <ul>
+    <li>Fast jobs</li>
+    <li>Cash pay or simple app payments</li>
+    <li>No long CV, no formal interview</li>
+  </ul>
 
-    <p>JobDash Online brings these needs together in one place:  
-    <strong>Quick jobs. Quick pay. No resume. No interview.</strong></p>
+  <h2>Who can use JobDash Online?</h2>
+  <ul>
+    <li><strong>Workers</strong> – Anyone who wants quick local jobs and flexible hours.</li>
+    <li><strong>Employers</strong> – Individuals, families or small businesses who need help.</li>
+    <li><strong>Newcomers</strong> – People new to the USA who need simple jobs to start earning.</li>
+  </ul>
 
-    <h2>Who can use JobDash Online?</h2>
-    <ul>
-      <li><strong>Workers:</strong> Anyone looking for simple, flexible local jobs with same-day or direct pay.</li>
-      <li><strong>Employers:</strong> Individuals, families, or small businesses who need help with short tasks.</li>
-      <li><strong>Newcomers:</strong> People new to the USA who need easy ways to start earning immediately.</li>
-    </ul>
+  <h2>How it works</h2>
+  <ol>
+    <li>The Employer posts a job: location, category, description, and pay.</li>
+    <li>Workers browse tasks and contact the Employer.</li>
+    <li>Once the job is complete, the Employer pays the Worker directly.</li>
+  </ol>
 
-    <h2>How it works</h2>
-    <ol>
-      <li>Post a job — location, category, pay type, description.</li>
-      <li>Workers see nearby tasks and apply.</li>
-      <li>Payment is made directly between the employer and the worker once the job is completed.</li>
-    </ol>
+  <h2>Our vision</h2>
+  <p>
+    Our goal is to become a trusted platform for quick day jobs across the USA,
+    giving workers more opportunities to earn and helping families get everyday
+    tasks done faster.
+  </p>
 
-    <h2>Our vision</h2>
-    <p>To become the most trusted platform for quick day-jobs across the USA, helping workers earn easily while supporting households and small communities.</p>
+  <p><strong>JobDash Online – quick cash jobs, simple and local.</strong></p>
+</div>
 
-  </div>
+<style>
+.page-container {
+    max-width: 900px;
+    margin: auto;
+    padding: 40px 20px;
+    color: white;
+}
+.page-title {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+h2 {
+    margin-top: 25px;
+    font-size: 22px;
+}
+p, ul, ol {
+    font-size: 17px;
+    line-height: 1.6;
+}
+ul, ol {
+    margin-left: 20px;
+}
+</style>
 
-  <footer class="footer">
-    <span>© 2026 JobDash Online. All rights reserved.</span>
-    <div class="footer-nav">
-      <a href="/privacy">Privacy Policy</a>
-      <a href="/terms">Terms of Use</a>
-      <a href="/contact">Contact</a>
-    </div>
-  </footer>
-</body>
-</html>
+{% endblock %}

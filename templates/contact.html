@@ -1,63 +1,63 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Contact – JobDash</title>
-  <link rel="stylesheet" href="/static/styles.css">
-</head>
-<body class="body-bg">
+{% extends "base.html" %}
+{% block content %}
 
-<header class="header">
-  <a href="/" class="logo">
-    <span class="logo-circle">JD</span>
-    JobDash
-  </a>
-  <nav class="nav">
-    <a href="/">Home</a>
-    <a href="/tasks">Tasks</a>
-    <a href="/post-job">Post a job</a>
-    <a href="/about">About</a>
-  </nav>
-</header>
+<div class="page-container">
+  <h1 class="page-title">Contact</h1>
 
-<main class="container">
-  <section class="big-card">
-    <h1>Contact</h1>
+  <p>
+    If you have questions about JobDash Online, partnership ideas, or need help with the Platform,
+    you can reach us using the information below.
+  </p>
 
-    <p>
-      Have a question about JobDash, your account or a job posting?
-      You can reach us using the information below.
-    </p>
+  <h2>Email</h2>
+  <p>
+    The best way to contact us is by email:<br>
+    <a href="mailto:hello@jobdashonline.com">hello@jobdashonline.com</a>
+  </p>
 
-    <h2>Email</h2>
-    <p>
-      <strong>support@jobdash.com</strong><br>
-      We will do our best to answer within a reasonable time.
-    </p>
+  <h2>For general questions</h2>
+  <ul>
+    <li>How to post a job</li>
+    <li>How to describe your task</li>
+    <li>Basic questions about using the Platform</li>
+  </ul>
 
-    <h2>For urgent safety issues</h2>
-    <p>
-      If you feel unsafe or in danger, please contact local emergency services first.
-      JobDash support cannot replace police, medical or emergency assistance.
-    </p>
+  <h2>For feedback and suggestions</h2>
+  <p>
+    We are still improving JobDash Online. If you have ideas to make the platform better for
+    workers or employers, we would love to hear from you.
+  </p>
 
-    <h2>Suggestions and feedback</h2>
-    <p>
-      We are continuously improving JobDash. If you have ideas to make the platform better for
-      workers or families, we would love to hear from you.
-    </p>
-  </section>
-</main>
+  <p><strong>JobDash Online – local jobs, quick cash, simple connection.</strong></p>
+</div>
 
-<footer class="footer">
-  <span>© 2026 JobDash. All rights reserved.</span>
-  <div class="footer-nav">
-    <a href="/privacy">Privacy Policy</a>
-    <a href="/terms">Terms of Use</a>
-    <a href="/contact">Contact</a>
-  </div>
-</footer>
+<style>
+.page-container {
+    max-width: 900px;
+    margin: auto;
+    padding: 40px 20px;
+    color: white;
+}
+.page-title {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+h2 {
+    margin-top: 25px;
+    font-size: 22px;
+}
+p, ul {
+    font-size: 17px;
+    line-height: 1.6;
+}
+ul {
+    margin-left: 20px;
+}
+a {
+    color: #cfe4ff;
+    text-decoration: underline;
+}
+</style>
 
-</body>
-</html>
+{% endblock %}
