@@ -1,26 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Terms of Use – JobDash Online</title>
-  <link rel="stylesheet" href="/static/style.css">
-</head>
+{% extends "base.html" %}
+{% block content %}
 
-<body>
-  <div class="page-container">
+<div class="page-container">
 
-    <h1>Terms of Use</h1>
+    <h1 class="page-title">Terms of Use</h1>
 
-    <p>By using JobDash Online (“the Platform”), you agree to the following terms.  
+    <p>By using JobDash Online ("the Platform"), you agree to the following terms. 
     If you do not agree, please do not use the Platform.</p>
 
     <h2>1. Purpose of the Platform</h2>
-    <p>JobDash Online is a listing platform where users can post local tasks and workers can view them. We do not hire workers, assign jobs, or handle payments.</p>
+    <p>JobDash Online is a marketplace where users can post local tasks and workers can view and respond to them. 
+    JobDash Online does not hire workers, assign jobs, or handle payments.</p>
 
     <h2>2. No Employment Relationship</h2>
-    <p>JobDash Online is <strong>not an employer</strong>.  
-    All jobs posted are independent agreements between the job poster (“Employer”) and the worker (“Worker”).  
-    We are not responsible for job performance, payment, behavior, or results.</p>
+    <p><strong>JobDash Online is not an employer.</strong>  
+    All jobs are independent agreements between the job poster ("Employer") 
+    and the worker ("Worker"). JobDash Online is not responsible for job performance, behavior, or results.</p>
 
     <h2>3. Payments</h2>
     <p>All payments are handled directly between Employers and Workers.  
@@ -28,40 +23,53 @@
 
     <h2>4. User Responsibilities</h2>
     <ul>
-      <li>Provide accurate job information.</li>
-      <li>Act respectfully and legally.</li>
-      <li>Pay workers directly once the job is completed.</li>
+        <li>Provide accurate job information.</li>
+        <li>Act respectfully and legally.</li>
+        <li>Pay workers directly once the job is completed.</li>
     </ul>
 
     <h2>5. Prohibited Content</h2>
-    <p>No illegal jobs, scams, or harmful activities. Jobs violating laws or safety rules will be removed.</p>
+    <p>No illegal jobs, scams, or harmful activities. Posts violating laws or safety rules will be removed.</p>
 
     <h2>6. Liability Disclaimer</h2>
     <p>JobDash Online is not responsible for:</p>
     <ul>
-      <li>Job outcomes or disputes</li>
-      <li>Losses, damages, delays, or personal issues between users</li>
-      <li>Any injury, accident, or misconduct during a task</li>
+        <li>Job outcomes or disputes</li>
+        <li>Losses, delays, damages, or personal conflicts between users</li>
+        <li>Any injury, accident, or misconduct during tasks</li>
     </ul>
 
-    <p>Users interact at their own risk.</p>
+    <p>By continuing to use JobDash Online, you agree to these terms.</p>
 
-    <h2>7. Account & Access</h2>
-    <p>We may limit or suspend access to the Platform at any time for misuse or violations.</p>
+</div>
 
-    <h2>8. Changes to Terms</h2>
-    <p>We may modify these Terms at any time. Updated versions will be posted on this page.</p>
+<style>
+.page-container {
+    max-width: 900px;
+    margin: auto;
+    padding: 40px 20px;
+    color: white;
+}
 
-  </div>
+.page-title {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
 
-  <footer class="footer">
-    <span>© 2026 JobDash Online. All rights reserved.</span>
-    <div class="footer-nav">
-      <a href="/privacy">Privacy Policy</a>
-      <a href="/terms">Terms of Use</a>
-      <a href="/contact">Contact</a>
-    </div>
-  </footer>
+h2 {
+    margin-top: 25px;
+    font-size: 22px;
+}
 
-</body>
-</html>
+p, ul {
+    font-size: 17px;
+    line-height: 1.6;
+}
+
+ul {
+    margin-left: 20px;
+}
+</style>
+
+{% endblock %}
