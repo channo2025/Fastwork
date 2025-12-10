@@ -1,64 +1,86 @@
 {% extends "base.html" %}
+
 {% block content %}
+<main class="page">
 
-<div class="contact-container">
-  
-  <h1>Contact</h1>
+  <section class="page-header">
+    <h1>Contact</h1>
+    <p class="page-intro">
+      Have questions about JobDash Online – quick cash jobs?  
+      You can reach us directly by email. We usually reply within 24–48 hours.
+    </p>
+  </section>
 
-  <p class="contact-text">
-    If you have questions, need help with the platform, or want to suggest improvements,
-    you can contact us anytime at:
-  </p>
+  <section class="page-section contact-section">
+    <div class="contact-card">
+      <h2>Email</h2>
+      <p>
+        For support, feedback, or partnership inquiries, contact us at:
+      </p>
+      <p class="contact-email">
+        <a href="mailto:hello@jobdashonline.com">hello@jobdashonline.com</a>
+      </p>
+      <p class="contact-note">
+        Please include your city and a short description of your question or issue.
+      </p>
+    </div>
+  </section>
 
-  <a class="contact-email" href="mailto:hello@jobdashonline.com">
-    hello@jobdashonline.com
-  </a>
-
-  <p class="contact-note">
-    We usually reply within 24–48 hours.
-  </p>
-
-</div>
+</main>
 
 <style>
-.contact-container {
-    max-width: 700px;
-    margin: 80px auto;
-    background: rgba(255,255,255,0.15);
-    padding: 40px;
-    border-radius: 20px;
-    color: white;
-    text-align: center;
-    backdrop-filter: blur(3px);
+.page {
+    max-width: 900px;
+    margin: 40px auto 80px;
+    padding: 0 24px;
+    color: #ffffff;
 }
 
-.contact-container h1 {
+.page-header h1 {
     font-size: 32px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
-.contact-text {
+.page-intro {
     font-size: 18px;
-    margin-bottom: 30px;
+    opacity: 0.9;
+}
+
+.page-section {
+    margin-top: 32px;
+}
+
+.contact-card {
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 20px;
+    padding: 28px 24px;
+    backdrop-filter: blur(4px);
+}
+
+.contact-card h2 {
+    font-size: 22px;
+    margin-bottom: 10px;
+}
+
+.contact-card p {
+    margin: 8px 0;
     line-height: 1.6;
 }
 
-.contact-email {
-    font-size: 20px;
+.contact-email a {
+    font-size: 18px;
     font-weight: 600;
-    color: #cfe4ff;
+    color: #d6e6ff;
     text-decoration: none;
 }
 
-.contact-email:hover {
+.contact-email a:hover {
     text-decoration: underline;
 }
 
 .contact-note {
-    margin-top: 30px;
-    font-size: 16px;
-    opacity: 0.8;
+    font-size: 14px;
+    opacity: 0.85;
 }
 </style>
-
 {% endblock %}
