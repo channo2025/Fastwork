@@ -1,112 +1,64 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Post a Job – JobDash</title>
+{% extends "base.html" %}
 
-    <style>
-        body {
-            background: #f7f7f7;
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
+{% block content %}
 
-        .container {
-            max-width: 850px;
-            margin: 40px auto;
-            background: white;
-            padding: 30px;
-            border-radius: 16px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
+<h1 class="page-title">Post a job</h1>
+<p class="page-subtitle">
+  Need help with cleaning, moving, yard work or shopping? Post your task and local workers will see it.
+</p>
 
-        h1 { font-size: 2rem; margin-bottom: 5px; }
-        p { color: #555; }
-
-        label {
-            font-weight: bold;
-            margin-top: 15px;
-            display: block;
-        }
-
-        input, textarea, select {
-            width: 100%;
-            padding: 12px;
-            margin-top: 8px;
-            border-radius: 10px;
-            border: 1px solid #ddd;
-            font-size: 1rem;
-        }
-
-        textarea { resize: vertical; height: 120px; }
-
-        .row {
-            display: flex;
-            gap: 20px;
-        }
-        .row div { flex: 1; }
-
-        button {
-            margin-top: 20px;
-            background: #d9534f;
-            color: white;
-            border: none;
-            padding: 14px 22px;
-            border-radius: 10px;
-            font-size: 1rem;
-            cursor: pointer;
-        }
-        button:hover { opacity: 0.8; }
-    </style>
-</head>
-
-<body>
-<div class="container">
-    <h1>Post a job</h1>
-    <p>Describe the help you need so local workers can see your task and contact you.</p>
-
-    <form action="/post-job" method="post">
-
+<section class="section">
+  <form method="post" action="/post-job" class="form-card">
+    <div class="form-grid">
+      <div>
         <label for="title">Job title</label>
-        <input type="text" id="title" name="title" placeholder="Example: Cleaning help for a small apartment">
+        <input type="text" id="title" name="title" placeholder="Example: Help with moving boxes" required />
+      </div>
 
-        <label for="description">What do you need help with?</label>
-        <textarea id="description" name="description" placeholder="Describe the task..."></textarea>
+      <div>
+        <label for="category">Category</label>
+        <select id="category" name="category" required>
+          <option value="Cleaning">Cleaning</option>
+          <option value="Moving">Moving</option>
+          <option value="Yard work">Yard work</option>
+          <option value="Shopping / errands">Shopping / errands</option>
+          <option value="Furniture assembly">Furniture assembly</option>
+          <option value="General help">General help</option>
+        </select>
+      </div>
 
-        <div class="row">
-            <div>
-                <label for="location">Location</label>
-                <input type="text" id="location" name="location" placeholder="North Portland, OR">
-            </div>
+      <div>
+        <label for="location">Location (area / neighborhood)</label>
+        <input type="text" id="location" name="location" placeholder="SE Portland, Gresham, Vancouver..." required />
+      </div>
 
-            <div>
-                <label for="budget">Budget (USD)</label>
-                <input type="number" id="budget" name="budget" placeholder="45">
-            </div>
-        </div>
+      <div>
+        <label for="pay">Pay (amount)</label>
+        <input type="text" id="pay" name="pay" placeholder="$80, $25/hr, flat rate..." required />
+      </div>
 
-        <div class="row">
-            <div>
-                <label for="when">When?</label>
-                <input type="datetime-local" id="when" name="when">
-            </div>
+      <div class="form-row-full">
+        <label for="pay_type">Pay type</label>
+        <select id="pay_type" name="pay_type" required>
+          <option value="Flat rate">Flat rate</option>
+          <option value="Per hour">Per hour</option>
+          <option value="Per day">Per day</option>
+          <option value="Cash on site">Cash on site</option>
+        </select>
+      </div>
 
-            <div>
-                <label for="task_type">Task type</label>
-                <select id="task_type" name="task_type">
-                    <option value="">Choose a category</option>
-                    <option value="Cleaning">Cleaning</option>
-                    <option value="Moving">Moving</option>
-                    <option value="Yard work">Yard work</option>
-                    <option value="Dishwashing">Dishwashing</option>
-                </select>
-            </div>
-        </div>
+      <div class="form-row-full">
+        <label for="description">Description</label>
+        <textarea id="description" name="description" placeholder="Describe what needs to be done, when, and any important details." required></textarea>
+      </div>
+    </div>
 
-        <button type="submit">Post this job</button>
-    </form>
-</div>
-</body>
-</html>
+    <button type="submit" class="btn-submit">Post this job</button>
+  </form>
+
+  <p class="pill-muted" style="margin-top:10px;">
+    Workers are independent. Please pay them directly (cash or app) once the job is done.
+  </p>
+</section>
+
+{% endblock %}

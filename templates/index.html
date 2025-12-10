@@ -1,306 +1,90 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>JobDash – Find quick jobs near you</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% extends "base.html" %}
 
-    <style>
-        body {
-            margin: 0;
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-            background: #f5f5f5;
-            color: #111827;
-        }
+{% block content %}
 
-        .page {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 24px 16px 60px;
-        }
+<section class="hero">
+  <div>
+    <div class="hero-tag">
+      <span class="hero-tag-dot"></span>
+      <span>Find quick jobs near you</span>
+    </div>
+    <h1>Same-day help for real-life tasks.</h1>
+    <p>
+      JobDash is your online jobcenter for fast, local tasks: cleaning, moving,
+      yard work, shopping and more. No resume, no interview – just work and get paid.
+    </p>
 
-        /* HEADER */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-        }
+    <div class="hero-buttons">
+      <a href="/tasks"><button class="btn-primary">Browse available tasks</button></a>
+      <a href="/post-job"><button class="btn-secondary">Post a job</button></a>
+    </div>
 
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+    <div class="hero-subtext">
+      Quick jobs · Cash pay · Flexible workers · Perfect for newcomers, students & busy families.
+    </div>
+  </div>
 
-        .badge-logo {
-            width: 40px;
-            height: 40px;
-            border-radius: 999px;
-            background: #2563eb;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-        }
+  <div class="hero-right">
+    <div class="hero-job-card">
+      <div class="hero-job-title">Apartment cleaning</div>
+      <div class="hero-job-meta">SE Portland · 2–3 hours</div>
+      <div class="hero-job-pay">$75 · same-day cash</div>
+      <span class="chip">Cleaning</span>
+    </div>
+    <div class="hero-job-card">
+      <div class="hero-job-title">Help with moving boxes</div>
+      <div class="hero-job-meta">Downtown · this weekend</div>
+      <div class="hero-job-pay">$25/hr · paid on site</div>
+      <span class="chip">Moving</span>
+    </div>
+    <div class="hero-job-card">
+      <div class="hero-job-title">Yard work & leaf pickup</div>
+      <div class="hero-job-meta">NE Portland · 4 hours</div>
+      <div class="hero-job-pay">$120 flat rate</div>
+      <span class="chip">Yard work</span>
+    </div>
+    <div class="hero-job-card">
+      <div class="hero-job-title">Grocery shopping help</div>
+      <div class="hero-job-meta">Gresham · today</div>
+      <div class="hero-job-pay">$40 + tips</div>
+      <span class="chip">Shopping</span>
+    </div>
+  </div>
+</section>
 
-        .brand-text-title {
-            font-weight: 700;
-        }
+<section class="section">
+  <h2>Available tasks near you</h2>
+  <p>These are the most recent jobs posted on JobDash.</p>
 
-        .brand-text-sub {
-            font-size: 0.8rem;
-            color: #6b7280;
-        }
-
-        .nav {
-            display: flex;
-            gap: 18px;
-            font-size: 0.9rem;
-        }
-
-        .nav a {
-            text-decoration: none;
-            color: #4b5563;
-        }
-
-        .nav a:hover {
-            text-decoration: underline;
-        }
-
-        /* HERO */
-        .hero {
-            background: linear-gradient(135deg, #2563eb, #1d4ed8);
-            border-radius: 26px;
-            padding: 32px 32px 36px;
-            color: white;
-            box-shadow: 0 18px 40px rgba(37, 99, 235, 0.35);
-            margin-bottom: 32px;
-        }
-
-        .hero-badge {
-            display: inline-block;
-            padding: 6px 14px;
-            border-radius: 999px;
-            background: rgba(15, 23, 42, 0.35);
-            font-size: 0.8rem;
-            margin-bottom: 16px;
-        }
-
-        .hero h1 {
-            font-size: 2.4rem;
-            margin: 0 0 10px;
-        }
-
-        .hero p {
-            margin: 0 0 20px;
-            max-width: 520px;
-            font-size: 0.98rem;
-        }
-
-        .hero-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-bottom: 10px;
-        }
-
-        .btn-primary {
-            padding: 12px 24px;
-            border-radius: 999px;
-            border: none;
-            background: white;
-            color: #1d4ed8;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .btn-secondary {
-            padding: 12px 24px;
-            border-radius: 999px;
-            border: 1px solid #cbd5f5;
-            background: transparent;
-            color: white;
-            font-weight: 500;
-            cursor: pointer;
-        }
-
-        .hero-subfoot {
-            font-size: 0.85rem;
-            color: #dbeafe;
-        }
-
-        /* AVAILABLE TASKS */
-        .section-title {
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin: 10px 0 4px;
-        }
-
-        .section-sub {
-            font-size: 0.9rem;
-            color: #6b7280;
-            margin-bottom: 18px;
-        }
-
-        .tasks-list {
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-        }
-
-        .task-card {
-            background: white;
-            border-radius: 16px;
-            padding: 16px 18px;
-            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .task-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-        }
-
-        .task-title {
-            font-weight: 600;
-        }
-
-        .task-budget {
-            font-weight: 600;
-            color: #16a34a;
-        }
-
-        .task-meta {
-            font-size: 0.85rem;
-            color: #6b7280;
-        }
-
-        .task-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            margin-top: 6px;
-        }
-
-        .tag {
-            font-size: 0.78rem;
-            padding: 4px 10px;
-            border-radius: 999px;
-            background: #eff6ff;
-            color: #1d4ed8;
-        }
-
-        .empty-text {
-            font-size: 0.9rem;
-            color: #6b7280;
-            font-style: italic;
-        }
-
-        @media (max-width: 700px) {
-            .hero {
-                border-radius: 0;
-                margin-left: -16px;
-                margin-right: -16px;
-            }
-
-            .header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 8px;
-            }
-
-            .nav {
-                font-size: 0.85rem;
-            }
-        }
-    </style>
-</head>
-<body>
-<div class="page">
-    <!-- HEADER -->
-    <header class="header">
-        <div class="brand">
-            <div class="badge-logo">JD</div>
-            <div>
-                <div class="brand-text-title">JobDash</div>
-                <div class="brand-text-sub">Jobcenter online</div>
+  {% if jobs and jobs|length > 0 %}
+    <div class="task-list">
+      {% for job in jobs %}
+        <article class="task-card">
+          <div class="task-main">
+            <div class="task-title">{{ job.get("title", "Quick task") }}</div>
+            <div class="task-meta">
+              {{ job.get("location", "Portland") }}
+              · {{ job.get("category", "General help") }}
             </div>
-        </div>
-
-        <nav class="nav">
-            <a href="#how">How it works</a>
-            <a href="#tasks">Tasks</a>
-            <a href="/post-job">Post a job</a>
-            <a href="#faq">FAQ</a>
-        </nav>
-    </header>
-
-    <!-- HERO -->
-    <section class="hero">
-        <div class="hero-badge">Digital job portal</div>
-        <h1>Find quick jobs near you.</h1>
-        <p>
-            JobDash connects people who need help with local workers ready to earn money fast.
-            No resume. No interview. Just quick jobs and real money.
-        </p>
-
-        <div class="hero-buttons">
-            <button class="btn-primary">I need a worker</button>
-            <button class="btn-secondary">I'm looking for a job</button>
-        </div>
-
-        <div class="hero-subfoot">
-            Accessible to everyone: students, newcomers, part-time workers, parents, and more.
-        </div>
-    </section>
-
-    <!-- AVAILABLE TASKS -->
-    <section id="tasks">
-        <h2 class="section-title">Available tasks near you</h2>
-        <p class="section-sub">
-            Here are the latest jobs posted on JobDash.
-        </p>
-
-        {% if jobs and jobs|length > 0 %}
-            <div class="tasks-list">
-                {% for job in jobs %}
-                    <article class="task-card">
-                        <div class="task-header">
-                            <div class="task-title">{{ job.title }}</div>
-                            {% if job.budget %}
-                                <div class="task-budget">${{ job.budget }}</div>
-                            {% endif %}
-                        </div>
-
-                        {% if job.description %}
-                            <div class="task-meta">{{ job.description }}</div>
-                        {% endif %}
-
-                        <div class="task-meta">
-                            {% if job.location %}{{ job.location }}{% else %}Location not specified{% endif %}
-                            {% if job.when %} · {{ job.when }}{% endif %}
-                        </div>
-
-                        <div class="task-tags">
-                            {% if job.task_type %}
-                                <span class="tag">{{ job.task_type }}</span>
-                            {% endif %}
-                            <span class="tag">Posted just now</span>
-                        </div>
-                    </article>
-                {% endfor %}
+            <div class="task-tags">
+              <span class="task-tag">Quick job</span>
+              <span class="task-tag">Cash pay</span>
+              <span class="task-tag">{{ job.get("pay_type", "Fixed rate") }}</span>
             </div>
-        {% else %}
-            <p class="empty-text">
-                No tasks yet. Be the first one to <a href="/post-job">post a job</a> on JobDash.
-            </p>
-        {% endif %}
-    </section>
-</div>
-</body>
-</html>
+          </div>
+          <div class="task-right">
+            <div>{{ job.get("pay", "$ —") }}</div>
+            <a href="/tasks/{{ job.get('id') }}">View details →</a>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+    <div class="pill-muted">
+      Looking for more? <a href="/tasks" style="color:#2563eb;">View all tasks</a>.
+    </div>
+  {% else %}
+    <p class="pill-muted">No tasks posted yet. Be the first one to <a href="/post-job" style="color:#2563eb;">post a job</a>.</p>
+  {% endif %}
+</section>
+
+{% endblock %}
