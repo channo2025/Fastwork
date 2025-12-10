@@ -1,64 +1,357 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Post a job – JobDash</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+        :root {
+            --blue-bg: #0050c8;
+            --blue-dark: #003b94;
+            --card-bg: #f5efe0;
+            --text-main: #111827;
+            --text-muted: #6b7280;
+            --border-light: #e5e7eb;
+            --btn-blue: #0854ff;
+        }
 
-{% block content %}
+        * {
+            box-sizing: border-box;
+        }
 
-<h1 class="page-title">Post a job</h1>
-<p class="page-subtitle">
-  Need help with cleaning, moving, yard work or shopping? Post your task and local workers will see it.
-</p>
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+                "Segoe UI", sans-serif;
+            background: radial-gradient(circle at top left, #3b82f6 0%, #0b2b6d 40%, #020617 100%);
+            color: var(--text-main);
+        }
 
-<section class="section">
-  <form method="post" action="/post-job" class="form-card">
-    <div class="form-grid">
-      <div>
-        <label for="title">Job title</label>
-        <input type="text" id="title" name="title" placeholder="Example: Help with moving boxes" required />
-      </div>
+        .page {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
 
-      <div>
-        <label for="category">Category</label>
-        <select id="category" name="category" required>
-          <option value="Cleaning">Cleaning</option>
-          <option value="Moving">Moving</option>
-          <option value="Yard work">Yard work</option>
-          <option value="Shopping / errands">Shopping / errands</option>
-          <option value="Furniture assembly">Furniture assembly</option>
-          <option value="General help">General help</option>
-        </select>
-      </div>
+        .shell {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 24px 16px 40px;
+        }
 
-      <div>
-        <label for="location">Location (area / neighborhood)</label>
-        <input type="text" id="location" name="location" placeholder="SE Portland, Gresham, Vancouver..." required />
-      </div>
+        /* HEADER */
+        .top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            color: #f9fafb;
+        }
 
-      <div>
-        <label for="pay">Pay (amount)</label>
-        <input type="text" id="pay" name="pay" placeholder="$80, $25/hr, flat rate..." required />
-      </div>
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
 
-      <div class="form-row-full">
-        <label for="pay_type">Pay type</label>
-        <select id="pay_type" name="pay_type" required>
-          <option value="Flat rate">Flat rate</option>
-          <option value="Per hour">Per hour</option>
-          <option value="Per day">Per day</option>
-          <option value="Cash on site">Cash on site</option>
-        </select>
-      </div>
+        .brand-badge {
+            width: 40px;
+            height: 40px;
+            border-radius: 999px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: #1d4ed8;
+            font-size: 14px;
+        }
 
-      <div class="form-row-full">
-        <label for="description">Description</label>
-        <textarea id="description" name="description" placeholder="Describe what needs to be done, when, and any important details." required></textarea>
-      </div>
+        .brand-text-title {
+            font-weight: 700;
+        }
+
+        .brand-text-sub {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .nav {
+            display: flex;
+            gap: 24px;
+            font-size: 14px;
+        }
+
+        .nav a {
+            color: #e5e7eb;
+            text-decoration: none;
+        }
+
+        .nav a:hover {
+            text-decoration: underline;
+        }
+
+        /* MAIN CARD */
+        .content-card {
+            background: #f9fafb;
+            border-radius: 24px;
+            padding: 28px 24px 24px;
+            box-shadow: 0 22px 60px rgba(15, 23, 42, 0.45);
+        }
+
+        .content-header-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin: 0 0 4px;
+        }
+
+        .content-header-sub {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+        }
+
+        .form-card {
+            background: var(--card-bg);
+            border-radius: 18px;
+            padding: 20px 18px 18px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 14px 18px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            font-size: 13px;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: #374151;
+        }
+
+        input[type="text"],
+        input[type="datetime-local"],
+        select,
+        textarea {
+            border-radius: 10px;
+            border: 1px solid #e5e7eb;
+            padding: 10px 11px;
+            font-size: 14px;
+            font-family: inherit;
+            background: #fdfbf6;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 90px;
+        }
+
+        .form-full {
+            grid-column: 1 / -1;
+        }
+
+        .btn-row {
+            margin-top: 14px;
+            display: flex;
+            justify-content: flex-start;
+        }
+
+        .btn-primary {
+            border-radius: 999px;
+            border: none;
+            padding: 10px 22px;
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+            background: var(--btn-blue);
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            background: #0644ca;
+        }
+
+        .helper-text {
+            margin-top: 10px;
+            font-size: 12px;
+            color: #4b5563;
+        }
+
+        /* FOOTER */
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 18px;
+            font-size: 12px;
+            color: #9ca3af;
+        }
+
+        .footer-nav {
+            display: flex;
+            gap: 14px;
+        }
+
+        .footer-nav a {
+            color: #9ca3af;
+            text-decoration: none;
+        }
+
+        .footer-nav a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .content-card {
+                padding: 22px 16px;
+            }
+
+            .top-bar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+    <div class="shell">
+        <!-- HEADER -->
+        <header class="top-bar">
+            <div class="brand">
+                <div class="brand-badge">JD</div>
+                <div>
+                    <div class="brand-text-title">JobDash</div>
+                    <div class="brand-text-sub">Jobcenter online – quick cash jobs</div>
+                </div>
+            </div>
+
+            <nav class="nav">
+                <a href="/">Home</a>
+                <a href="/tasks">Tasks</a>
+                <a href="/post-job">Post a job</a>
+                <a href="/about">About</a>
+            </nav>
+        </header>
+
+        <!-- MAIN CONTENT CARD -->
+        <main class="content-card">
+            <h1 class="content-header-title">Post a job</h1>
+            <p class="content-header-sub">
+                Need help with cleaning, moving, yard work or shopping?
+                Post your task and local workers will see it.
+            </p>
+
+            <form method="post" action="/post-job" class="form-card">
+                <div class="form-grid">
+                    <!-- Row 1: title + category -->
+                    <div class="form-group">
+                        <label for="title">Job title</label>
+                        <input
+                            id="title"
+                            type="text"
+                            name="title"
+                            placeholder="Example: Help with moving boxes"
+                            required
+                        />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="category">Category</label>
+                        <select id="category" name="category" required>
+                            <option value="Cleaning">Cleaning</option>
+                            <option value="Moving">Moving</option>
+                            <option value="Yard work">Yard work</option>
+                            <option value="Shopping">Shopping</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <!-- Row 2: location + pay -->
+                    <div class="form-group">
+                        <label for="location">Location (area / neighborhood)</label>
+                        <input
+                            id="location"
+                            type="text"
+                            name="location"
+                            placeholder="SE Portland, Gresham, Vancouver..."
+                            required
+                        />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="pay">Pay (amount)</label>
+                        <input
+                            id="pay"
+                            type="text"
+                            name="pay"
+                            placeholder="$80, $25/hr, flat rate..."
+                            required
+                        />
+                    </div>
+
+                    <!-- Row 3: pay type + when  ✅ NOUVEAU CHAMP -->
+                    <div class="form-group">
+                        <label for="pay_type">Pay type</label>
+                        <select id="pay_type" name="pay_type" required>
+                            <option value="Flat rate">Flat rate</option>
+                            <option value="Hourly">Hourly</option>
+                            <option value="Per visit">Per visit</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="when">When (date &amp; time)</label>
+                        <input
+                            id="when"
+                            type="datetime-local"
+                            name="when"
+                            required
+                        />
+                    </div>
+
+                    <!-- Row 4: description full width -->
+                    <div class="form-group form-full">
+                        <label for="description">Description</label>
+                        <textarea
+                            id="description"
+                            name="description"
+                            placeholder="Describe what needs to be done, when, and any important details."
+                            required
+                        ></textarea>
+                    </div>
+                </div>
+
+                <div class="btn-row">
+                    <button class="btn-primary" type="submit">Post this job</button>
+                </div>
+
+                <p class="helper-text">
+                    Workers are independent. Please pay them directly (cash or app) once the job is done.
+                </p>
+            </form>
+
+            <footer class="footer">
+                <span>© 2026 JobDash. All rights reserved.</span>
+                <div class="footer-nav">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Use</a>
+                    <a href="#">Contact</a>
+                </div>
+            </footer>
+        </main>
     </div>
-
-    <button type="submit" class="btn-submit">Post this job</button>
-  </form>
-
-  <p class="pill-muted" style="margin-top:10px;">
-    Workers are independent. Please pay them directly (cash or app) once the job is done.
-  </p>
-</section>
-
-{% endblock %}
+</div>
+</body>
+</html>

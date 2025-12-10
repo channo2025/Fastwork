@@ -1,59 +1,59 @@
 from fastapi import FastAPI, Request, Form
 from fastapi.responses import HTMLResponse, RedirectResponse
-from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from uuid import uuid4
+from fastapi.staticfiles import StaticFiles
 from datetime import datetime
-from typing import List, Dict
 
 app = FastAPI()
 
-# Static folder (au cas où tu ajoutes des images / css plus tard)
+# Templates & static files
+templates = Jinja2Templates(directory="templates")
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-templates = Jinja2Templates(directory="templates")
+# --------- SIMPLE IN-MEMORY STORAGE ----------
+# (Les jobs restent tant que le serveur Render ne redémarre pas)
+tasks_data = []
 
-# Stockage simple en mémoire (jobs disparaissent si le serveur redémarre)
-jobs: List[Dict] = []
 
-
+# --------- HOME PAGE ----------
 @app.get("/", response_class=HTMLResponse)
-async def home(request: Request):
-    latest_jobs = list(reversed(jobs[-5:]))  # derniers jobs
+def home(request: Request):
+    # On affiche seulement les jobs récents sur la home (par ex. 4 derniers)
+    recent_tasks = list(reversed(tasks_data))[:4]
     return templates.TemplateResponse(
         "index.html",
-        {"request": request, "jobs": latest_jobs},
+        {
+            "request": request,
+            "tasks": recent_tasks,
+        },
     )
 
 
+# --------- TASKS PAGE (ALL JOBS) ----------
 @app.get("/tasks", response_class=HTMLResponse)
-async def tasks_page(request: Request):
-    # Tous les jobs, les plus récents en haut
-    all_jobs = list(reversed(jobs))
+def all_tasks(request: Request):
     return templates.TemplateResponse(
         "tasks.html",
-        {"request": request, "jobs": all_jobs},
+        {
+            "request": request,
+            "tasks": tasks_data,
+        },
     )
 
 
-@app.get("/tasks/{job_id}", response_class=HTMLResponse)
-async def job_detail(request: Request, job_id: str):
-    job = next((j for j in jobs if j["id"] == job_id), None)
-    return templates.TemplateResponse(
-        "job_detail.html",
-        {"request": request, "job": job},
-    )
-
-
+# --------- POST JOB (FORM) ----------
 @app.get("/post-job", response_class=HTMLResponse)
-async def post_job_form(request: Request):
+def post_job_form(request: Request):
     return templates.TemplateResponse(
         "post_job.html",
-        {"request": request},
+        {
+            "request": request,
+        },
     )
 
 
-@app.post("/post-job", response_class=HTMLResponse)
+# --------- HANDLE FORM SUBMIT ----------
+@app.post("/post-job")
 async def submit_job(
     request: Request,
     title: str = Form(...),
@@ -61,49 +61,51 @@ async def submit_job(
     location: str = Form(...),
     pay: str = Form(...),
     pay_type: str = Form(...),
+    when: str = Form(...),          # ✅ NOUVEAU CHAMP DATE + HEURE
     description: str = Form(...),
 ):
-    job = {
-        "id": str(uuid4()),
-        "title": title.strip(),
-        "category": category.strip(),
-        "location": location.strip(),
-        "pay": pay.strip(),
-        "pay_type": pay_type.strip(),
-        "description": description.strip(),
-        "created_at": datetime.utcnow(),
-    }
-    jobs.append(job)
-    return RedirectResponse(url="/tasks", status_code=303)
+    # ID simple
+    job_id = len(tasks_data) + 1
+
+    tasks_data.append(
+        {
+            "id": job_id,
+            "title": title,
+            "category": category,
+            "location": location,
+            "pay": pay,
+            "pay_type": pay_type,
+            "when": when,  # ✅ enregistré
+            "description": description,
+            "created_at": datetime.utcnow().isoformat(),
+        }
+    )
+
+    # Après création, on envoie vers la page détails du job
+    return RedirectResponse(url=f"/jobs/{job_id}", status_code=303)
 
 
+# --------- JOB DETAIL PAGE ----------
+@app.get("/jobs/{job_id}", response_class=HTMLResponse)
+def job_detail(request: Request, job_id: int):
+    job = next((j for j in tasks_data if j["id"] == job_id), None)
+    if not job:
+        return templates.TemplateResponse(
+            "job_detail.html",
+            {"request": request, "job": None},
+            status_code=404,
+        )
+
+    return templates.TemplateResponse(
+        "job_detail.html",
+        {"request": request, "job": job},
+    )
+
+
+# --------- ABOUT PAGE (si tu veux l'utiliser dans la nav) ----------
 @app.get("/about", response_class=HTMLResponse)
-async def about_page(request: Request):
+def about(request: Request):
     return templates.TemplateResponse(
         "about.html",
-        {"request": request},
-    )
-
-
-@app.get("/privacy", response_class=HTMLResponse)
-async def privacy_page(request: Request):
-    return templates.TemplateResponse(
-        "privacy.html",
-        {"request": request},
-    )
-
-
-@app.get("/terms", response_class=HTMLResponse)
-async def terms_page(request: Request):
-    return templates.TemplateResponse(
-        "terms.html",
-        {"request": request},
-    )
-
-
-@app.get("/contact", response_class=HTMLResponse)
-async def contact_page(request: Request):
-    return templates.TemplateResponse(
-        "contact.html",
         {"request": request},
     )
