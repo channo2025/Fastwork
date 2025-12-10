@@ -1,357 +1,346 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <title>Post a job – JobDash</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <style>
-        :root {
-            --blue-bg: #0050c8;
-            --blue-dark: #003b94;
-            --card-bg: #f5efe0;
-            --text-main: #111827;
-            --text-muted: #6b7280;
-            --border-light: #e5e7eb;
-            --btn-blue: #0854ff;
-        }
+  <meta charset="UTF-8" />
+  <title>Post a job – JobDash</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-        * {
-            box-sizing: border-box;
-        }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      background: radial-gradient(circle at top left, #1d4ed8, #0f172a);
+      color: #0f172a;
+      min-height: 100vh;
+    }
 
-        body {
-            margin: 0;
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
-                "Segoe UI", sans-serif;
-            background: radial-gradient(circle at top left, #3b82f6 0%, #0b2b6d 40%, #020617 100%);
-            color: var(--text-main);
-        }
+    .page {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px 16px 40px;
+    }
 
-        .page {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      color: #f9fafb;
+    }
 
-        .shell {
-            max-width: 1120px;
-            margin: 0 auto;
-            padding: 24px 16px 40px;
-        }
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
 
-        /* HEADER */
-        .top-bar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 24px;
-            color: #f9fafb;
-        }
+    .logo-circle {
+      width: 36px;
+      height: 36px;
+      border-radius: 999px;
+      background: #2563eb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #f9fafb;
+      font-weight: 700;
+      font-size: 16px;
+      box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.6);
+    }
 
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+    .logo-text-main {
+      font-weight: 700;
+      font-size: 18px;
+    }
 
-        .brand-badge {
-            width: 40px;
-            height: 40px;
-            border-radius: 999px;
-            background: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            color: #1d4ed8;
-            font-size: 14px;
-        }
+    .logo-text-sub {
+      font-size: 12px;
+      opacity: 0.9;
+    }
 
-        .brand-text-title {
-            font-weight: 700;
-        }
+    .nav {
+      display: flex;
+      gap: 20px;
+      font-size: 14px;
+    }
 
-        .brand-text-sub {
-            font-size: 12px;
-            opacity: 0.9;
-        }
+    .nav a {
+      color: #e5e7eb;
+      text-decoration: none;
+    }
 
-        .nav {
-            display: flex;
-            gap: 24px;
-            font-size: 14px;
-        }
+    .nav a:hover {
+      text-decoration: underline;
+    }
 
-        .nav a {
-            color: #e5e7eb;
-            text-decoration: none;
-        }
+    .card {
+      background: #f9fafb;
+      border-radius: 24px;
+      padding: 26px 26px 28px;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.55);
+    }
 
-        .nav a:hover {
-            text-decoration: underline;
-        }
+    h1 {
+      font-size: 24px;
+      margin-bottom: 4px;
+    }
 
-        /* MAIN CARD */
-        .content-card {
-            background: #f9fafb;
-            border-radius: 24px;
-            padding: 28px 24px 24px;
-            box-shadow: 0 22px 60px rgba(15, 23, 42, 0.45);
-        }
+    .intro {
+      font-size: 14px;
+      color: #4b5563;
+      margin-bottom: 18px;
+    }
 
-        .content-header-title {
-            font-size: 24px;
-            font-weight: 700;
-            margin: 0 0 4px;
-        }
+    form {
+      background: #fef3c7;
+      border-radius: 20px;
+      padding: 20px 20px 18px;
+      border: 1px solid #fde68a;
+    }
 
-        .content-header-sub {
-            font-size: 14px;
-            color: var(--text-muted);
-            margin-bottom: 20px;
-        }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 14px;
+    }
 
-        .form-card {
-            background: var(--card-bg);
-            border-radius: 18px;
-            padding: 20px 18px 18px;
-        }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: 14px;
+    }
 
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1.2fr 1fr;
-            gap: 14px 18px;
-        }
+    label {
+      font-size: 13px;
+      font-weight: 600;
+      color: #374151;
+    }
 
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            font-size: 13px;
-        }
+    input[type="text"],
+    input[type="number"],
+    input[type="datetime-local"],
+    select,
+    textarea {
+      border-radius: 10px;
+      border: 1px solid #e5e7eb;
+      padding: 9px 11px;
+      font-size: 14px;
+      font-family: inherit;
+      background: #ffffff;
+    }
 
-        .form-group label {
-            font-weight: 600;
-            color: #374151;
-        }
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
 
-        input[type="text"],
-        input[type="datetime-local"],
-        select,
-        textarea {
-            border-radius: 10px;
-            border: 1px solid #e5e7eb;
-            padding: 10px 11px;
-            font-size: 14px;
-            font-family: inherit;
-            background: #fdfbf6;
-        }
+    .help {
+      font-size: 12px;
+      color: #6b7280;
+    }
 
-        textarea {
-            resize: vertical;
-            min-height: 90px;
-        }
+    .submit-area {
+      margin-top: 8px;
+    }
 
-        .form-full {
-            grid-column: 1 / -1;
-        }
+    .btn-primary {
+      border-radius: 999px;
+      padding: 10px 22px;
+      font-size: 14px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      background: #2563eb;
+      color: #f9fafb;
+      box-shadow: 0 10px 25px rgba(37, 99, 235, 0.5);
+    }
 
-        .btn-row {
-            margin-top: 14px;
-            display: flex;
-            justify-content: flex-start;
-        }
+    .foot-note {
+      font-size: 12px;
+      color: #6b7280;
+      margin-top: 10px;
+    }
 
-        .btn-primary {
-            border-radius: 999px;
-            border: none;
-            padding: 10px 22px;
-            font-size: 14px;
-            font-weight: 600;
-            color: white;
-            background: var(--btn-blue);
-            cursor: pointer;
-        }
+    /* FOOTER */
 
-        .btn-primary:hover {
-            background: #0644ca;
-        }
+    .footer {
+      margin-top: 24px;
+      padding-top: 18px;
+      border-top: 1px solid #e5e7eb;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #e5e7eb;
+      font-size: 13px;
+    }
 
-        .helper-text {
-            margin-top: 10px;
-            font-size: 12px;
-            color: #4b5563;
-        }
+    .footer-nav {
+      display: flex;
+      gap: 16px;
+    }
 
-        /* FOOTER */
-        .footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 18px;
-            font-size: 12px;
-            color: #9ca3af;
-        }
+    .footer-nav a {
+      color: #e5e7eb;
+      text-decoration: none;
+    }
 
-        .footer-nav {
-            display: flex;
-            gap: 14px;
-        }
+    .footer-nav a:hover {
+      text-decoration: underline;
+    }
 
-        .footer-nav a {
-            color: #9ca3af;
-            text-decoration: none;
-        }
+    @media (max-width: 900px) {
+      .form-row {
+        grid-template-columns: 1fr;
+      }
 
-        .footer-nav a:hover {
-            text-decoration: underline;
-        }
-
-        @media (max-width: 768px) {
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .content-card {
-                padding: 22px 16px;
-            }
-
-            .top-bar {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 10px;
-            }
-        }
-    </style>
+      .footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+    }
+  </style>
 </head>
 <body>
-<div class="page">
-    <div class="shell">
-        <!-- HEADER -->
-        <header class="top-bar">
-            <div class="brand">
-                <div class="brand-badge">JD</div>
-                <div>
-                    <div class="brand-text-title">JobDash</div>
-                    <div class="brand-text-sub">Jobcenter online – quick cash jobs</div>
-                </div>
+  <div class="page">
+    <header class="top-bar">
+      <div class="logo-area">
+        <div class="logo-circle">JD</div>
+        <div>
+          <div class="logo-text-main">JobDash</div>
+          <div class="logo-text-sub">Jobcenter online – quick cash jobs</div>
+        </div>
+      </div>
+      <nav class="nav">
+        <a href="/">Home</a>
+        <a href="/tasks">Tasks</a>
+        <a href="/post-job">Post a job</a>
+        <a href="/#about">About</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="card">
+        <h1>Post a job</h1>
+        <p class="intro">
+          Need help with cleaning, moving, yard work or shopping? Post your
+          task and local workers will see it.
+        </p>
+
+        <form method="post" action="/post-job">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="title">Job title</label>
+              <input
+                id="title"
+                name="title"
+                type="text"
+                placeholder="Example: Help with moving boxes"
+                required
+              />
             </div>
 
-            <nav class="nav">
-                <a href="/">Home</a>
-                <a href="/tasks">Tasks</a>
-                <a href="/post-job">Post a job</a>
-                <a href="/about">About</a>
-            </nav>
-        </header>
+            <div class="form-group">
+              <label for="task_type">Category</label>
+              <select id="task_type" name="task_type" required>
+                <option value="">Choose a category</option>
+                <option value="Cleaning">Cleaning</option>
+                <option value="Moving">Moving</option>
+                <option value="Yard work">Yard work</option>
+                <option value="Shopping">Shopping</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+          </div>
 
-        <!-- MAIN CONTENT CARD -->
-        <main class="content-card">
-            <h1 class="content-header-title">Post a job</h1>
-            <p class="content-header-sub">
-                Need help with cleaning, moving, yard work or shopping?
-                Post your task and local workers will see it.
-            </p>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="location">Location (area / neighborhood)</label>
+              <input
+                id="location"
+                name="location"
+                type="text"
+                placeholder="SE Portland, Gresham, Vancouver..."
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="budget">Pay (amount)</label>
+              <input
+                id="budget"
+                name="budget"
+                type="number"
+                step="1"
+                min="0"
+                placeholder="80, 25, 120..."
+                required
+              />
+              <div class="help">Use USD (for example: 80, 120, 25).</div>
+            </div>
+          </div>
 
-            <form method="post" action="/post-job" class="form-card">
-                <div class="form-grid">
-                    <!-- Row 1: title + category -->
-                    <div class="form-group">
-                        <label for="title">Job title</label>
-                        <input
-                            id="title"
-                            type="text"
-                            name="title"
-                            placeholder="Example: Help with moving boxes"
-                            required
-                        />
-                    </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="when">When?</label>
+              <input
+                id="when"
+                name="when"
+                type="datetime-local"
+                required
+              />
+              <div class="help">Choose the date and time for the job.</div>
+            </div>
 
-                    <div class="form-group">
-                        <label for="category">Category</label>
-                        <select id="category" name="category" required>
-                            <option value="Cleaning">Cleaning</option>
-                            <option value="Moving">Moving</option>
-                            <option value="Yard work">Yard work</option>
-                            <option value="Shopping">Shopping</option>
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
+            <div class="form-group">
+              <label for="pay_type">Pay type (for you)</label>
+              <select id="pay_type" name="pay_type">
+                <option value="Flat rate">Flat rate</option>
+                <option value="Hourly">Hourly</option>
+                <option value="Per visit">Per visit</option>
+              </select>
+              <div class="help">
+                This field is just for information; workers are paid directly.
+              </div>
+            </div>
+          </div>
 
-                    <!-- Row 2: location + pay -->
-                    <div class="form-group">
-                        <label for="location">Location (area / neighborhood)</label>
-                        <input
-                            id="location"
-                            type="text"
-                            name="location"
-                            placeholder="SE Portland, Gresham, Vancouver..."
-                            required
-                        />
-                    </div>
+          <div class="form-group">
+            <label for="description">Description</label>
+            <textarea
+              id="description"
+              name="description"
+              placeholder="Describe what needs to be done, when, and any important details."
+              required
+            ></textarea>
+          </div>
 
-                    <div class="form-group">
-                        <label for="pay">Pay (amount)</label>
-                        <input
-                            id="pay"
-                            type="text"
-                            name="pay"
-                            placeholder="$80, $25/hr, flat rate..."
-                            required
-                        />
-                    </div>
+          <div class="submit-area">
+            <button class="btn-primary" type="submit">Post this job</button>
+          </div>
 
-                    <!-- Row 3: pay type + when  ✅ NOUVEAU CHAMP -->
-                    <div class="form-group">
-                        <label for="pay_type">Pay type</label>
-                        <select id="pay_type" name="pay_type" required>
-                            <option value="Flat rate">Flat rate</option>
-                            <option value="Hourly">Hourly</option>
-                            <option value="Per visit">Per visit</option>
-                        </select>
-                    </div>
+          <p class="foot-note">
+            Workers are independent. Please pay them directly (cash or app)
+            once the job is done.
+          </p>
+        </form>
+      </section>
+    </main>
 
-                    <div class="form-group">
-                        <label for="when">When (date &amp; time)</label>
-                        <input
-                            id="when"
-                            type="datetime-local"
-                            name="when"
-                            required
-                        />
-                    </div>
-
-                    <!-- Row 4: description full width -->
-                    <div class="form-group form-full">
-                        <label for="description">Description</label>
-                        <textarea
-                            id="description"
-                            name="description"
-                            placeholder="Describe what needs to be done, when, and any important details."
-                            required
-                        ></textarea>
-                    </div>
-                </div>
-
-                <div class="btn-row">
-                    <button class="btn-primary" type="submit">Post this job</button>
-                </div>
-
-                <p class="helper-text">
-                    Workers are independent. Please pay them directly (cash or app) once the job is done.
-                </p>
-            </form>
-
-            <footer class="footer">
-                <span>© 2026 JobDash. All rights reserved.</span>
-                <div class="footer-nav">
-                    <a href="#">Privacy Policy</a>
-                    <a href="#">Terms of Use</a>
-                    <a href="#">Contact</a>
-                </div>
-            </footer>
-        </main>
-    </div>
-</div>
+    <footer class="footer">
+      <span>© 2026 JobDash. All rights reserved.</span>
+      <div class="footer-nav">
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Use</a>
+        <a href="/contact">Contact</a>
+      </div>
+    </footer>
+  </div>
 </body>
 </html>

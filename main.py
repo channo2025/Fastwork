@@ -11,21 +11,16 @@ templates = Jinja2Templates(directory="templates")
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # --------- SIMPLE IN-MEMORY STORAGE ----------
-# (Les jobs restent tant que le serveur Render ne redémarre pas)
 tasks_data = []
 
 
 # --------- HOME PAGE ----------
 @app.get("/", response_class=HTMLResponse)
 def home(request: Request):
-    # On affiche seulement les jobs récents sur la home (par ex. 4 derniers)
     recent_tasks = list(reversed(tasks_data))[:4]
     return templates.TemplateResponse(
         "index.html",
-        {
-            "request": request,
-            "tasks": recent_tasks,
-        },
+        {"request": request, "tasks": recent_tasks},
     )
 
 
@@ -34,10 +29,7 @@ def home(request: Request):
 def all_tasks(request: Request):
     return templates.TemplateResponse(
         "tasks.html",
-        {
-            "request": request,
-            "tasks": tasks_data,
-        },
+        {"request": request, "tasks": tasks_data},
     )
 
 
@@ -46,13 +38,10 @@ def all_tasks(request: Request):
 def post_job_form(request: Request):
     return templates.TemplateResponse(
         "post_job.html",
-        {
-            "request": request,
-        },
+        {"request": request},
     )
 
 
-# --------- HANDLE FORM SUBMIT ----------
 @app.post("/post-job")
 async def submit_job(
     request: Request,
@@ -61,10 +50,9 @@ async def submit_job(
     location: str = Form(...),
     pay: str = Form(...),
     pay_type: str = Form(...),
-    when: str = Form(...),          # ✅ NOUVEAU CHAMP DATE + HEURE
+    when: str = Form(...),
     description: str = Form(...),
 ):
-    # ID simple
     job_id = len(tasks_data) + 1
 
     tasks_data.append(
@@ -75,13 +63,12 @@ async def submit_job(
             "location": location,
             "pay": pay,
             "pay_type": pay_type,
-            "when": when,  # ✅ enregistré
+            "when": when,
             "description": description,
             "created_at": datetime.utcnow().isoformat(),
         }
     )
 
-    # Après création, on envoie vers la page détails du job
     return RedirectResponse(url=f"/jobs/{job_id}", status_code=303)
 
 
@@ -102,10 +89,37 @@ def job_detail(request: Request, job_id: int):
     )
 
 
-# --------- ABOUT PAGE (si tu veux l'utiliser dans la nav) ----------
+# --------- ABOUT ----------
 @app.get("/about", response_class=HTMLResponse)
 def about(request: Request):
     return templates.TemplateResponse(
         "about.html",
+        {"request": request},
+    )
+
+
+# --------- PRIVACY POLICY ----------
+@app.get("/privacy", response_class=HTMLResponse)
+def privacy(request: Request):
+    return templates.TemplateResponse(
+        "privacy.html",
+        {"request": request},
+    )
+
+
+# --------- TERMS OF USE ----------
+@app.get("/terms", response_class=HTMLResponse)
+def terms(request: Request):
+    return templates.TemplateResponse(
+        "terms.html",
+        {"request": request},
+    )
+
+
+# --------- CONTACT ----------
+@app.get("/contact", response_class=HTMLResponse)
+def contact(request: Request):
+    return templates.TemplateResponse(
+        "contact.html",
         {"request": request},
     )
