@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin – Jobs | FastWork</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="page-admin">
+<div class="page">
+
+    <header class="site-header">
+        <div class="logo">
+            <div class="logo-badge">FW</div>
+            <div>
+                <div class="logo-text">FastWork</div>
+                <div class="tagline">Quick jobs. Real cash.</div>
+            </div>
+        </div>
+
+        <nav class="main-nav">
+            <a href="/admin/jobs" class="nav-link active">Jobs</a>
+            <a href="/admin/applications" class="nav-link">Applications</a>
+            <a href="/post-job" class="nav-link">Post a job</a>
+            <a href="/jobs" class="nav-link">Public jobs</a>
+        </nav>
+    </header>
+
+    <main>
+
+        <section class="hero">
+            <h1 class="hero-title">Admin – Jobs</h1>
+            <p class="hero-subtitle">
+                Manage all jobs posted on FastWork.
+            </p>
+
+            <a href="/post-job" class="primary-btn">
+                + Post a new job
+            </a>
+        </section>
+
+        <section class="jobs-section">
+            {% if jobs %}
+                <div class="jobs-grid admin-jobs-grid">
+                    {% for job in jobs %}
+                        <div class="job-card admin-job-card">
+
+                            <div class="job-top-row">
+                                <div class="job-title">
+                                    {{ job.title }}
+                                </div>
+
+                                {% if job.badge %}
+                                    <div class="job-badge">{{ job.badge }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div class="job-meta">
+                                📍 {{ job.location }} • {{ job.hours }}
+                            </div>
+
+                            <div class="job-pay">
+                                ${{ job.price }}
+                            </div>
+
+                            <div class="job-footer admin-job-footer">
+                                <div class="job-client">
+                                    {% if job.client %}
+                                        {{ job.client }}
+                                    {% else %}
+                                        Client type: N/A
+                                    {% endif %}
+                                </div>
+
+                                <div class="job-admin-links">
+                                    <a href="/job/{{ job.id }}" class="admin-link">
+                                        View public page →
+                                    </a>
+                                </div>
+                            </div>
+
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="empty-state">
+                    No jobs posted yet. Start by creating one.
+                </p>
+            {% endif %}
+        </section>
+
+    </main>
+
+</div>
+</body>
+</html>
