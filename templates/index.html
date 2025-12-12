@@ -133,7 +133,8 @@
 
     .hero-side {
       flex: 1;
-      padding-left: 20px;
+      padding-left: 24px;
+      border-left: 1px solid #e5e7eb;
       margin-top: 6px;
     }
 
@@ -217,13 +218,27 @@
       color: #10b981;
     }
 
-    /* SIDEBAR TASKS */
+    /* SIDEBAR TASKS – version améliorée */
+
+    .side-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
 
     .side-title {
       font-size: 14px;
       font-weight: 600;
       color: #111827;
-      margin-bottom: 4px;
+    }
+
+    .side-link {
+      font-size: 11px;
+      color: #2563eb;
+      cursor: pointer;
+      white-space: nowrap;
     }
 
     .side-sub {
@@ -243,16 +258,26 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 8px 10px;
-      border-radius: 999px;
-      background: #eef2ff;
+      padding: 9px 11px;
+      border-radius: 14px;
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 4px 10px rgba(15, 23, 42, 0.03);
       font-size: 12px;
     }
 
-    .task-left {
+    .task-left-row {
       display: flex;
-      flex-direction: column;
-      gap: 1px;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 2px;
+    }
+
+    .task-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #22c55e;
     }
 
     .task-label {
@@ -265,10 +290,13 @@
       color: #6b7280;
     }
 
-    .task-pay {
+    .task-pay-badge {
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: #ecfdf3;
+      color: #166534;
       font-weight: 600;
       font-size: 12px;
-      color: #1d4ed8;
     }
 
     .side-foot {
@@ -300,6 +328,8 @@
       }
       .hero-side {
         padding-left: 0;
+        border-left: none;
+        margin-top: 16px;
       }
     }
 
@@ -345,7 +375,7 @@
     <section class="hero-wrap">
       <div class="hero-card">
 
-        <!-- Left column -->
+        <!-- Colonne gauche -->
         <div class="hero-main">
           <div class="hero-tag">
             <span class="hero-tag-dot"></span>
@@ -374,47 +404,62 @@
           </p>
         </div>
 
-        <!-- Right column -->
+        <!-- Colonne droite : Popular tasks -->
         <aside class="hero-side">
-          <div class="side-title">Popular tasks on JobDash</div>
+          <div class="side-header">
+            <div class="side-title">Popular tasks on JobDash</div>
+            <div class="side-link">View all tasks →</div>
+          </div>
           <div class="side-sub">What people usually book in your city:</div>
 
           <div class="task-list">
             <div class="task-item">
-              <div class="task-left">
-                <span class="task-label">🧹 Deep clean 1-bedroom</span>
-                <span class="task-meta">Today · SE Portland</span>
+              <div>
+                <div class="task-left-row">
+                  <span class="task-dot"></span>
+                  <span class="task-label">Deep clean 1-bedroom</span>
+                </div>
+                <div class="task-meta">Today · SE Portland</div>
               </div>
-              <span class="task-pay">$85</span>
+              <span class="task-pay-badge">$85</span>
             </div>
 
             <div class="task-item">
-              <div class="task-left">
-                <span class="task-label">📦 Move boxes to storage</span>
-                <span class="task-meta">Tomorrow · Gresham</span>
+              <div>
+                <div class="task-left-row">
+                  <span class="task-dot"></span>
+                  <span class="task-label">Move boxes to storage</span>
+                </div>
+                <div class="task-meta">Tomorrow · Gresham</div>
               </div>
-              <span class="task-pay">$60</span>
+              <span class="task-pay-badge">$60</span>
             </div>
 
             <div class="task-item">
-              <div class="task-left">
-                <span class="task-label">🌿 Yard mowing + cleanup</span>
-                <span class="task-meta">This weekend · NE Portland</span>
+              <div>
+                <div class="task-left-row">
+                  <span class="task-dot"></span>
+                  <span class="task-label">Yard mowing + cleanup</span>
+                </div>
+                <div class="task-meta">This weekend · NE Portland</div>
               </div>
-              <span class="task-pay">$70</span>
+              <span class="task-pay-badge">$70</span>
             </div>
 
             <div class="task-item">
-              <div class="task-left">
-                <span class="task-label">🛒 Grocery shopping + drop-off</span>
-                <span class="task-meta">Today · Downtown</span>
+              <div>
+                <div class="task-left-row">
+                  <span class="task-dot"></span>
+                  <span class="task-label">Grocery shopping + drop-off</span>
+                </div>
+                <div class="task-meta">Today · Downtown</div>
               </div>
-              <span class="task-pay">$45</span>
+              <span class="task-pay-badge">$45</span>
             </div>
           </div>
 
           <div class="side-foot">
-            <strong>Real jobs, real cash.</strong> New tasks are posted all day.
+            <strong>Real jobs, real cash.</strong> New tasks are posted all day on JobDash.
           </div>
         </aside>
 
