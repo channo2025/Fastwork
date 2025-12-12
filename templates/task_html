@@ -1,75 +1,49 @@
 {% extends "base.html" %}
 
 {% block content %}
-<main class="page-wrap">
-  <section class="tasks-shell">
-    <header class="tasks-head">
+<main style="max-width:1100px;margin:0 auto;padding:34px 22px;">
+  <section style="background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.18);border-radius:18px;padding:22px;backdrop-filter: blur(10px);">
+    <header style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:18px;">
       <div>
-        <h1 class="tasks-title">All available tasks</h1>
-        <p class="tasks-sub">Browse the latest local jobs posted on JobDash.</p>
+        <h1 style="margin:0;font-size:34px;letter-spacing:-.02em;">All available tasks</h1>
+        <p style="margin:6px 0 0;opacity:.85">Browse the latest local jobs posted on JobDash.</p>
       </div>
-
-      <a class="btn btn-primary" href="/post-job">Post a job</a>
+      <a href="/post-job" style="display:inline-flex;align-items:center;justify-content:center;padding:10px 14px;border-radius:12px;font-weight:800;text-decoration:none;background:#0b5cff;color:#fff;">Post a job</a>
     </header>
 
     {% if tasks %}
-      <div class="tasks-grid">
+      <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;">
         {% for task in tasks %}
-          <article class="task-card">
-            <div class="task-top">
-              <h3 class="task-name">{{ task.title }}</h3>
+          <article style="background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);border-radius:16px;padding:14px 14px 12px;">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;">
+              <h3 style="margin:0;font-size:16px;line-height:1.25">{{ task.title }}</h3>
               {% if task.price %}
-                <span class="task-price">${{ task.price }}</span>
+                <span style="background:rgba(34,197,94,.18);border:1px solid rgba(34,197,94,.35);padding:6px 10px;border-radius:999px;font-weight:800">${{ task.price }}</span>
               {% endif %}
             </div>
 
-            <div class="task-meta">
+            <div style="margin-top:8px;font-size:13px;opacity:.85;display:flex;gap:8px;flex-wrap:wrap">
               {% if task.when %}<span>{{ task.when }}</span>{% endif %}
               {% if task.location %}<span>• {{ task.location }}</span>{% endif %}
               {% if task.duration %}<span>• {{ task.duration }}</span>{% endif %}
             </div>
 
             {% if task.description %}
-              <p class="task-desc">{{ task.description }}</p>
+              <p style="margin:10px 0 0;font-size:13px;opacity:.9;line-height:1.4">{{ task.description }}</p>
             {% endif %}
 
-            <div class="task-actions">
-              <a class="btn btn-ghost" href="/tasks">View</a>
-              <a class="btn btn-primary" href="/apply?task_id={{ task.id }}">Apply</a>
+            <div style="display:flex;gap:10px;margin-top:12px">
+              <a href="/apply?task_id={{ task.id }}" style="display:inline-flex;align-items:center;justify-content:center;padding:10px 14px;border-radius:12px;font-weight:800;text-decoration:none;background:#0b5cff;color:#fff;">Apply</a>
             </div>
           </article>
         {% endfor %}
       </div>
     {% else %}
-      <div class="empty-box">
+      <div style="background:rgba(255,255,255,.10);border:1px dashed rgba(255,255,255,.25);border-radius:16px;padding:16px;">
         <strong>No tasks yet.</strong>
-        <span>Be the first to <a href="/post-job">post a job</a> on JobDash.</span>
+        <span style="opacity:.9"> Be the first to <a href="/post-job" style="color:#fff;font-weight:900">post a job</a> on JobDash.</span>
       </div>
     {% endif %}
   </section>
 </main>
-
-<style>
-  .page-wrap{max-width:1100px;margin:0 auto;padding:34px 22px;}
-  .tasks-shell{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.18);border-radius:18px;padding:22px;backdrop-filter: blur(10px);}
-  .tasks-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:18px;}
-  .tasks-title{margin:0;font-size:34px;letter-spacing:-.02em;}
-  .tasks-sub{margin:6px 0 0;opacity:.85}
-  .tasks-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;}
-  .task-card{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);border-radius:16px;padding:14px 14px 12px;}
-  .task-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;}
-  .task-name{margin:0;font-size:16px;line-height:1.25}
-  .task-price{background:rgba(34,197,94,.18);border:1px solid rgba(34,197,94,.35);padding:6px 10px;border-radius:999px;font-weight:800}
-  .task-meta{margin-top:8px;font-size:13px;opacity:.85;display:flex;gap:8px;flex-wrap:wrap}
-  .task-desc{margin:10px 0 0;font-size:13px;opacity:.9;line-height:1.4}
-  .task-actions{display:flex;gap:10px;margin-top:12px}
-  .btn{display:inline-flex;align-items:center;justify-content:center;padding:10px 14px;border-radius:12px;font-weight:800;text-decoration:none}
-  .btn-primary{background:#0b5cff;color:#fff}
-  .btn-primary:hover{background:#094bcc}
-  .btn-ghost{border:1px solid rgba(255,255,255,.25);color:#fff}
-  .empty-box{background:rgba(255,255,255,.10);border:1px dashed rgba(255,255,255,.25);border-radius:16px;padding:16px;display:flex;gap:8px;align-items:center}
-  .empty-box a{color:#fff;font-weight:900}
-  @media (max-width: 900px){.tasks-grid{grid-template-columns:repeat(2,1fr)}}
-  @media (max-width: 620px){.tasks-head{flex-direction:column;align-items:stretch}.tasks-grid{grid-template-columns:1fr}}
-</style>
 {% endblock %}
