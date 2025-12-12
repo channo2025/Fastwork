@@ -1,46 +1,48 @@
+/* ---- POPULAR TASKS IN SQUARE PREMIUM MODE ---- */
 
-/* GRID carré pour les tasks */
 .task-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 14px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 10px;
 }
 
 .task-card {
-    background: #ffffff;
-    border-radius: 16px;
-    border: 1px solid #e5e7eb;
-    box-shadow: 0 4px 8px rgba(15, 23, 42, 0.06);
-    padding: 14px;
-    height: 120px; /* CARRE */
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    transition: 0.2s ease;
+  background: #ffffff;
+  border-radius: 18px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 6px 12px rgba(15, 23, 42, 0.06);
+  padding: 16px;
+  height: 140px;  /* Plus grand */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: 0.25s ease;
 }
 
 .task-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 16px rgba(15, 23, 42, 0.12);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.12);
 }
 
 .task-card-title {
-    font-size: 14px;
-    font-weight: 600;
-    color: #111827;
+  font-size: 15px;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 4px;
 }
 
 .task-card-meta {
-    font-size: 11px;
-    color: #6b7280;
+  font-size: 12px;
+  color: #6b7280;
 }
 
 .task-card-pay {
-    background: #d1fae5;
-    border-radius: 10px;
-    padding: 4px 10px;
-    font-size: 13px;
-    font-weight: 600;
-    color: #065f46;
-    align-self: flex-start;
+  background: #d1fae5;
+  border-radius: 12px;
+  padding: 6px 12px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #065f46;
+  align-self: flex-start;
 }
