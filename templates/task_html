@@ -1,259 +1,75 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Tasks – JobDash</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+{% extends "base.html" %}
 
-    body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-        sans-serif;
-      background: linear-gradient(to bottom right, #f8fafc, #eef2f7);
-      color: #0f172a;
-      line-height: 1.5;
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    .container {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 0 16px;
-    }
-
-    /* HEADER (comme la home) */
-
-    header {
-      background: transparent;
-    }
-
-    .nav {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 14px 0;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .logo-circle {
-      width: 36px;
-      height: 36px;
-      border-radius: 999px;
-      background: #2563eb;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      font-size: 16px;
-      color: #ffffff;
-    }
-
-    .brand-text-title {
-      font-weight: 700;
-      font-size: 18px;
-    }
-
-    .brand-text-sub {
-      font-size: 12px;
-      color: #6b7280;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 22px;
-      font-size: 14px;
-      color: #4b5563;
-      align-items: center;
-    }
-
-    .nav-links a:hover {
-      color: #2563eb;
-    }
-
-    .nav-cta {
-      padding: 7px 16px;
-      border-radius: 999px;
-      background: #2563eb;
-      color: #ffffff;
-      font-size: 13px;
-      font-weight: 600;
-    }
-
-    /* PAGE TASKS */
-
-    .page-wrap {
-      padding: 50px 16px 60px;
-    }
-
-    .tasks-card {
-      background: #ffffff;
-      border-radius: 24px;
-      border: 1px solid #e5e7eb;
-      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
-      padding: 26px 24px 30px;
-    }
-
-    .tasks-header {
-      margin-bottom: 18px;
-    }
-
-    .tasks-title {
-      font-size: 24px;
-      font-weight: 700;
-      margin-bottom: 4px;
-    }
-
-    .tasks-subtitle {
-      font-size: 14px;
-      color: #6b7280;
-    }
-
-    .filter-bar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 22px;
-      margin-top: 10px;
-    }
-
-    .filter-pill {
-      padding: 6px 12px;
-      border-radius: 999px;
-      border: 1px solid #e5e7eb;
-      background: #f9fafb;
-      font-size: 12px;
-      color: #4b5563;
-    }
-
-    .filter-pill.primary {
-      background: #2563eb;
-      color: #ffffff;
-      border-color: #2563eb;
-      font-weight: 600;
-    }
-
-    /* EMPTY STATE */
-
-    .empty-state {
-      border-radius: 18px;
-      border: 1px dashed #d1d5db;
-      background: #f9fafb;
-      padding: 24px 20px;
-      font-size: 14px;
-      color: #4b5563;
-    }
-
-    .empty-title {
-      font-weight: 600;
-      font-size: 16px;
-      margin-bottom: 6px;
-    }
-
-    .empty-text {
-      margin-bottom: 14px;
-    }
-
-    .btn-outline-main {
-      display: inline-block;
-      padding: 9px 16px;
-      border-radius: 999px;
-      border: 1px solid #2563eb;
-      color: #2563eb;
-      font-size: 13px;
-      font-weight: 600;
-      background: #ffffff;
-    }
-
-    footer {
-      padding: 20px 16px 30px;
-      font-size: 12px;
-      color: #9ca3af;
-      text-align: center;
-    }
-
-    footer a {
-      color: #9ca3af;
-    }
-  </style>
-</head>
-<body>
-  <!-- HEADER -->
-  <header>
-    <div class="container nav">
-      <div class="brand">
-        <div class="logo-circle">JD</div>
-        <div>
-          <div class="brand-text-title">JobDash</div>
-          <div class="brand-text-sub">Jobcenter online · quick cash jobs</div>
-        </div>
+{% block content %}
+<main class="page-wrap">
+  <section class="tasks-shell">
+    <header class="tasks-head">
+      <div>
+        <h1 class="tasks-title">All available tasks</h1>
+        <p class="tasks-sub">Browse the latest local jobs posted on JobDash.</p>
       </div>
 
-      <nav class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="tasks.html">Tasks</a>
-        <a href="post_job.html">Post a job</a>
-        <a href="about.html">About</a>
-        <a href="contact.html">Contact</a>
-        <a class="nav-cta" href="post_job.html">Post a job</a>
-      </nav>
-    </div>
-  </header>
+      <a class="btn btn-primary" href="/post-job">Post a job</a>
+    </header>
 
-  <!-- MAIN -->
-  <main>
-    <section class="page-wrap">
-      <div class="container">
-        <div class="tasks-card">
-          <div class="tasks-header">
-            <h1 class="tasks-title">All available tasks</h1>
-            <p class="tasks-subtitle">
-              Browse the latest local jobs posted on JobDash.
-            </p>
-          </div>
-
-          <div class="filter-bar">
-            <span class="filter-pill primary">All tasks</span>
-            <span class="filter-pill">Cleaning</span>
-            <span class="filter-pill">Moving</span>
-            <span class="filter-pill">Yard work</span>
-            <span class="filter-pill">Shopping & delivery</span>
-          </div>
-
-          <div class="empty-state">
-            <div class="empty-title">No tasks yet.</div>
-            <div class="empty-text">
-              Be the first to post a job on JobDash. Create a quick task
-              for cleaning, moving, yard work, shopping or more – workers
-              in your area will see it immediately.
+    {% if tasks %}
+      <div class="tasks-grid">
+        {% for task in tasks %}
+          <article class="task-card">
+            <div class="task-top">
+              <h3 class="task-name">{{ task.title }}</h3>
+              {% if task.price %}
+                <span class="task-price">${{ task.price }}</span>
+              {% endif %}
             </div>
-            <a href="post_job.html" class="btn-outline-main">
-              Post a job
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
 
-  <!-- FOOTER -->
-  <footer>
-    © 2025 JobDash Online. All rights reserved ·
-    <a href="privacy.html">Privacy Policy</a> ·
-    <a href="terms.html">Terms of Use</a>
-  </footer>
-</body>
-</html>
+            <div class="task-meta">
+              {% if task.when %}<span>{{ task.when }}</span>{% endif %}
+              {% if task.location %}<span>• {{ task.location }}</span>{% endif %}
+              {% if task.duration %}<span>• {{ task.duration }}</span>{% endif %}
+            </div>
+
+            {% if task.description %}
+              <p class="task-desc">{{ task.description }}</p>
+            {% endif %}
+
+            <div class="task-actions">
+              <a class="btn btn-ghost" href="/tasks">View</a>
+              <a class="btn btn-primary" href="/apply?task_id={{ task.id }}">Apply</a>
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="empty-box">
+        <strong>No tasks yet.</strong>
+        <span>Be the first to <a href="/post-job">post a job</a> on JobDash.</span>
+      </div>
+    {% endif %}
+  </section>
+</main>
+
+<style>
+  .page-wrap{max-width:1100px;margin:0 auto;padding:34px 22px;}
+  .tasks-shell{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.18);border-radius:18px;padding:22px;backdrop-filter: blur(10px);}
+  .tasks-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:18px;}
+  .tasks-title{margin:0;font-size:34px;letter-spacing:-.02em;}
+  .tasks-sub{margin:6px 0 0;opacity:.85}
+  .tasks-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;}
+  .task-card{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);border-radius:16px;padding:14px 14px 12px;}
+  .task-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;}
+  .task-name{margin:0;font-size:16px;line-height:1.25}
+  .task-price{background:rgba(34,197,94,.18);border:1px solid rgba(34,197,94,.35);padding:6px 10px;border-radius:999px;font-weight:800}
+  .task-meta{margin-top:8px;font-size:13px;opacity:.85;display:flex;gap:8px;flex-wrap:wrap}
+  .task-desc{margin:10px 0 0;font-size:13px;opacity:.9;line-height:1.4}
+  .task-actions{display:flex;gap:10px;margin-top:12px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;padding:10px 14px;border-radius:12px;font-weight:800;text-decoration:none}
+  .btn-primary{background:#0b5cff;color:#fff}
+  .btn-primary:hover{background:#094bcc}
+  .btn-ghost{border:1px solid rgba(255,255,255,.25);color:#fff}
+  .empty-box{background:rgba(255,255,255,.10);border:1px dashed rgba(255,255,255,.25);border-radius:16px;padding:16px;display:flex;gap:8px;align-items:center}
+  .empty-box a{color:#fff;font-weight:900}
+  @media (max-width: 900px){.tasks-grid{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width: 620px){.tasks-head{flex-direction:column;align-items:stretch}.tasks-grid{grid-template-columns:1fr}}
+</style>
+{% endblock %}
