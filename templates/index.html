@@ -80,20 +80,8 @@
       align-items: center;
     }
 
-    .nav-links a {
-      position: relative;
-      padding-bottom: 3px;
-    }
-
-    .nav-links a:hover::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      bottom: 0;
-      width: 100%;
-      height: 2px;
-      border-radius: 999px;
-      background: #2563eb;
+    .nav-links a:hover {
+      color: #2563eb;
     }
 
     .nav-cta {
@@ -177,7 +165,6 @@
 
     .hero-actions {
       display: flex;
-      flex-wrap: wrap;
       gap: 10px;
       margin-bottom: 18px;
     }
@@ -191,9 +178,6 @@
       font-size: 14px;
       border: none;
       cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
     }
 
     .btn-outline {
@@ -202,43 +186,76 @@
       border: 1px solid #d1d5db;
       background: #ffffff;
       color: #374151;
-      font-weight: 500;
-      font-size: 14px;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
     }
 
     .hero-note {
       font-size: 12px;
       color: #6b7280;
     }
-    .hero-note strong {
-      color: #10b981;
+
+    /* ---- POPULAR TASKS IN SQUARE CARDS ---- */
+
+    .task-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
     }
 
-    /* SIDEBAR TASKS – version améliorée */
+    .task-card {
+      background: #ffffff;
+      border-radius: 16px;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 4px 8px rgba(15, 23, 42, 0.06);
+      padding: 14px;
+      height: 120px; /* SQUARE */
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: 0.2s ease;
+    }
+
+    .task-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 16px rgba(15, 23, 42, 0.12);
+    }
+
+    .task-card-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #111827;
+    }
+
+    .task-card-meta {
+      font-size: 11px;
+      color: #6b7280;
+    }
+
+    .task-card-pay {
+      background: #d1fae5;
+      border-radius: 10px;
+      padding: 4px 10px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #065f46;
+      align-self: flex-start;
+    }
 
     .side-header {
       display: flex;
-      align-items: baseline;
       justify-content: space-between;
-      gap: 8px;
+      align-items: center;
       margin-bottom: 6px;
     }
 
     .side-title {
       font-size: 14px;
       font-weight: 600;
-      color: #111827;
     }
 
     .side-link {
       font-size: 11px;
       color: #2563eb;
       cursor: pointer;
-      white-space: nowrap;
     }
 
     .side-sub {
@@ -247,79 +264,13 @@
       margin-bottom: 14px;
     }
 
-    .task-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin-bottom: 8px;
-    }
-
-    .task-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 9px 11px;
-      border-radius: 14px;
-      background: #ffffff;
-      border: 1px solid #e5e7eb;
-      box-shadow: 0 4px 10px rgba(15, 23, 42, 0.03);
-      font-size: 12px;
-    }
-
-    .task-left-row {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      margin-bottom: 2px;
-    }
-
-    .task-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 999px;
-      background: #22c55e;
-    }
-
-    .task-label {
-      font-weight: 500;
-      color: #111827;
-    }
-
-    .task-meta {
-      font-size: 11px;
-      color: #6b7280;
-    }
-
-    .task-pay-badge {
-      padding: 4px 10px;
-      border-radius: 999px;
-      background: #ecfdf3;
-      color: #166534;
-      font-weight: 600;
-      font-size: 12px;
-    }
-
-    .side-foot {
-      font-size: 11px;
-      color: #6b7280;
-      margin-top: 6px;
-    }
-
-    .side-foot strong {
-      color: #2563eb;
-    }
-
     /* FOOTER */
 
     footer {
-      padding: 10px 16px 30px;
+      padding: 20px 16px 30px;
       font-size: 12px;
       color: #9ca3af;
       text-align: center;
-    }
-
-    footer a {
-      color: #9ca3af;
     }
 
     @media (max-width: 880px) {
@@ -329,26 +280,13 @@
       .hero-side {
         padding-left: 0;
         border-left: none;
-        margin-top: 16px;
       }
     }
 
-    @media (max-width: 640px) {
-      .hero-card {
-        padding: 24px 20px;
-      }
-      .hero-title {
-        font-size: 26px;
-      }
-      .nav-links {
-        display: none; 
-      }
-    }
   </style>
 </head>
 
 <body>
-  <!-- HEADER -->
   <header>
     <div class="container nav">
       <div class="brand">
@@ -365,21 +303,21 @@
         <a href="post_job.html">Post a job</a>
         <a href="about.html">About</a>
         <a href="contact.html">Contact</a>
-        <a href="post_job.html" class="nav-cta">Post a job</a>
+        <a class="nav-cta" href="post_job.html">Post a job</a>
       </nav>
     </div>
   </header>
 
-  <!-- HERO -->
   <main>
     <section class="hero-wrap">
       <div class="hero-card">
 
-        <!-- Colonne gauche -->
+        <!-- LEFT SIDE -->
         <div class="hero-main">
+
           <div class="hero-tag">
             <span class="hero-tag-dot"></span>
-            <span>Same-day help for real-life tasks</span>
+            Same-day help for real-life tasks
           </div>
 
           <h1 class="hero-title">
@@ -404,62 +342,50 @@
           </p>
         </div>
 
-        <!-- Colonne droite : Popular tasks -->
+        <!-- RIGHT SIDE : POPULAR TASKS SQUARE -->
         <aside class="hero-side">
+
           <div class="side-header">
             <div class="side-title">Popular tasks on JobDash</div>
             <div class="side-link">View all tasks →</div>
           </div>
+
           <div class="side-sub">What people usually book in your city:</div>
 
-          <div class="task-list">
-            <div class="task-item">
+          <div class="task-grid">
+
+            <div class="task-card">
               <div>
-                <div class="task-left-row">
-                  <span class="task-dot"></span>
-                  <span class="task-label">Deep clean 1-bedroom</span>
-                </div>
-                <div class="task-meta">Today · SE Portland</div>
+                <div class="task-card-title">🧽 Deep clean 1-bedroom</div>
+                <div class="task-card-meta">Today • SE Portland</div>
               </div>
-              <span class="task-pay-badge">$85</span>
+              <div class="task-card-pay">$85</div>
             </div>
 
-            <div class="task-item">
+            <div class="task-card">
               <div>
-                <div class="task-left-row">
-                  <span class="task-dot"></span>
-                  <span class="task-label">Move boxes to storage</span>
-                </div>
-                <div class="task-meta">Tomorrow · Gresham</div>
+                <div class="task-card-title">📦 Move boxes to storage</div>
+                <div class="task-card-meta">Tomorrow • Gresham</div>
               </div>
-              <span class="task-pay-badge">$60</span>
+              <div class="task-card-pay">$60</div>
             </div>
 
-            <div class="task-item">
+            <div class="task-card">
               <div>
-                <div class="task-left-row">
-                  <span class="task-dot"></span>
-                  <span class="task-label">Yard mowing + cleanup</span>
-                </div>
-                <div class="task-meta">This weekend · NE Portland</div>
+                <div class="task-card-title">🌿 Yard mowing + cleanup</div>
+                <div class="task-card-meta">This weekend • NE Portland</div>
               </div>
-              <span class="task-pay-badge">$70</span>
+              <div class="task-card-pay">$70</div>
             </div>
 
-            <div class="task-item">
+            <div class="task-card">
               <div>
-                <div class="task-left-row">
-                  <span class="task-dot"></span>
-                  <span class="task-label">Grocery shopping + drop-off</span>
-                </div>
-                <div class="task-meta">Today · Downtown</div>
+                <div class="task-card-title">🛒 Grocery shopping + drop-off</div>
+                <div class="task-card-meta">Today • Downtown</div>
               </div>
-              <span class="task-pay-badge">$45</span>
+              <div class="task-card-pay">$45</div>
             </div>
-          </div>
 
-          <div class="side-foot">
-            <strong>Real jobs, real cash.</strong> New tasks are posted all day on JobDash.
           </div>
         </aside>
 
@@ -467,13 +393,413 @@
     </section>
   </main>
 
-  <!-- FOOTER -->
   <footer>
-    © 2025 JobDash Online. All rights reserved.
-    ·
-    <a href="privacy.html">Privacy Policy</a>
-    ·
+    © 2025 JobDash Online. All rights reserved ·
+    <a href="privacy.html">Privacy Policy</a> ·
     <a href="terms.html">Terms of Use</a>
   </footer>
+
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>JobDash – Work today. Get paid today.</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      background: linear-gradient(to bottom right, #f8fafc, #eef2f7);
+      color: #0f172a;
+      line-height: 1.5;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+
+    /* HEADER */
+
+    header {
+      background: transparent;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-circle {
+      width: 36px;
+      height: 36px;
+      border-radius: 999px;
+      background: #2563eb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 16px;
+      color: #ffffff;
+    }
+
+    .brand-text-title {
+      font-weight: 700;
+      font-size: 18px;
+    }
+
+    .brand-text-sub {
+      font-size: 12px;
+      color: #6b7280;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 22px;
+      font-size: 14px;
+      color: #4b5563;
+      align-items: center;
+    }
+
+    .nav-links a:hover {
+      color: #2563eb;
+    }
+
+    .nav-cta {
+      padding: 7px 16px;
+      border-radius: 999px;
+      background: #2563eb;
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    /* HERO */
+
+    .hero-wrap {
+      padding: 70px 16px 40px;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 60px;
+    }
+
+    .hero-card {
+      background: #ffffff;
+      border-radius: 26px;
+      padding: 32px 28px;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+      border: 1px solid #e5e7eb;
+      max-width: 900px;
+      width: 100%;
+      display: flex;
+      gap: 24px;
+      align-items: flex-start;
+    }
+
+    .hero-main {
+      flex: 1.2;
+    }
+
+    .hero-side {
+      flex: 1;
+      padding-left: 24px;
+      border-left: 1px solid #e5e7eb;
+      margin-top: 6px;
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: #eff6ff;
+      color: #1d4ed8;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 18px;
+    }
+
+    .hero-tag-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #22c55e;
+    }
+
+    .hero-title {
+      font-size: 32px;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .hero-title span {
+      display: block;
+    }
+
+    .hero-subtitle {
+      font-size: 15px;
+      color: #4b5563;
+      max-width: 520px;
+      margin-bottom: 22px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .btn-primary {
+      padding: 10px 20px;
+      border-radius: 999px;
+      background: #2563eb;
+      color: #ffffff;
+      font-weight: 600;
+      font-size: 14px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-outline {
+      padding: 9px 18px;
+      border-radius: 999px;
+      border: 1px solid #d1d5db;
+      background: #ffffff;
+      color: #374151;
+    }
+
+    .hero-note {
+      font-size: 12px;
+      color: #6b7280;
+    }
+
+    /* ---- POPULAR TASKS IN SQUARE CARDS ---- */
+
+    .task-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    .task-card {
+      background: #ffffff;
+      border-radius: 16px;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 4px 8px rgba(15, 23, 42, 0.06);
+      padding: 14px;
+      height: 120px; /* SQUARE */
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: 0.2s ease;
+    }
+
+    .task-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 16px rgba(15, 23, 42, 0.12);
+    }
+
+    .task-card-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #111827;
+    }
+
+    .task-card-meta {
+      font-size: 11px;
+      color: #6b7280;
+    }
+
+    .task-card-pay {
+      background: #d1fae5;
+      border-radius: 10px;
+      padding: 4px 10px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #065f46;
+      align-self: flex-start;
+    }
+
+    .side-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .side-title {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .side-link {
+      font-size: 11px;
+      color: #2563eb;
+      cursor: pointer;
+    }
+
+    .side-sub {
+      font-size: 12px;
+      color: #6b7280;
+      margin-bottom: 14px;
+    }
+
+    /* FOOTER */
+
+    footer {
+      padding: 20px 16px 30px;
+      font-size: 12px;
+      color: #9ca3af;
+      text-align: center;
+    }
+
+    @media (max-width: 880px) {
+      .hero-card {
+        flex-direction: column;
+      }
+      .hero-side {
+        padding-left: 0;
+        border-left: none;
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="container nav">
+      <div class="brand">
+        <div class="logo-circle">JD</div>
+        <div>
+          <div class="brand-text-title">JobDash</div>
+          <div class="brand-text-sub">Jobcenter online · quick cash jobs</div>
+        </div>
+      </div>
+
+      <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="tasks.html">Tasks</a>
+        <a href="post_job.html">Post a job</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <a class="nav-cta" href="post_job.html">Post a job</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero-wrap">
+      <div class="hero-card">
+
+        <!-- LEFT SIDE -->
+        <div class="hero-main">
+
+          <div class="hero-tag">
+            <span class="hero-tag-dot"></span>
+            Same-day help for real-life tasks
+          </div>
+
+          <h1 class="hero-title">
+            <span>Work today.</span>
+            <span>Get paid today.</span>
+          </h1>
+
+          <p class="hero-subtitle">
+            JobDash connects you with fast, local work: cleaning, moving, yard
+            work, shopping and more. No resume. No interview. Just quick jobs and
+            real money.
+          </p>
+
+          <div class="hero-actions">
+            <a href="tasks.html" class="btn-primary">Browse tasks</a>
+            <a href="post_job.html" class="btn-outline">Post a job</a>
+          </div>
+
+          <p class="hero-note">
+            <strong>For workers:</strong> sign up in minutes, choose your own jobs.<br />
+            <strong>For clients:</strong> get reliable help for same-day or next-day tasks.
+          </p>
+        </div>
+
+        <!-- RIGHT SIDE : POPULAR TASKS SQUARE -->
+        <aside class="hero-side">
+
+          <div class="side-header">
+            <div class="side-title">Popular tasks on JobDash</div>
+            <div class="side-link">View all tasks →</div>
+          </div>
+
+          <div class="side-sub">What people usually book in your city:</div>
+
+          <div class="task-grid">
+
+            <div class="task-card">
+              <div>
+                <div class="task-card-title">🧽 Deep clean 1-bedroom</div>
+                <div class="task-card-meta">Today • SE Portland</div>
+              </div>
+              <div class="task-card-pay">$85</div>
+            </div>
+
+            <div class="task-card">
+              <div>
+                <div class="task-card-title">📦 Move boxes to storage</div>
+                <div class="task-card-meta">Tomorrow • Gresham</div>
+              </div>
+              <div class="task-card-pay">$60</div>
+            </div>
+
+            <div class="task-card">
+              <div>
+                <div class="task-card-title">🌿 Yard mowing + cleanup</div>
+                <div class="task-card-meta">This weekend • NE Portland</div>
+              </div>
+              <div class="task-card-pay">$70</div>
+            </div>
+
+            <div class="task-card">
+              <div>
+                <div class="task-card-title">🛒 Grocery shopping + drop-off</div>
+                <div class="task-card-meta">Today • Downtown</div>
+              </div>
+              <div class="task-card-pay">$45</div>
+            </div>
+
+          </div>
+        </aside>
+
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    © 2025 JobDash Online. All rights reserved ·
+    <a href="privacy.html">Privacy Policy</a> ·
+    <a href="terms.html">Terms of Use</a>
+  </footer>
+
 </body>
 </html>
