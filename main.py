@@ -1,130 +1,156 @@
-from fastapi import FastAPI, Request, Form
-from fastapi.responses import HTMLResponse, RedirectResponse
-from fastapi.templating import Jinja2Templates
-from fastapi.staticfiles import StaticFiles
-from datetime import datetime
+from flask import Flask, render_template, request, redirect, url_for, flash
+import sqlite3
+from pathlib import Path
 
-app = FastAPI()
+app = Flask(__name__)
+app.secret_key = "jobdash-secret-key"  # ok pour dev
 
-# Templates & static files
-templates = Jinja2Templates(directory="templates")
-app.mount("/static", StaticFiles(directory="static"), name="static")
-
-# --------- SIMPLE IN-MEMORY STORAGE ----------
-tasks_data = []
+BASE_DIR = Path(__file__).resolve().parent
+DB_PATH = BASE_DIR / "fastwork_db.db"
 
 
-# --------- HOME PAGE ----------
-@app.get("/", response_class=HTMLResponse)
-def home(request: Request):
-    recent_tasks = list(reversed(tasks_data))[:4]
-    return templates.TemplateResponse(
-        "index.html",
-        {"request": request, "tasks": recent_tasks},
-    )
+def get_db():
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row  # pour accéder comme dict: row["title"]
+    return conn
 
 
-# --------- TASKS PAGE (ALL JOBS) ----------
-@app.get("/tasks", response_class=HTMLResponse)
-def all_tasks(request: Request):
-    return templates.TemplateResponse(
-        "tasks.html",
-        {"request": request, "tasks": tasks_data},
-    )
+def init_db():
+    conn = get_db()
+    cur = conn.cursor()
 
-
-# --------- POST JOB (FORM) ----------
-@app.get("/post-job", response_class=HTMLResponse)
-def post_job_form(request: Request):
-    return templates.TemplateResponse(
-        "post_job.html",
-        {"request": request},
-    )
-
-
-@app.post("/post-job")
-async def submit_job(
-    request: Request,
-    title: str = Form(...),
-    category: str = Form(...),
-    location: str = Form(...),
-    pay: str = Form(...),
-    pay_type: str = Form(...),
-    when: str = Form(...),
-    description: str = Form(...),
-):
-    job_id = len(tasks_data) + 1
-
-    tasks_data.append(
-        {
-            "id": job_id,
-            "title": title,
-            "category": category,
-            "location": location,
-            "pay": pay,
-            "pay_type": pay_type,
-            "when": when,
-            "description": description,
-            "created_at": datetime.utcnow().isoformat(),
-        }
-    )
-
-    return RedirectResponse(url=f"/jobs/{job_id}", status_code=303)
-
-
-# --------- JOB DETAIL PAGE ----------
-@app.get("/jobs/{job_id}", response_class=HTMLResponse)
-def job_detail(request: Request, job_id: int):
-    job = next((j for j in tasks_data if j["id"] == job_id), None)
-    if not job:
-        return templates.TemplateResponse(
-            "job_detail.html",
-            {"request": request, "job": None},
-            status_code=404,
+    # Table des jobs (tasks)
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS jobs (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            title TEXT NOT NULL,
+            location TEXT NOT NULL,
+            city TEXT,
+            duration_hours REAL,
+            pay INTEGER NOT NULL,
+            description TEXT,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
         )
+    """)
 
-    return templates.TemplateResponse(
-        "job_detail.html",
-        {"request": request, "job": job},
-    )
+    # (Optionnel) table applications - on l'utilisera STEP 3
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS applications (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            job_id INTEGER NOT NULL,
+            full_name TEXT NOT NULL,
+            phone TEXT NOT NULL,
+            message TEXT,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY(job_id) REFERENCES jobs(id)
+        )
+    """)
 
-
-# --------- ABOUT ----------
-@app.get("/about", response_class=HTMLResponse)
-def about(request: Request):
-    return templates.TemplateResponse(
-        "about.html",
-        {"request": request},
-    )
-
-
-# --------- PRIVACY POLICY ----------
-@app.get("/privacy", response_class=HTMLResponse)
-def privacy(request: Request):
-    return templates.TemplateResponse(
-        "privacy.html",
-        {"request": request},
-    )
+    conn.commit()
+    conn.close()
 
 
-# --------- TERMS OF USE ----------
-@app.get("/terms", response_class=HTMLResponse)
-def terms(request: Request):
-    return templates.TemplateResponse(
-        "terms.html",
-        {"request": request},
-    )
+def seed_jobs_if_empty():
+    conn = get_db()
+    cur = conn.cursor()
+    cur.execute("SELECT COUNT(*) as c FROM jobs")
+    count = cur.fetchone()["c"]
+
+    if count == 0:
+        demo = [
+            ("Deep clean 1-bedroom", "SE Portland", "Portland", 3, 85, "Deep clean: kitchen + bathroom + floors."),
+            ("Move boxes to storage", "Gresham", "Gresham", 2, 60, "Help move 10–15 boxes to a storage unit."),
+            ("Yard mowing + cleanup", "NE Portland", "Portland", 2.5, 70, "Mow front yard + bag clippings."),
+            ("Grocery shopping + drop-off", "Downtown", "Portland", 1.5, 45, "Pick up groceries and deliver same day.")
+        ]
+        cur.executemany("""
+            INSERT INTO jobs (title, location, city, duration_hours, pay, description)
+            VALUES (?, ?, ?, ?, ?, ?)
+        """, demo)
+        conn.commit()
+
+    conn.close()
 
 
-# --------- CONTACT ----------
-@app.get("/contact", response_class=HTMLResponse)
-def contact(request: Request):
-    return templates.TemplateResponse(
-        "contact.html",
-        {"request": request},
-    )
+@app.route("/")
+def index():
+    # Ta homepage existe déjà: templates/index.html
+    return render_template("index.html")
+
 
 @app.route("/tasks")
 def tasks():
-    tasks = get_tasks_from_db()  # ou []
-    return render_template("tasks.html", tasks=tasks)
+    conn = get_db()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM jobs ORDER BY created_at DESC")
+    rows = cur.fetchall()
+    conn.close()
+
+    return render_template("tasks.html", tasks=rows)
+
+
+@app.route("/post-job", methods=["GET", "POST"])
+def post_job():
+    # Si tu as déjà un post_job.html, on le garde
+    if request.method == "POST":
+        title = request.form.get("title", "").strip()
+        location = request.form.get("location", "").strip()
+        city = request.form.get("city", "").strip()
+        duration_hours = request.form.get("duration_hours", "").strip()
+        pay = request.form.get("pay", "").strip()
+        description = request.form.get("description", "").strip()
+
+        if not title or not location or not pay:
+            flash("Please fill: Title, Location, and Pay.")
+            return redirect(url_for("post_job"))
+
+        try:
+            pay_int = int(pay)
+        except:
+            flash("Pay must be a number.")
+            return redirect(url_for("post_job"))
+
+        dur_val = None
+        if duration_hours:
+            try:
+                dur_val = float(duration_hours)
+            except:
+                dur_val = None
+
+        conn = get_db()
+        cur = conn.cursor()
+        cur.execute("""
+            INSERT INTO jobs (title, location, city, duration_hours, pay, description)
+            VALUES (?, ?, ?, ?, ?, ?)
+        """, (title, location, city, dur_val, pay_int, description))
+        conn.commit()
+        conn.close()
+
+        flash("Job posted ✅")
+        return redirect(url_for("tasks"))
+
+    return render_template("post_job.html")
+
+
+# pages légales (si elles existent chez toi)
+@app.route("/about")
+def about():
+    return render_template("about.html")
+
+@app.route("/contact")
+def contact():
+    return render_template("contact.html")
+
+@app.route("/privacy")
+def privacy():
+    return render_template("privacy.html")
+
+@app.route("/terms")
+def terms():
+    return render_template("terms.html")
+
+
+if __name__ == "__main__":
+    init_db()
+    seed_jobs_if_empty()
+    app.run(debug=True)

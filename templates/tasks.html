@@ -1,11 +1,79 @@
 {% extends "base.html" %}
-{% block title %}Tasks – JobDash{% endblock %}
-
 {% block content %}
-  <h1 style="margin:0 0 10px;">Available Tasks</h1>
-  <p style="margin:0; color:#64748b;">If you see this, the Tasks page is working ✅</p>
 
-  <div style="margin-top:18px; background:#fff; border:1px solid rgba(15,23,42,.10); border-radius:18px; padding:18px;">
-    <b>Next step:</b> we’ll plug the real jobs list here (from your DB).
-  </div>
+<style>
+  .page-wrap{max-width:1100px;margin:40px auto;padding:0 20px;}
+  .page-title{font-size:42px;margin:0 0 6px;}
+  .page-sub{opacity:.75;margin:0 0 18px;}
+  .tasks-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;}
+  .task-card{
+    background:rgba(255,255,255,.10);
+    border:1px solid rgba(255,255,255,.18);
+    border-radius:16px;
+    padding:14px;
+    backdrop-filter: blur(10px);
+  }
+  .task-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;}
+  .task-title{font-weight:700;font-size:16px;line-height:1.2;margin:0;}
+  .task-meta{opacity:.75;font-size:13px;margin-top:6px;}
+  .pill{
+    display:inline-flex;align-items:center;justify-content:center;
+    padding:6px 10px;border-radius:999px;font-weight:700;
+    background:rgba(120,255,180,.20);
+    border:1px solid rgba(120,255,180,.35);
+    min-width:62px;
+  }
+  .task-desc{opacity:.9;font-size:13px;margin:10px 0 12px;min-height:32px;}
+  .task-actions{display:flex;gap:10px;}
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;
+    padding:10px 12px;border-radius:12px;text-decoration:none;
+    font-weight:700;border:1px solid rgba(255,255,255,.18);
+  }
+  .btn-primary{background:#1A73E8;color:white;border-color:transparent;}
+  .btn-ghost{background:rgba(255,255,255,.08);color:white;}
+  @media(max-width:900px){.tasks-grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:560px){.tasks-grid{grid-template-columns:1fr}.page-title{font-size:34px}}
+</style>
+
+<div class="page-wrap">
+  <h1 class="page-title">Available Tasks</h1>
+  <p class="page-sub">Browse real local tasks. Apply fast. Get paid.</p>
+
+  {% if tasks and tasks|length > 0 %}
+    <div class="tasks-grid">
+      {% for task in tasks %}
+        <div class="task-card">
+          <div class="task-top">
+            <div>
+              <p class="task-title">{{ task["title"] }}</p>
+              <div class="task-meta">
+                {{ task["location"] }}
+                {% if task["city"] %} · {{ task["city"] }}{% endif %}
+                {% if task["duration_hours"] %} · {{ task["duration_hours"] }} hrs{% endif %}
+              </div>
+            </div>
+            <div class="pill">${{ task["pay"] }}</div>
+          </div>
+
+          {% if task["description"] %}
+            <div class="task-desc">{{ task["description"] }}</div>
+          {% else %}
+            <div class="task-desc">Quick help needed. Details inside.</div>
+          {% endif %}
+
+          <div class="task-actions">
+            <!-- STEP 2 on fera /job/<id> -->
+            <a class="btn btn-primary" href="#">View</a>
+            <a class="btn btn-ghost" href="{{ url_for('post_job') }}">Post a job</a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>No tasks yet. Be the first to post one ✅</p>
+    <a class="btn btn-primary" href="{{ url_for('post_job') }}">Post a job</a>
+  {% endif %}
+</div>
+
 {% endblock %}
