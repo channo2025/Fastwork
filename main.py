@@ -123,3 +123,8 @@ def contact(request: Request):
         "contact.html",
         {"request": request},
     )
+
+@app.route("/tasks")
+def tasks():
+    tasks = get_tasks_from_db()  # ou []
+    return render_template("tasks.html", tasks=tasks)
