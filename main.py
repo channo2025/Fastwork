@@ -1,180 +1,126 @@
-from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse
+from fastapi import FastAPI, Request, Form
+from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
+import sqlite3
 
 app = FastAPI()
 
+# Templates
 templates = Jinja2Templates(directory="templates")
 
-def get_db_jobs():
+# Static files (CSS, images, etc.)
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+
+# ---------- HOME ----------
+@app.get("/", response_class=HTMLResponse)
+async def home(request: Request):
+    return templates.TemplateResponse(
+        "index.html",
+        {"request": request}
+    )
+
+
+# ---------- TASKS ----------
+@app.get("/tasks", response_class=HTMLResponse)
+async def tasks(request: Request):
     conn = sqlite3.connect("fastwork_db.db")
     conn.row_factory = sqlite3.Row
     cur = conn.cursor()
 
-    rows = cur.execute("SELECT * FROM job ORDER BY id DESC").fetchall()
+    cur.execute("SELECT * FROM job ORDER BY id DESC")
+    jobs = cur.fetchall()
 
     conn.close()
-    return [dict(r) for r in rows]
 
-app = Flask(__name__)
-app.secret_key = "jobdash-secret-key"  # ok pour dev
-
-BASE_DIR = Path(__file__).resolve().parent
-DB_PATH = BASE_DIR / "fastwork_db.db"
-
-
-def get_db():
-    conn = sqlite3.connect(DB_PATH)
-    conn.row_factory = sqlite3.Row  # pour accéder comme dict: row["title"]
-    return conn
+    return templates.TemplateResponse(
+        "tasks.html",
+        {
+            "request": request,
+            "jobs": jobs
+        }
+    )
 
 
-def init_db():
-    conn = get_db()
+# ---------- POST A JOB ----------
+@app.get("/post-job", response_class=HTMLResponse)
+async def post_job_form(request: Request):
+    return templates.TemplateResponse(
+        "post_job.html",
+        {"request": request}
+    )
+
+
+@app.post("/post-job")
+async def post_job(
+    title: str = Form(...),
+    location: str = Form(...),
+    price: str = Form(...),
+    hours: str = Form(...),
+    description: str = Form(...),
+    contact_email: str = Form(...),
+    contact_sms: str = Form(...)
+):
+    conn = sqlite3.connect("fastwork_db.db")
     cur = conn.cursor()
 
-    # Table des jobs (tasks)
     cur.execute("""
-        CREATE TABLE IF NOT EXISTS jobs (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            title TEXT NOT NULL,
-            location TEXT NOT NULL,
-            city TEXT,
-            duration_hours REAL,
-            pay INTEGER NOT NULL,
-            description TEXT,
-            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-        )
-    """)
-
-    # (Optionnel) table applications - on l'utilisera STEP 3
-    cur.execute("""
-        CREATE TABLE IF NOT EXISTS applications (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            job_id INTEGER NOT NULL,
-            full_name TEXT NOT NULL,
-            phone TEXT NOT NULL,
-            message TEXT,
-            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY(job_id) REFERENCES jobs(id)
-        )
-    """)
+        INSERT INTO job (title, location, price, hours, description, contact_email, contact_sms)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+    """, (title, location, price, hours, description, contact_email, contact_sms))
 
     conn.commit()
     conn.close()
 
-
-def seed_jobs_if_empty():
-    conn = get_db()
-    cur = conn.cursor()
-    cur.execute("SELECT COUNT(*) as c FROM jobs")
-    count = cur.fetchone()["c"]
-
-    if count == 0:
-        demo = [
-            ("Deep clean 1-bedroom", "SE Portland", "Portland", 3, 85, "Deep clean: kitchen + bathroom + floors."),
-            ("Move boxes to storage", "Gresham", "Gresham", 2, 60, "Help move 10–15 boxes to a storage unit."),
-            ("Yard mowing + cleanup", "NE Portland", "Portland", 2.5, 70, "Mow front yard + bag clippings."),
-            ("Grocery shopping + drop-off", "Downtown", "Portland", 1.5, 45, "Pick up groceries and deliver same day.")
-        ]
-        cur.executemany("""
-            INSERT INTO jobs (title, location, city, duration_hours, pay, description)
-            VALUES (?, ?, ?, ?, ?, ?)
-        """, demo)
-        conn.commit()
-
-    conn.close()
+    return RedirectResponse(url="/tasks", status_code=303)
 
 
-@app.route("/")
-def index():
-    # Ta homepage existe déjà: templates/index.html
-    return render_template("index.html")
-
-
-@app.get("/tasks", response_class=HTMLResponse)
-def tasks_page(request: Request):
-    tasks = get_db_jobs()
-    return templates.TemplateResponse("tasks.html", {"request": request, "tasks": tasks})
-
-
-@app.route("/post-job", methods=["GET", "POST"])
-def post_job():
-    # Si tu as déjà un post_job.html, on le garde
-    if request.method == "POST":
-        title = request.form.get("title", "").strip()
-        location = request.form.get("location", "").strip()
-        city = request.form.get("city", "").strip()
-        duration_hours = request.form.get("duration_hours", "").strip()
-        pay = request.form.get("pay", "").strip()
-        description = request.form.get("description", "").strip()
-
-        if not title or not location or not pay:
-            flash("Please fill: Title, Location, and Pay.")
-            return redirect(url_for("post_job"))
-
-        try:
-            pay_int = int(pay)
-        except:
-            flash("Pay must be a number.")
-            return redirect(url_for("post_job"))
-
-        dur_val = None
-        if duration_hours:
-            try:
-                dur_val = float(duration_hours)
-            except:
-                dur_val = None
-
-        conn = get_db()
-        cur = conn.cursor()
-        cur.execute("""
-            INSERT INTO jobs (title, location, city, duration_hours, pay, description)
-            VALUES (?, ?, ?, ?, ?, ?)
-        """, (title, location, city, dur_val, pay_int, description))
-        conn.commit()
-        conn.close()
-
-        flash("Job posted ✅")
-        return redirect(url_for("tasks"))
-
-    return render_template("post_job.html")
-
-
-# pages légales (si elles existent chez toi)
-@app.route("/about")
-def about():
-    return render_template("about.html")
-
-@app.route("/contact")
-def contact():
-    return render_template("contact.html")
-
-@app.route("/privacy")
-def privacy():
-    return render_template("privacy.html")
-
-@app.route("/terms")
-def terms():
-    return render_template("terms.html")
-
-
-if __name__ == "__main__":
-    init_db()
-    seed_jobs_if_empty()
-    app.run(debug=True)
-
+# ---------- APPLY ----------
 @app.get("/apply/{job_id}", response_class=HTMLResponse)
-def apply_page(request: Request, job_id: int):
+async def apply_form(request: Request, job_id: int):
+    return templates.TemplateResponse(
+        "apply.html",
+        {
+            "request": request,
+            "job_id": job_id
+        }
+    )
+
+
+@app.post("/apply")
+async def apply(
+    job_id: int = Form(...),
+    full_name: str = Form(...),
+    phone: str = Form(...),
+    email: str = Form(...),
+    message: str = Form(...)
+):
     conn = sqlite3.connect("fastwork_db.db")
-    conn.row_factory = sqlite3.Row
     cur = conn.cursor()
 
-    job = cur.execute("SELECT * FROM job WHERE id = ?", (job_id,)).fetchone()
+    cur.execute("""
+        INSERT INTO application (job_id, full_name, phone, email, message)
+        VALUES (?, ?, ?, ?, ?)
+    """, (job_id, full_name, phone, email, message))
+
+    conn.commit()
     conn.close()
 
-    if not job:
-        return HTMLResponse("Job not found", status_code=404)
+    return RedirectResponse(url="/tasks", status_code=303)
 
-    return templates.TemplateResponse("apply.html", {"request": request, "job": dict(job)})
+
+# ---------- STATIC PAGES ----------
+@app.get("/about", response_class=HTMLResponse)
+async def about(request: Request):
+    return templates.TemplateResponse("about.html", {"request": request})
+
+
+@app.get("/contact", response_class=HTMLResponse)
+async def contact(request: Request):
+    return templates.TemplateResponse("contact.html", {"request": request})
+
+
+@app.get("/terms", response_class=HTMLResponse)
+async def terms(request: Request):
+    return templates.TemplateResponse("terms.html", {"request": request})
