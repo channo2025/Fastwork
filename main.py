@@ -1,7 +1,5 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
-import sqlite3
-from pathlib import Path
-
+from fastapi.responses import HTMLResponse
+from fastapi import FastAPI, Request
 import sqlite3
 
 def get_db_jobs():
