@@ -1,6 +1,11 @@
-from fastapi.responses import HTMLResponse
 from fastapi import FastAPI, Request
-import sqlite3
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles
+
+app = FastAPI()
+
+templates = Jinja2Templates(directory="templates")
 
 def get_db_jobs():
     conn = sqlite3.connect("fastwork_db.db")
