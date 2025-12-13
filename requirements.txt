@@ -3,5 +3,4 @@ uvicorn
 jinja2
 sqlmodel
 python-multipart
-Flask
 gunicorn
