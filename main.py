@@ -2,6 +2,18 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 import sqlite3
 from pathlib import Path
 
+import sqlite3
+
+def get_db_jobs():
+    conn = sqlite3.connect("fastwork_db.db")
+    conn.row_factory = sqlite3.Row
+    cur = conn.cursor()
+
+    rows = cur.execute("SELECT * FROM job ORDER BY id DESC").fetchall()
+
+    conn.close()
+    return [dict(r) for r in rows]
+
 app = Flask(__name__)
 app.secret_key = "jobdash-secret-key"  # ok pour dev
 
@@ -78,15 +90,10 @@ def index():
     return render_template("index.html")
 
 
-@app.route("/tasks")
-def tasks():
-    conn = get_db()
-    cur = conn.cursor()
-    cur.execute("SELECT * FROM jobs ORDER BY created_at DESC")
-    rows = cur.fetchall()
-    conn.close()
-
-    return render_template("tasks.html", tasks=rows)
+@app.get("/tasks", response_class=HTMLResponse)
+def tasks_page(request: Request):
+    tasks = get_db_jobs()
+    return templates.TemplateResponse("tasks.html", {"request": request, "tasks": tasks})
 
 
 @app.route("/post-job", methods=["GET", "POST"])
@@ -154,3 +161,17 @@ if __name__ == "__main__":
     init_db()
     seed_jobs_if_empty()
     app.run(debug=True)
+
+@app.get("/apply/{job_id}", response_class=HTMLResponse)
+def apply_page(request: Request, job_id: int):
+    conn = sqlite3.connect("fastwork_db.db")
+    conn.row_factory = sqlite3.Row
+    cur = conn.cursor()
+
+    job = cur.execute("SELECT * FROM job WHERE id = ?", (job_id,)).fetchone()
+    conn.close()
+
+    if not job:
+        return HTMLResponse("Job not found", status_code=404)
+
+    return templates.TemplateResponse("apply.html", {"request": request, "job": dict(job)})
