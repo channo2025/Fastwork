@@ -1,16 +1,37 @@
 {% extends "base.html" %}
+{% block title %}Apply — JobChap{% endblock %}
+
 {% block content %}
-
 <section class="page">
-  <h1>Apply for this job</h1>
+  {% if not job %}
+    <h1>Apply</h1>
+    <p class="muted">{{ error }}</p>
+    <a class="btn primary" href="/tasks">Back to tasks</a>
+  {% else %}
+    <div class="page-head">
+      <div>
+        <h1>Apply</h1>
+        <p class="muted">You’re applying for: <strong>{{ job["title"] }}</strong></p>
+      </div>
+      <a class="btn outline" href="/tasks">Back</a>
+    </div>
 
-  <form method="post" action="/apply/{{ job_id }}">
-    <input type="text" name="full_name" placeholder="Your full name" required>
-    <input type="email" name="email" placeholder="Your email" required>
-    <textarea name="message" placeholder="Message"></textarea>
+    <form class="form" method="post" action="/apply/{{ job['id'] }}">
+      <label>Full name
+        <input name="full_name" required />
+      </label>
+      <label>Email
+        <input name="email" type="email" required />
+      </label>
+      <label>Phone (optional)
+        <input name="phone" />
+      </label>
+      <label>Message (optional)
+        <textarea name="message" rows="5" placeholder="Tell the client why you’re a good fit..."></textarea>
+      </label>
 
-    <button class="btn primary" type="submit">Send application</button>
-  </form>
+      <button class="btn primary" type="submit">Send application</button>
+    </form>
+  {% endif %}
 </section>
-
 {% endblock %}

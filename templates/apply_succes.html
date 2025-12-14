@@ -1,42 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Application sent – FastWork</title>
-    <link rel="stylesheet" href="/static/style.css">
-</head>
-<body class="page-apply">
-<div class="page">
+{% extends "base.html" %}
+{% block title %}Application sent — JobChap{% endblock %}
 
-<main>
-
-    <section class="success-hero">
-        <h1>Application sent ✅</h1>
-        <p class="success-subtitle">
-            Your application for <strong>{{ job.title }}</strong> has been sent to the client.
-        </p>
-    </section>
-
-    <section class="success-body">
-        {% if application %}
-            <p>
-                We shared the following information with the client:
-            </p>
-            <ul class="success-list">
-                <li><strong>Name:</strong> {{ application.full_name }}</li>
-                <li><strong>Phone:</strong> {{ application.phone }}</li>
-                <li><strong>Email:</strong> {{ application.email }}</li>
-                <li><strong>Experience:</strong> {{ application.experience or application.message }}</li>
-            </ul>
-        {% endif %}
-
-        <a href="/jobs" class="primary-btn">
-            Back to jobs
-        </a>
-    </section>
-
-</main>
-
-</div>
-</body>
-</html>
+{% block content %}
+<section class="page">
+  <div class="success">
+    <h1>✅ Application sent!</h1>
+    <p class="muted">Your application was submitted for: <strong>{{ job["title"] }}</strong></p>
+    <a class="btn primary" href="/tasks">Back to tasks</a>
+    <a class="btn outline" href="/post-job">Post a job</a>
+  </div>
+</section>
+{% endblock %}

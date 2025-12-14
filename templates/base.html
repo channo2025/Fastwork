@@ -1,25 +1,46 @@
-<header class="hero">
-  <div class="hero-content">
-    <h1 class="brand">JobChap</h1>
-    <p class="subtitle">jobcenter online</p>
-    
-    <a href="/" class="logo-text">
-  <strong>JobChap</strong>
-  <span class="logo-sub">jobcenter online</span>
-</a>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>{% block title %}JobChap{% endblock %}</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
 
-    <h2 class="headline">
-      WORK TODAY.<br>
-      GET PAID TODAY.
-    </h2>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="/">
+        <div class="logo">JC</div>
+        <div class="brand-text">
+          <div class="brand-name">JobChap</div>
+          <div class="brand-sub">Jobcenter online · quick cash jobs</div>
+        </div>
+      </a>
 
-    <p class="tagline">
-      Quick local jobs · Real money · No waiting
-    </p>
-
-    <div class="hero-actions">
-      <a href="/tasks" class="btn primary">View jobs</a>
-      <a href="/post-job" class="btn outline">Post a job</a>
+      <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/tasks">Tasks</a>
+        <a href="/post-job" class="btn primary sm">Post a job</a>
+        <a href="/about">About</a>
+        <a href="/contact">Contact</a>
+      </div>
     </div>
-  </div>
-</header>
+  </nav>
+
+  <main class="container">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>© 2025 JobChap Online. All rights reserved.</div>
+      <div class="footer-links">
+        <a href="/privacy">Privacy Policy</a>
+        <span>·</span>
+        <a href="/terms">Terms of Use</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
