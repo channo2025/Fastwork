@@ -1,38 +1,46 @@
 {% extends "base.html" %}
-
 {% block content %}
-<div style="max-width:1100px;margin:40px auto;padding:0 20px;">
-  <h1 style="margin:0 0 10px;">Available Tasks</h1>
-  <p style="margin:0 0 20px;color:#555;">Showing real tasks from your database ✅</p>
 
-  {% if tasks and tasks|length > 0 %}
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;">
-      {% for t in tasks %}
-        <div style="border:1px solid #e6e6e6;border-radius:14px;padding:16px;background:#fff;">
-          <div style="font-weight:800;font-size:16px;line-height:1.2;">
-            {{ t['title'] }}
+<section class="page">
+  <div class="page-head">
+    <h1>Available Tasks</h1>
+    <p class="muted">Browse real local jobs posted on JobDash.</p>
+    <a class="btn primary" href="/post-job">Post a job</a>
+  </div>
+
+  {% if jobs and jobs|length > 0 %}
+    <div class="grid">
+      {% for job in jobs %}
+        <article class="card">
+          <div class="card-top">
+            <h3 class="card-title">{{ job["title"] }}</h3>
+            <span class="pill">${{ job["price"] }}</span>
           </div>
 
-          <div style="margin-top:8px;color:#666;font-size:13px;">
-            {{ t['location'] }}
+          <div class="card-meta">
+            <span>📍 {{ job["location"] }}</span>
+            <span>⏱ {{ job["hours"] }} hrs</span>
+            {% if job["badge"] %}
+              <span class="badge">{{ job["badge"] }}</span>
+            {% endif %}
           </div>
 
-          <div style="margin-top:12px;display:flex;gap:10px;align-items:center;">
-            <span style="background:#E8F5E9;color:#1B5E20;padding:6px 10px;border-radius:999px;font-weight:800;font-size:13px;">
-              ${{ t['price'] }}
-            </span>
+          <p class="card-desc">{{ job["description"] }}</p>
 
-            <a href="/apply/{{ t['id'] }}" style="margin-left:auto;text-decoration:none;font-weight:800;color:#1A73E8;">
-              Apply →
-            </a>
+          <div class="card-actions">
+            <a class="btn" href="/post-job">Apply</a>
+            <a class="btn ghost" href="mailto:{{ job['contact_email'] }}">Email</a>
           </div>
-        </div>
+        </article>
       {% endfor %}
     </div>
   {% else %}
-    <div style="border:1px dashed #ccc;border-radius:14px;padding:16px;background:#fafafa;">
-      No tasks yet. Post the first job from “Post a job” ✅
+    <div class="empty">
+      <h3>No tasks yet</h3>
+      <p class="muted">Post the first job and it will show here instantly.</p>
+      <a class="btn primary" href="/post-job">Post a job</a>
     </div>
   {% endif %}
-</div>
+</section>
+
 {% endblock %}
