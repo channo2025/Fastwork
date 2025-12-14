@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="page">
+  <h1>Apply for this job</h1>
+
+  <form method="post" action="/apply/{{ job_id }}">
+    <input type="text" name="full_name" placeholder="Your full name" required>
+    <input type="email" name="email" placeholder="Your email" required>
+    <textarea name="message" placeholder="Message"></textarea>
+
+    <button class="btn primary" type="submit">Send application</button>
+  </form>
+</section>
+
+{% endblock %}

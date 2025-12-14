@@ -2,50 +2,43 @@
 {% block content %}
 
 <section class="page">
-    <div class="page-head">
-        <h1>Available Tasks</h1>
-        <p class="muted">Browse real local jobs posted on JobDash.</p>
-        <a class="btn primary" href="/post-job">Post a job</a>
-    </div>
+  <div class="page-head">
+    <h1>Available Tasks</h1>
+    <p class="muted">Browse real local jobs posted on JobDash.</p>
+    <a class="btn primary" href="/post-job">Post a job</a>
+  </div>
 
-    {% if jobs and jobs|length > 0 %}
-    <div class="grid">
-        {% for job in jobs %}
-        <article class="card">
+  {% if jobs and jobs|length > 0 %}
+  <div class="task-grid">
+    {% for job in jobs %}
+    <article class="task-card">
 
-            <!-- TOP -->
-            <div class="card-top">
-                <h3 class="card-title">{{ job["title"] }}</h3>
-                <span class="pill">${{ job["price"] }}</span>
-            </div>
+      <div class="card-top">
+        <h3 class="card-title">{{ job["title"] }}</h3>
+        <span class="pill">${{ job["price"] }}</span>
+      </div>
 
-            <!-- META -->
-            <div class="card-meta">
-                <span>📍 {{ job["location"] }}</span>
-                <span>⏱ {{ job["hours"] }} hrs</span>
+      <div class="card-meta">
+        <span>📍 {{ job["location"] }}</span>
+        <span>⏱ {{ job["hours"] }} hrs</span>
+        {% if job["badge"] %}
+          <span class="badge">{{ job["badge"] }}</span>
+        {% endif %}
+      </div>
 
-                {% if job["badge"] %}
-                    <span class="badge">{{ job["badge"] }}</span>
-                {% endif %}
-            </div>
+      <p class="card-desc">{{ job["description"] }}</p>
 
-            <!-- DESCRIPTION -->
-            <p class="card-desc">
-                {{ job["description"] }}
-            </p>
+      <div class="card-actions">
+        <a class="btn outline" href="/apply/{{ job['id'] }}">Apply</a>
+        <a class="btn ghost" href="mailto:{{ job['contact_email'] }}">Email</a>
+      </div>
 
-            <!-- ACTIONS -->
-            <div class="card-actions">
-                <a class="btn outline" href="/apply/{{ job['id'] }}">Apply</a>
-                <a class="btn ghost" href="mailto:{{ job['contact_email'] }}">Email</a>
-            </div>
-
-        </article>
-        {% endfor %}
-    </div>
-    {% else %}
-        <p class="muted">No jobs available yet.</p>
-    {% endif %}
+    </article>
+    {% endfor %}
+  </div>
+  {% else %}
+    <p>No jobs available.</p>
+  {% endif %}
 </section>
 
 {% endblock %}

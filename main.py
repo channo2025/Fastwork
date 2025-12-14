@@ -93,3 +93,12 @@ async def post_job_submit(
     conn.close()
 
     return RedirectResponse(url="/tasks", status_code=303)
+    @app.get("/apply/{job_id}", response_class=HTMLResponse)
+async def apply_job(request: Request, job_id: int):
+    return templates.TemplateResponse(
+        "apply.html",
+        {
+            "request": request,
+            "job_id": job_id
+        }
+    )
