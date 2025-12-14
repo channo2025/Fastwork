@@ -1,37 +1,40 @@
 {% extends "base.html" %}
-{% block title %}Apply — JobChap{% endblock %}
-
 {% block content %}
 <section class="page">
-  {% if not job %}
+  <div class="page-head">
     <h1>Apply</h1>
-    <p class="muted">{{ error }}</p>
-    <a class="btn primary" href="/tasks">Back to tasks</a>
-  {% else %}
-    <div class="page-head">
-      <div>
-        <h1>Apply</h1>
-        <p class="muted">You’re applying for: <strong>{{ job["title"] }}</strong></p>
+    <p class="muted">Applying for: <b>{{ job.title }}</b> — ${{ job.price }}</p>
+  </div>
+
+  <div class="card form-card">
+    <form method="post" action="/apply/{{ job.id }}">
+      <div class="form-grid">
+        <label>
+          Full name*
+          <input name="full_name" required placeholder="Your name" />
+        </label>
+
+        <label>
+          Email*
+          <input name="email" type="email" required placeholder="you@email.com" />
+        </label>
+
+        <label>
+          Phone (optional)
+          <input name="phone" placeholder="+1 555 123 4567" />
+        </label>
+
+        <label class="full">
+          Message (optional)
+          <textarea name="message" rows="4" placeholder="Tell the client why you're a good fit..."></textarea>
+        </label>
       </div>
-      <a class="btn outline" href="/tasks">Back</a>
-    </div>
 
-    <form class="form" method="post" action="/apply/{{ job['id'] }}">
-      <label>Full name
-        <input name="full_name" required />
-      </label>
-      <label>Email
-        <input name="email" type="email" required />
-      </label>
-      <label>Phone (optional)
-        <input name="phone" />
-      </label>
-      <label>Message (optional)
-        <textarea name="message" rows="5" placeholder="Tell the client why you’re a good fit..."></textarea>
-      </label>
-
-      <button class="btn primary" type="submit">Send application</button>
+      <div class="card-actions">
+        <button class="btn primary" type="submit">Send application</button>
+        <a class="btn outline" href="/tasks">Back to tasks</a>
+      </div>
     </form>
-  {% endif %}
+  </div>
 </section>
 {% endblock %}

@@ -1,13 +1,17 @@
 {% extends "base.html" %}
-{% block title %}Application sent — JobChap{% endblock %}
-
 {% block content %}
 <section class="page">
-  <div class="success">
-    <h1>✅ Application sent!</h1>
-    <p class="muted">Your application was submitted for: <strong>{{ job["title"] }}</strong></p>
-    <a class="btn primary" href="/tasks">Back to tasks</a>
-    <a class="btn outline" href="/post-job">Post a job</a>
+  <div class="page-head">
+    <h1>✅ Application sent</h1>
+    <p class="muted">The client will contact you soon if interested.</p>
+  </div>
+
+  <div class="card">
+    <p><b>Tip:</b> Keep your phone/email available today.</p>
+    <div class="card-actions">
+      <a class="btn primary" href="/tasks">Back to tasks</a>
+      <a class="btn outline" href="/post-job">Post a job</a>
+    </div>
   </div>
 </section>
 {% endblock %}
