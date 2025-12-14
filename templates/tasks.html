@@ -11,29 +11,29 @@
   {% if jobs and jobs|length > 0 %}
   <div class="task-grid">
     {% for job in jobs %}
-    <article class="task-card">
+      <article class="task-card">
 
-      <div class="card-top">
-        <h3 class="card-title">{{ job["title"] }}</h3>
-        <span class="pill">${{ job["price"] }}</span>
-      </div>
+        <div class="task-card-top">
+          <h3 class="task-title">{{ job["title"] }}</h3>
+          <span class="task-price">${{ job["price"] }}</span>
+        </div>
 
-      <div class="card-meta">
-        <span>📍 {{ job["location"] }}</span>
-        <span>⏱ {{ job["hours"] }} hrs</span>
-        {% if job["badge"] %}
-          <span class="badge">{{ job["badge"] }}</span>
-        {% endif %}
-      </div>
+        <div class="task-meta">
+          <span>📍 {{ job["location"] }}</span>
+          <span>⏱ {{ job["hours"] }} hrs</span>
+          {% if job["badge"] %}
+            <span class="task-badge">{{ job["badge"] }}</span>
+          {% endif %}
+        </div>
 
-      <p class="card-desc">{{ job["description"] }}</p>
+        <p class="task-desc">{{ job["description"] }}</p>
 
-      <div class="card-actions">
-        <a class="btn outline" href="/apply/{{ job['id'] }}">Apply</a>
-        <a class="btn ghost" href="mailto:{{ job['contact_email'] }}">Email</a>
-      </div>
+        <div class="task-actions">
+          <a class="btn outline" href="/apply/{{ job['id'] }}">Apply</a>
+          <a class="btn ghost" href="mailto:{{ job['contact_email'] }}">Email</a>
+        </div>
 
-    </article>
+      </article>
     {% endfor %}
   </div>
   {% else %}
