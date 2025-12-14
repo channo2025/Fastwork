@@ -36,3 +36,18 @@
   gap: 15px;
   flex-wrap: wrap;
 }
+
+.logo-text {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1A73E8;
+  text-decoration: none;
+}
+
+.logo-sub {
+  display: block;
+  font-size: 12px;
+  font-weight: 400;
+  color: #6b7280;
+  margin-top: -2px;
+}
