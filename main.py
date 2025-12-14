@@ -9,11 +9,15 @@ app = FastAPI()
 # Templates
 templates = Jinja2Templates(directory="templates")
 
-# Static files (CSS, images, etc.)
+# Static files
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
+DB_NAME = "fastwork_db.db"
 
-# ---------- HOME ----------
+
+# -------------------------
+# HOME
+# -------------------------
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
     return templates.TemplateResponse(
@@ -22,10 +26,12 @@ async def home(request: Request):
     )
 
 
-# ---------- TASKS ----------
+# -------------------------
+# TASKS (LIST)
+# -------------------------
 @app.get("/tasks", response_class=HTMLResponse)
 async def tasks(request: Request):
-    conn = sqlite3.connect("fastwork_db.db")
+    conn = sqlite3.connect(DB_NAME)
     conn.row_factory = sqlite3.Row
     cur = conn.cursor()
 
@@ -43,7 +49,9 @@ async def tasks(request: Request):
     )
 
 
-# ---------- POST A JOB ----------
+# -------------------------
+# POST JOB (FORM PAGE)
+# -------------------------
 @app.get("/post-job", response_class=HTMLResponse)
 async def post_job_form(request: Request):
     return templates.TemplateResponse(
@@ -52,75 +60,36 @@ async def post_job_form(request: Request):
     )
 
 
+# -------------------------
+# POST JOB (SUBMIT)
+# -------------------------
 @app.post("/post-job")
-async def post_job(
+async def post_job_submit(
+    request: Request,
     title: str = Form(...),
     location: str = Form(...),
     price: str = Form(...),
     hours: str = Form(...),
+    badge: str = Form(""),
+    client: str = Form(""),
     description: str = Form(...),
     contact_email: str = Form(...),
     contact_sms: str = Form(...)
 ):
-    conn = sqlite3.connect("fastwork_db.db")
+    conn = sqlite3.connect(DB_NAME)
     cur = conn.cursor()
 
     cur.execute("""
-        INSERT INTO job (title, location, price, hours, description, contact_email, contact_sms)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
-    """, (title, location, price, hours, description, contact_email, contact_sms))
+        INSERT INTO job (
+            title, location, price, hours, badge,
+            client, description, contact_email, contact_sms
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    """, (
+        title, location, price, hours, badge,
+        client, description, contact_email, contact_sms
+    ))
 
     conn.commit()
     conn.close()
 
     return RedirectResponse(url="/tasks", status_code=303)
-
-
-# ---------- APPLY ----------
-@app.get("/apply/{job_id}", response_class=HTMLResponse)
-async def apply_form(request: Request, job_id: int):
-    return templates.TemplateResponse(
-        "apply.html",
-        {
-            "request": request,
-            "job_id": job_id
-        }
-    )
-
-
-@app.post("/apply")
-async def apply(
-    job_id: int = Form(...),
-    full_name: str = Form(...),
-    phone: str = Form(...),
-    email: str = Form(...),
-    message: str = Form(...)
-):
-    conn = sqlite3.connect("fastwork_db.db")
-    cur = conn.cursor()
-
-    cur.execute("""
-        INSERT INTO application (job_id, full_name, phone, email, message)
-        VALUES (?, ?, ?, ?, ?)
-    """, (job_id, full_name, phone, email, message))
-
-    conn.commit()
-    conn.close()
-
-    return RedirectResponse(url="/tasks", status_code=303)
-
-
-# ---------- STATIC PAGES ----------
-@app.get("/about", response_class=HTMLResponse)
-async def about(request: Request):
-    return templates.TemplateResponse("about.html", {"request": request})
-
-
-@app.get("/contact", response_class=HTMLResponse)
-async def contact(request: Request):
-    return templates.TemplateResponse("contact.html", {"request": request})
-
-
-@app.get("/terms", response_class=HTMLResponse)
-async def terms(request: Request):
-    return templates.TemplateResponse("terms.html", {"request": request})
