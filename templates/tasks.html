@@ -1,52 +1,57 @@
 {% extends "base.html" %}
 {% block title %}Tasks — JobChap{% endblock %}
-
 {% block content %}
+
 <section class="page">
   <div class="page-head">
     <div>
       <h1>Available Tasks</h1>
       <p class="muted">Browse real local jobs posted on JobChap.</p>
     </div>
+
     <a class="btn primary" href="/post-job">Post a job</a>
   </div>
 
   {% if jobs and jobs|length > 0 %}
-  <div class="grid">
-    {% for job in jobs %}
-    <article class="card">
-      <div class="card-top">
-        <h3 class="card-title">{{ job["title"] }}</h3>
-        <span class="pill">${{ job["price"] }}</span>
-      </div>
+    <div class="grid">
+      {% for job in jobs %}
+        <article class="card">
+          <div class="card-top">
+            <h3 class="card-title">{{ job["title"] }}</h3>
+            <span class="pill">${{ job["price"] }}</span>
+          </div>
 
-      <div class="card-meta">
-        <span>📍 {{ job["location"] }}</span>
-        <span>🕒 {{ job["hours"] }} hrs</span>
-        {% if job["badge"] %}
-          <span class="badge">{{ job["badge"] }}</span>
-        {% endif %}
-      </div>
+          <div class="card-meta">
+            <span>📍 {{ job["location"] }}</span>
+            <span>⏱ {{ job["hours"] }} hrs</span>
 
-      {% if job["description"] %}
-        <p class="card-desc">{{ job["description"] }}</p>
-      {% else %}
-        <p class="card-desc muted">No description provided.</p>
-      {% endif %}
+            {% if job.get("badge") %}
+              <span class="badge">{{ job["badge"] }}</span>
+            {% endif %}
+          </div>
 
-      <div class="card-actions">
-        <a class="btn outline" href="/apply/{{ job['id'] }}">Apply</a>
-        <a class="btn ghost" href="mailto:{{ job['contact_email'] }}">Email</a>
-      </div>
-    </article>
-    {% endfor %}
-  </div>
+          {% if job.get("description") %}
+            <p class="card-desc">{{ job["description"] }}</p>
+          {% endif %}
+
+          <div class="card-actions">
+            <a class="btn outline" href="/apply/{{ job['id'] }}">Apply</a>
+            {% if job.get("contact_email") %}
+              <a class="btn ghost" href="mailto:{{ job['contact_email'] }}">Email</a>
+            {% else %}
+              <a class="btn ghost" href="/contact">Contact</a>
+            {% endif %}
+          </div>
+        </article>
+      {% endfor %}
+    </div>
   {% else %}
-  <div class="empty">
-    <h3>No jobs yet</h3>
-    <p class="muted">Be the first to post a task on JobChap.</p>
-    <a class="btn primary" href="/post-job">Post a job</a>
-  </div>
+    <div class="card" style="padding:18px;">
+      <h3 style="margin:0 0 6px;">No tasks yet</h3>
+      <p class="muted" style="margin:0 0 12px;">Be the first to post a job.</p>
+      <a class="btn primary" href="/post-job">Post a job</a>
+    </div>
   {% endif %}
 </section>
+
 {% endblock %}
