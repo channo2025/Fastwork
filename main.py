@@ -42,13 +42,12 @@ def submit_application(
     message: str = Form(...)
 ):
 
-
 @app.get("/", response_class=HTMLResponse)
 def home(request: Request):
-    return templates.TemplateResponse("home.html", {"request": request})
-    job = next((j for j in jobs if j["id"] == job_id), None)
-    if not job:
-        return HTMLResponse("Job not found", status_code=404)
+    return templates.TemplateResponse(
+        "home.html",
+        {"request": request}
+    )
 
     # ✅ Pour l’instant: on log (plus tard on envoie email ou on sauvegarde)
     print("NEW APPLICATION:", {"job_id": job_id, "name": full_name, "email": email, "message": message})
@@ -57,4 +56,5 @@ def home(request: Request):
     return RedirectResponse(url=f"/thank-you?job_id={job_id}", status_code=HTTP_303_SEE_OTHER)
 @app.get("/thank-you", response_class=HTMLResponse)
 def thank_you(request: Request, job_id: int | None = None):
+
     return templates.TemplateResponse("thank_you.html", {"request": request, "job_id": job_id})
