@@ -66,3 +66,49 @@ async def apply_submit(
 @app.get("/apply-success/{job_id}", response_class=HTMLResponse)
 async def apply_success(request: Request, job_id: int):
     return templates.TemplateResponse("apply_success.html", {"request": request, "job_id": job_id})
+
+from fastapi import Form
+from fastapi.responses import RedirectResponse
+
+@app.get("/apply/{job_id}", response_class=HTMLResponse)
+async def apply_page(request: Request, job_id: int):
+    conn = get_db()
+    job = conn.execute(
+        "SELECT * FROM jobs WHERE id = ?", (job_id,)
+    ).fetchone()
+    conn.close()
+
+    if not job:
+        return templates.TemplateResponse(
+            "apply_not_found.html",
+            {"request": request}
+        )
+
+    return templates.TemplateResponse(
+        "apply.html",
+        {"request": request, "job": job}
+    )
+
+
+@app.post("/apply/{job_id}")
+async def apply_submit(
+    request: Request,
+    job_id: int,
+    full_name: str = Form(...),
+    email: str = Form(...),
+    phone: str = Form(""),
+    message: str = Form("")
+):
+    # Pour V1 : pas de stockage, juste confirmation
+    return RedirectResponse(
+        url="/apply-success",
+        status_code=303
+    )
+
+
+@app.get("/apply-success", response_class=HTMLResponse)
+async def apply_success(request: Request):
+    return templates.TemplateResponse(
+        "apply_success.html",
+        {"request": request}
+    )
