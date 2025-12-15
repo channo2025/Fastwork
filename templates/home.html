@@ -1,68 +1,58 @@
 {% extends "base.html" %}
 {% block content %}
 
-<section class="section">
-  <div class="grid-2">
-    <!-- LEFT: Hero -->
-    <div class="card card-pad">
-      <div class="badge">🟢 Same-day help for real-life tasks</div>
+<section class="hero-wrap">
+  <div class="hero-card">
+    <div class="hero-grid">
 
-      <h1 class="h1">
-        Work today.<br>
-        Get paid today.
-      </h1>
-
-      <p class="p" style="margin-top:10px;">
-        JobChap connects you with fast, local work: cleaning, moving, yard work, shopping and more.
-        No resume. No interview. Just quick jobs and real money.
-      </p>
-
-      <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:18px;">
-        <a class="btn btn-primary" href="/tasks">Browse tasks</a>
-        <a class="btn btn-outline" href="/post-job">Post a job</a>
-      </div>
-
-      <div style="margin-top:14px; font-size:13px; color:rgba(15,23,42,.70); line-height:1.5;">
-        <strong>For workers:</strong> sign up in minutes, choose your own jobs.<br>
-        <strong>For clients:</strong> get reliable help for same-day or next-day tasks.
-      </div>
-    </div>
-
-    <!-- RIGHT: Popular tasks -->
-    <div class="card card-pad">
-      <div style="display:flex; justify-content:space-between; gap:10px; align-items:flex-start;">
-        <div>
-          <div style="font-weight:800;">Popular tasks on JobChap</div>
-          <div class="p" style="margin-top:6px; font-size:13px;">What people usually book in your city:</div>
-        </div>
-        <a href="/tasks" style="text-decoration:none; font-weight:800; color:var(--primary);">View all tasks →</a>
-      </div>
-
-      <div class="task-grid" style="margin-top:14px;">
-        <div class="task">
-          <h3>Deep clean 1-bedroom</h3>
-          <div class="meta">Today · SE Portland</div>
-          <div class="price">$85</div>
+      <!-- LEFT: Title + text + buttons -->
+      <div class="hero-left">
+        <div class="pill">
+          <span class="dot"></span>
+          Same-day help for real-life tasks
         </div>
 
-        <div class="task">
-          <h3>Move boxes to storage</h3>
-          <div class="meta">Tomorrow · Gresham</div>
-          <div class="price">$60</div>
+        <h1 class="hero-title">Work today.<br>Get paid today.</h1>
+
+        <p class="hero-text">
+          JobChap connects you with fast, local work: cleaning, moving, yard work, shopping and more.
+          No resume. No interview. Just quick jobs and real money.
+        </p>
+
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="/tasks">Browse tasks</a>
+          <a class="btn btn-ghost" href="/post-job">Post a job</a>
         </div>
 
-        <div class="task">
-          <h3>Yard mowing + cleanup</h3>
-          <div class="meta">This weekend · NE Portland</div>
-          <div class="price">$70</div>
-        </div>
-
-        <div class="task">
-          <h3>Grocery shopping + drop-off</h3>
-          <div class="meta">Today · Downtown</div>
-          <div class="price">$45</div>
+        <div class="hero-mini">
+          <p><strong>For workers:</strong> sign up in minutes, choose your own jobs.</p>
+          <p><strong>For clients:</strong> get reliable help for same-day or next-day tasks.</p>
         </div>
       </div>
+
+      <!-- RIGHT: Popular tasks (INSIDE same rectangle) -->
+      <aside class="hero-right">
+        <div class="popular-head">
+          <div>
+            <h3>Popular tasks on JobChap</h3>
+            <p>What people usually book in your city:</p>
+          </div>
+          <a class="link" href="/tasks">View all tasks →</a>
+        </div>
+
+        <div class="popular-grid">
+          {% for job in jobs[:4] %}
+          <a class="task-mini" href="/apply/{{ job.id }}">
+            <div class="task-mini-top">
+              <div class="task-mini-title">{{ job.title }}</div>
+              <div class="task-mini-meta">{{ job.time }} · {{ job.location }}</div>
+            </div>
+            <div class="task-mini-price">${{ job.price }}</div>
+          </a>
+          {% endfor %}
+        </div>
+      </aside>
+
     </div>
   </div>
 </section>
