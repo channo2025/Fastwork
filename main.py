@@ -15,6 +15,23 @@ jobs = [
     {"id": 1, "title": "House cleaning", "location": "Portland", "time": "3 hrs", "pay": "$85", "description": "Clean a 1-bedroom apartment.", "contact_email": "example@gmail.com"},
 ]
 
+@app.get("/apply/{job_id}", response_class=HTMLResponse)
+def apply_page(request: Request, job_id: int):
+    job = next((j for j in jobs if j["id"] == job_id), None)
+
+    if not job:
+        return templates.TemplateResponse(
+            "apply_not_found.html",
+            {"request": request}
+        )
+
+    return templates.TemplateResponse(
+        "apply.html",
+        {
+            "request": request,
+            "job": job
+        }
+    )
 
 @app.post("/apply/{job_id}")
 def submit_application(
