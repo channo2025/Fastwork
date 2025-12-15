@@ -1,114 +1,24 @@
-from fastapi import FastAPI, Request, Form
-from fastapi.responses import HTMLResponse, RedirectResponse
-from fastapi.templating import Jinja2Templates
-from fastapi.staticfiles import StaticFiles
-import sqlite3
+{% extends "base.html" %}
 
-# ... ton code existant ...
+{% block content %}
+<div class="container" style="max-width:600px; margin:60px auto;">
+  <h1>Apply for this job</h1>
 
-def get_db():
-    conn = sqlite3.connect("jobs.db")
-    conn.row_factory = sqlite3.Row
-    return conn
+  <p>This job was posted on <strong>JobChap</strong>.</p>
 
-@app.get("/apply/{job_id}", response_class=HTMLResponse)
-async def apply_page(request: Request, job_id: int):
-    conn = get_db()
-    job = conn.execute("SELECT * FROM jobs WHERE id = ?", (job_id,)).fetchone()
-    conn.close()
+  <form method="post">
+    <label>Your name</label>
+    <input type="text" name="name" required>
 
-    if job is None:
-        return templates.TemplateResponse("apply_not_found.html", {"request": request})
+    <label>Your phone or email</label>
+    <input type="text" name="contact" required>
 
-    return templates.TemplateResponse("apply.html", {"request": request, "job": dict(job)})
+    <label>Message</label>
+    <textarea name="message" rows="4"></textarea>
 
-
-@app.post("/apply/{job_id}")
-async def apply_submit(
-    request: Request,
-    job_id: int,
-    full_name: str = Form(...),
-    phone: str = Form(""),
-    email: str = Form(...),
-    message: str = Form("")
-):
-    # Vérifie que le job existe
-    conn = get_db()
-    job = conn.execute("SELECT * FROM jobs WHERE id = ?", (job_id,)).fetchone()
-    if job is None:
-        conn.close()
-        return RedirectResponse(url="/tasks", status_code=303)
-
-    # Crée la table applications si elle n'existe pas
-    conn.execute("""
-        CREATE TABLE IF NOT EXISTS applications (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            job_id INTEGER,
-            full_name TEXT,
-            phone TEXT,
-            email TEXT,
-            message TEXT,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )
-    """)
-
-    conn.execute("""
-        INSERT INTO applications (job_id, full_name, phone, email, message)
-        VALUES (?, ?, ?, ?, ?)
-    """, (job_id, full_name, phone, email, message))
-
-    conn.commit()
-    conn.close()
-
-    return RedirectResponse(url=f"/apply-success/{job_id}", status_code=303)
-
-
-@app.get("/apply-success/{job_id}", response_class=HTMLResponse)
-async def apply_success(request: Request, job_id: int):
-    return templates.TemplateResponse("apply_success.html", {"request": request, "job_id": job_id})
-
-from fastapi import Form
-from fastapi.responses import RedirectResponse
-
-@app.get("/apply/{job_id}", response_class=HTMLResponse)
-async def apply_page(request: Request, job_id: int):
-    conn = get_db()
-    job = conn.execute(
-        "SELECT * FROM jobs WHERE id = ?", (job_id,)
-    ).fetchone()
-    conn.close()
-
-    if not job:
-        return templates.TemplateResponse(
-            "apply_not_found.html",
-            {"request": request}
-        )
-
-    return templates.TemplateResponse(
-        "apply.html",
-        {"request": request, "job": job}
-    )
-
-
-@app.post("/apply/{job_id}")
-async def apply_submit(
-    request: Request,
-    job_id: int,
-    full_name: str = Form(...),
-    email: str = Form(...),
-    phone: str = Form(""),
-    message: str = Form("")
-):
-    # Pour V1 : pas de stockage, juste confirmation
-    return RedirectResponse(
-        url="/apply-success",
-        status_code=303
-    )
-
-
-@app.get("/apply-success", response_class=HTMLResponse)
-async def apply_success(request: Request):
-    return templates.TemplateResponse(
-        "apply_success.html",
-        {"request": request}
-    )
+    <button type="submit" class="btn primary" style="margin-top:20px;">
+      Send application
+    </button>
+  </form>
+</div>
+{% endblock %}
