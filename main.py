@@ -41,6 +41,11 @@ def submit_application(
     email: str = Form(...),
     message: str = Form(...)
 ):
+
+
+@app.get("/", response_class=HTMLResponse)
+def home(request: Request):
+    return templates.TemplateResponse("home.html", {"request": request})
     job = next((j for j in jobs if j["id"] == job_id), None)
     if not job:
         return HTMLResponse("Job not found", status_code=404)
