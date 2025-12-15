@@ -10,28 +10,52 @@ app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
-# --- Exemple data (si tu as déjà jobs, garde le tien) ---
+# --- Example jobs data (tu peux modifier plus tard) ---
 jobs = [
-    {"id": 1, "title": "House cleaning", "location": "Portland", "time": "3 hrs", "pay": "$85", "description": "Clean a 1-bedroom apartment.", "contact_email": "example@gmail.com"},
+    {
+        "id": 1,
+        "title": "House cleaning",
+        "location": "Portland",
+        "time": "3 hrs",
+        "pay": 85,
+        "description": "Clean a 1-bedroom apartment.",
+    },
+    {
+        "id": 2,
+        "title": "Move boxes to storage",
+        "location": "Gresham",
+        "time": "2 hrs",
+        "pay": 60,
+        "description": "Help move boxes into a storage unit.",
+    },
 ]
+
+def get_job(job_id: int):
+    return next((j for j in jobs if j["id"] == job_id), None)
+
+# ---------------- ROUTES ----------------
+
+@app.get("/", response_class=HTMLResponse)
+def home(request: Request):
+    return templates.TemplateResponse("home.html", {"request": request, "jobs": jobs})
+
+@app.get("/tasks", response_class=HTMLResponse)
+def tasks_page(request: Request):
+    return templates.TemplateResponse("tasks.html", {"request": request, "jobs": jobs})
+
+@app.get("/tasks/{job_id}", response_class=HTMLResponse)
+def job_detail(request: Request, job_id: int):
+    job = get_job(job_id)
+    if not job:
+        return templates.TemplateResponse("apply_not_found.html", {"request": request})
+    return templates.TemplateResponse("job_detail.html", {"request": request, "job": job})
 
 @app.get("/apply/{job_id}", response_class=HTMLResponse)
 def apply_page(request: Request, job_id: int):
-    job = next((j for j in jobs if j["id"] == job_id), None)
-
+    job = get_job(job_id)
     if not job:
-        return templates.TemplateResponse(
-            "apply_not_found.html",
-            {"request": request}
-        )
-
-    return templates.TemplateResponse(
-        "apply.html",
-        {
-            "request": request,
-            "job": job
-        }
-    )
+        return templates.TemplateResponse("apply_not_found.html", {"request": request})
+    return templates.TemplateResponse("apply.html", {"request": request, "job": job})
 
 @app.post("/apply/{job_id}")
 def submit_application(
@@ -39,22 +63,15 @@ def submit_application(
     job_id: int,
     full_name: str = Form(...),
     email: str = Form(...),
-    message: str = Form(...)
+    message: str = Form(...),
 ):
+    job = get_job(job_id)
+    if not job:
+        return templates.TemplateResponse("apply_not_found.html", {"request": request})
 
-@app.get("/", response_class=HTMLResponse)
-def home(request: Request):
-    return templates.TemplateResponse(
-        "home.html",
-        {"request": request}
-    )
+    # Pour l’instant on “simule” l’envoi (plus tard on stockera en DB ou email)
+    return RedirectResponse(url="/thank-you", status_code=HTTP_303_SEE_OTHER)
 
-    # ✅ Pour l’instant: on log (plus tard on envoie email ou on sauvegarde)
-    print("NEW APPLICATION:", {"job_id": job_id, "name": full_name, "email": email, "message": message})
-
-    # ✅ Redirige vers une page merci
-    return RedirectResponse(url=f"/thank-you?job_id={job_id}", status_code=HTTP_303_SEE_OTHER)
 @app.get("/thank-you", response_class=HTMLResponse)
-def thank_you(request: Request, job_id: int | None = None):
-
-    return templates.TemplateResponse("thank_you.html", {"request": request, "job_id": job_id})
+def thank_you(request: Request):
+    return templates.TemplateResponse("thank_you.html", {"request": request})
