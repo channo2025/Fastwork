@@ -1,51 +1,28 @@
 {% extends "base.html" %}
-
-{% block title %}Apply — JobChap{% endblock %}
-
 {% block content %}
-<section class="page">
+
+<div class="apply-card">
   <h1>Apply for job</h1>
 
-  <div class="card" style="max-width:520px;">
-    <h3>{{ job.title }}</h3>
-    <p class="muted">{{ job.location }} · {{ job.hours }} hrs</p>
-    <p><strong>${{ job.price }}</strong></p>
-    <p>{{ job.description }}</p>
+  <h2>{{ job.title }}</h2>
+  <p class="job-meta">{{ job.location }} · {{ job.hours }} hrs</p>
+  <p class="job-pay">${{ job.pay }}</p>
+  <p class="job-desc">{{ job.description }}</p>
 
-    <form method="post" action="#">
-      <label>Full name</label>
-      <input type="text" required>
-
-      <label>Email</label>
-      <input type="email" required>
-
-      <label>Message</label>
-      <textarea rows="4"></textarea>
-
-      <button class="btn primary" type="submit">
-        Submit application
-      </button>
-    <form method="post" action="/apply/{{ job['id'] }}" class="apply-form">
-  <div class="form-row">
+  <form method="post" action="/apply/{{ job.id }}">
     <label>Full name</label>
     <input type="text" name="full_name" required>
-  </div>
 
-  <div class="form-row">
     <label>Email</label>
     <input type="email" name="email" required>
-  </div>
 
-  <div class="form-row">
     <label>Message</label>
-    <textarea name="message" rows="4" required></textarea>
-  </div>
+    <textarea name="message" placeholder="Tell the employer why you’re a good fit"></textarea>
 
-  <button class="btn primary" type="submit">Submit application</button>
-    </form>
+    <button type="submit" class="btn-primary">
+      Submit application
+    </button>
+  </form>
+</div>
 
-
-    </form>
-  </div>
-</section>
 {% endblock %}
