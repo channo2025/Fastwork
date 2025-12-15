@@ -1,50 +1,41 @@
-from fastapi import FastAPI, Request, Form
-from fastapi.responses import HTMLResponse, RedirectResponse
-from fastapi.staticfiles import StaticFiles
+from fastapi import FastAPI, Request
+from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles
 
 app = FastAPI()
 
-app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
-# Fake jobs list (replace with DB later)
-jobs = [
-    {"id": 1, "title": "Moving helper", "price": 200, "location": "Portland", "hours": 12, "badge": "Premium", "description": "helping moving", "contact_email": "email@example.com"},
-    {"id": 2, "title": "Cleaning", "price": 85, "location": "SE Portland", "hours": 2, "badge": "Same-day", "description": "Deep clean 1-bedroom", "contact_email": "email@example.com"},
+# Fake jobs (TEMPORAIRE mais STABLE)
+JOBS = [
+    {
+        "id": 1,
+        "title": "House cleaning",
+        "price": 85,
+        "location": "Portland",
+        "hours": 3,
+        "description": "Clean a 1-bedroom apartment."
+    },
+    {
+        "id": 2,
+        "title": "Move boxes",
+        "price": 60,
+        "location": "Gresham",
+        "hours": 2,
+        "description": "Help move boxes to storage."
+    }
 ]
 
-@app.get("/", response_class=HTMLResponse)
-async def home(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
-
-@app.get("/tasks", response_class=HTMLResponse)
-async def tasks(request: Request):
-    return templates.TemplateResponse("tasks.html", {"request": request, "jobs": jobs})
-
 @app.get("/apply/{job_id}", response_class=HTMLResponse)
-async def apply_page(request: Request, job_id: int):
-    job = next((j for j in jobs if j["id"] == job_id), None)
-    return templates.TemplateResponse("apply.html", {"request": request, "job": job})
+def apply_page(request: Request, job_id: int):
+    job = next((j for j in JOBS if j["id"] == job_id), None)
 
-@app.post("/apply/{job_id}", response_class=HTMLResponse)
-async def apply_submit(
-    request: Request,
-    job_id: int,
-    name: str = Form(...),
-    contact: str = Form(...),
-    message: str = Form("")
-):
-    return templates.TemplateResponse("thank_you.html", {"request": request})
+    if not job:
+        return HTMLResponse("<h1>Job not found</h1>", status_code=404)
 
-@app.get("/about", response_class=HTMLResponse)
-async def about(request: Request):
-    return templates.TemplateResponse("about.html", {"request": request})
-
-@app.get("/terms", response_class=HTMLResponse)
-async def terms(request: Request):
-    return templates.TemplateResponse("terms.html", {"request": request})
-
-@app.get("/privacy", response_class=HTMLResponse)
-async def privacy(request: Request):
-    return templates.TemplateResponse("privacy.html", {"request": request})
+    return templates.TemplateResponse(
+        "apply.html",
+        {"request": request, "job": job}
+    )

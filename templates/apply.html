@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Apply — JobChap{% endblock %}
+
+{% block content %}
+<section class="page">
+  <h1>Apply for job</h1>
+
+  <div class="card" style="max-width:520px;">
+    <h3>{{ job.title }}</h3>
+    <p class="muted">{{ job.location }} · {{ job.hours }} hrs</p>
+    <p><strong>${{ job.price }}</strong></p>
+    <p>{{ job.description }}</p>
+
+    <form method="post" action="#">
+      <label>Full name</label>
+      <input type="text" required>
+
+      <label>Email</label>
+      <input type="email" required>
+
+      <label>Message</label>
+      <textarea rows="4"></textarea>
+
+      <button class="btn primary" type="submit">
+        Submit application
+      </button>
+    </form>
+  </div>
+</section>
+{% endblock %}
