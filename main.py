@@ -1,16 +1,19 @@
 from fastapi import FastAPI, Request, Form
 from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.staticfiles import StaticFiles
+from starlette.templating import Jinja2Templates
 from starlette.status import HTTP_303_SEE_OTHER
 
-# ...
+app = FastAPI()
 
-@app.get("/apply/{job_id}", response_class=HTMLResponse)
-def apply_page(request: Request, job_id: int):
-    job = next((j for j in jobs if j["id"] == job_id), None)
-    if not job:
-        return HTMLResponse("Job not found", status_code=404)
+# Static + templates
+app.mount("/static", StaticFiles(directory="static"), name="static")
+templates = Jinja2Templates(directory="templates")
 
-    return templates.TemplateResponse("apply.html", {"request": request, "job": job})
+# --- Exemple data (si tu as déjà jobs, garde le tien) ---
+jobs = [
+    {"id": 1, "title": "House cleaning", "location": "Portland", "time": "3 hrs", "pay": "$85", "description": "Clean a 1-bedroom apartment.", "contact_email": "example@gmail.com"},
+]
 
 
 @app.post("/apply/{job_id}")
