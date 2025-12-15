@@ -1,24 +1,35 @@
 {% extends "base.html" %}
+{% block title %}Apply{% endblock %}
 
 {% block content %}
-<div class="container" style="max-width:600px; margin:60px auto;">
-  <h1>Apply for this job</h1>
+<section class="page">
+  <div class="page-head">
+    <h1>Apply</h1>
+    {% if job %}
+      <p class="muted">Applying for: <strong>{{ job["title"] }}</strong> — {{ job["location"] }} — ${{ job["price"] }}</p>
+    {% else %}
+      <p class="muted">Job not found.</p>
+    {% endif %}
+  </div>
 
-  <p>This job was posted on <strong>JobChap</strong>.</p>
+  {% if job %}
+  <div class="card form-card">
+    <form method="post" action="/apply/{{ job['id'] }}">
+      <label>Your name</label>
+      <input name="name" required placeholder="Your full name" />
 
-  <form method="post">
-    <label>Your name</label>
-    <input type="text" name="name" required>
+      <label>Contact (phone or email)</label>
+      <input name="contact" required placeholder="Phone or email" />
 
-    <label>Your phone or email</label>
-    <input type="text" name="contact" required>
+      <label>Message (optional)</label>
+      <textarea name="message" rows="4" placeholder="Short message..."></textarea>
 
-    <label>Message</label>
-    <textarea name="message" rows="4"></textarea>
-
-    <button type="submit" class="btn primary" style="margin-top:20px;">
-      Send application
-    </button>
-  </form>
-</div>
+      <div class="card-actions">
+        <button class="btn primary" type="submit">Send application</button>
+        <a class="btn outline" href="/tasks">Back to tasks</a>
+      </div>
+    </form>
+  </div>
+  {% endif %}
+</section>
 {% endblock %}

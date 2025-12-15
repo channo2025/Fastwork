@@ -1,19 +1,12 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title>Merci !</title>
-    <link rel="stylesheet" href="/static/style.css">
-</head>
+{% extends "base.html" %}
+{% block title %}Thank you{% endblock %}
 
-<body class="page-thanks">
-
-<div class="container">
-    <h1>🎉 Merci pour ta candidature !</h1>
-    <p>Nous avons bien reçu ton intérêt pour ce job.</p>
-
-    <a href="/jobs" class="primary-btn">Voir d’autres jobs</a>
-</div>
-
-</body>
-</html>
+{% block content %}
+<section class="page">
+  <div class="page-head">
+    <h1>Application sent ✅</h1>
+    <p class="muted">Thanks! The client will contact you soon.</p>
+    <a class="btn primary" href="/tasks">Back to tasks</a>
+  </div>
+</section>
+{% endblock %}
