@@ -1,11 +1,19 @@
 {% extends "base.html" %}
+{% block title %}Application sent — JobChap{% endblock %}
 {% block content %}
-<section class="page">
-  <h1>✅ Application sent</h1>
-  <p>The employer will contact you if interested.</p>
 
-  <a href="/tasks" class="btn primary">
-    Back to jobs
-  </a>
+<section class="page">
+  <div class="card" style="padding:20px; max-width:500px;">
+    <h2>✅ Application sent</h2>
+    <p>
+      Your application has been sent successfully.
+      The job poster will contact you directly.
+    </p>
+
+    <a href="/tasks" class="btn outline">
+      Back to jobs
+    </a>
+  </div>
 </section>
+
 {% endblock %}

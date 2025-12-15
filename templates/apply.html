@@ -25,6 +25,26 @@
       <button class="btn primary" type="submit">
         Submit application
       </button>
+    <form method="post" action="/apply/{{ job['id'] }}" class="apply-form">
+  <div class="form-row">
+    <label>Full name</label>
+    <input type="text" name="full_name" required>
+  </div>
+
+  <div class="form-row">
+    <label>Email</label>
+    <input type="email" name="email" required>
+  </div>
+
+  <div class="form-row">
+    <label>Message</label>
+    <textarea name="message" rows="4" required></textarea>
+  </div>
+
+  <button class="btn primary" type="submit">Submit application</button>
+    </form>
+
+
     </form>
   </div>
 </section>
