@@ -1,44 +1,27 @@
-<h1>About JobChap</h1>
+{% extends "base.html" %}
+{% block content %}
+<section class="page-card">
+  <h1 class="page-title">About JobChap</h1>
+  <p class="page-sub">A digital jobcenter platform built to connect workers and clients for fast local tasks.</p>
 
-<p>
-JobChap is a digital job marketplace designed to connect people who need quick local help
-with workers ready to earn money fast.
-</p>
+  <p class="small-note" style="font-size:15px;">
+    JobChap helps people find quick, local work (and helps clients get help fast).
+    We’re a marketplace-style platform: workers choose tasks, clients post needs.
+  </p>
 
-<p>
-From cleaning and moving to yard work, shopping, and small tasks,
-JobChap makes it easy to post a job and get help the same day.
-</p>
+  <hr class="sep"/>
 
-<h2>Our Mission</h2>
+  <h3 style="margin:0 0 8px;">What JobChap is</h3>
+  <ul class="small-note" style="margin-top:0;">
+    <li>A digital jobcenter for short tasks</li>
+    <li>A place to discover and post local work</li>
+    <li>A platform that helps people move faster (same-day/next-day)</li>
+  </ul>
 
-<p>
-Our mission is simple: help people work today and get paid today.
-We believe access to quick work opportunities should be easy, fair, and transparent.
-</p>
-
-<h2>JobChap & Jobcenter</h2>
-
-<p>
-JobChap is a digital platform inspired by real-world job centers such as Vozw Workers.
-While traditional job centers operate physically, JobChap brings the job center experience online,
-making it accessible anytime and anywhere.
-</p>
-
-<p>
-JobChap operates as an independent digital platform and does not act as an employer,
-recruiter, or staffing agency.
-</p>
-
-<h2>How It Works</h2>
-
-<ul>
-  <li>Clients post short-term jobs.</li>
-  <li>Workers browse available tasks.</li>
-  <li>Both parties connect directly.</li>
-</ul>
-
-<p>
-JobChap does not supervise, manage, or guarantee any job or worker.
-All agreements are made directly between users.
-</p>
+  <h3 style="margin:18px 0 8px;">What JobChap is not</h3>
+  <ul class="small-note" style="margin-top:0;">
+    <li>We are not an employer, staffing agency, or background-check company</li>
+    <li>We don’t guarantee earnings, hiring, or job availability</li>
+  </ul>
+</section>
+{% endblock %}

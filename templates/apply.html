@@ -1,28 +1,31 @@
 {% extends "base.html" %}
 {% block content %}
+<section class="page-card">
+  <h1 class="page-title">Apply for job</h1>
 
-<div class="apply-card">
-  <h1>Apply for job</h1>
+  <div class="task-mini" style="margin-top:14px;">
+    <div>
+      <div class="task-mini-title">{{ job.title }}</div>
+      <div class="task-mini-meta">{{ job.location }} · {{ job.time }}</div>
+      <div class="task-mini-meta">{{ job.description }}</div>
+    </div>
+    <div class="task-mini-price">${{ job.price }}</div>
+  </div>
 
-  <h2>{{ job.title }}</h2>
-  <p class="job-meta">{{ job.location }} · {{ job.hours }} hrs</p>
-  <p class="job-pay">${{ job.pay }}</p>
-  <p class="job-desc">{{ job.description }}</p>
+  <hr class="sep"/>
 
-  <form method="post" action="/apply/{{ job.id }}">
-    <label>Full name</label>
-    <input type="text" name="full_name" required>
+  <form class="form" method="post" action="/apply/{{ job.id }}">
+    <div class="form-row">
+      <input class="input" name="full_name" placeholder="Full name" required />
+      <input class="input" name="email" placeholder="Email" type="email" required />
+    </div>
+    <textarea class="textarea" name="message" placeholder="Message" required></textarea>
+    <button class="btn btn-primary" type="submit">Submit application</button>
 
-    <label>Email</label>
-    <input type="email" name="email" required>
-
-    <label>Message</label>
-    <textarea name="message" placeholder="Tell the employer why you’re a good fit"></textarea>
-
-    <button type="submit" class="btn-primary">
-      Submit application
-    </button>
+    <p class="small-note">
+      By submitting, you agree to our <a href="/terms">Terms</a> and <a href="/privacy">Privacy Policy</a>.
+      JobChap is a digital jobcenter platform connecting clients and workers. We do not guarantee hiring or earnings.
+    </p>
   </form>
-</div>
-
+</section>
 {% endblock %}

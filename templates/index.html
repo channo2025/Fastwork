@@ -1,54 +1,45 @@
 {% extends "base.html" %}
 {% block content %}
-
-<div class="hero-card">
+<section class="hero-card">
   <div class="hero-grid">
-
-    <!-- LEFT -->
     <div>
-      <span class="badge">Same-day help for real-life tasks</span>
-
-      <h1 class="hero-title">
-        Work today.<br>Get paid today.
-      </h1>
-
+      <div class="badge"><span class="dot"></span> Same-day help for real-life tasks</div>
+      <h1 class="hero-title">Work today.<br/>Get paid today.</h1>
       <p class="hero-text">
-        JobChap connects you with fast, local work: cleaning, moving,
-        yard work and more. No resume. No interview.
+        JobChap connects you with fast, local work: cleaning, moving, yard work, shopping and more.
+        No resume. No interview. Just quick jobs and real money.
       </p>
 
       <div class="hero-actions">
-        <a href="/tasks" class="btn-primary">Browse tasks</a>
-        <a href="#" class="btn-secondary">Post a job</a>
+        <a class="btn btn-primary" href="/tasks">Browse tasks</a>
+        <a class="btn" href="/post">Post a job</a>
+      </div>
+
+      <div class="helper-box">
+        <b>For workers:</b> sign up in minutes, choose your own jobs.<br/>
+        <b>For clients:</b> get reliable help for same-day or next-day tasks.
       </div>
     </div>
 
-    <!-- RIGHT -->
-    <div class="tasks-box">
-      <div class="tasks-header">
-        <h3>Popular tasks on JobChap</h3>
-        <a href="/tasks">View all →</a>
+    <aside class="tasks-box">
+      <div class="tasks-box-header">
+        <div>
+          <h3>Popular tasks on JobChap</h3>
+          <p>What people usually book in your city:</p>
+        </div>
+        <a class="view-all" href="/tasks">View all tasks →</a>
       </div>
 
+      {% for t in popular %}
       <div class="task-mini">
         <div>
-          <h4>House cleaning</h4>
-          <p>3 hrs · Portland</p>
+          <div class="task-mini-title">{{ t.title }}</div>
+          <div class="task-mini-meta">{{ t.time }} · {{ t.location }}</div>
         </div>
-        <div class="task-mini-price">$85</div>
+        <div class="task-mini-price">${{ t.price }}</div>
       </div>
-
-      <div class="task-mini">
-        <div>
-          <h4>Move boxes to storage</h4>
-          <p>2 hrs · Gresham</p>
-        </div>
-        <div class="task-mini-price">$60</div>
-      </div>
-
-    </div>
-
+      {% endfor %}
+    </aside>
   </div>
-</div>
-
+</section>
 {% endblock %}

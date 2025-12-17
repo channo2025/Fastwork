@@ -1,8 +1,20 @@
 {% extends "base.html" %}
-{% block title %}Contact — JobChap{% endblock %}
 {% block content %}
-<section class="page">
-  <h1>Contact</h1>
-  <p class="muted">Email: support@jobchaponline.com</p>
+<section class="page-card">
+  <h1 class="page-title">Contact</h1>
+  <p class="page-sub">Questions, feedback, or reports? Send us a message.</p>
+
+  <form class="form" method="post" action="/contact">
+    <div class="form-row">
+      <input class="input" name="name" placeholder="Your name" required />
+      <input class="input" name="email" placeholder="Your email" type="email" required />
+    </div>
+    <textarea class="textarea" name="message" placeholder="Your message" required></textarea>
+    <button class="btn btn-primary" type="submit">Send message</button>
+
+    <p class="small-note">
+      For legal/privacy requests, include “Privacy Request” in your message subject line (in the message text).
+    </p>
+  </form>
 </section>
 {% endblock %}

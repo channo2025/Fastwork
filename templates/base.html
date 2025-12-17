@@ -1,30 +1,45 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>JobChap – Quick cash jobs</title>
-  <link rel="stylesheet" href="/static/style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>{{ page_title if page_title else "JobChap" }}</title>
+  <link rel="stylesheet" href="/static/style.css" />
 </head>
 <body>
 
-  <header class="header">
-    <div class="logo">Job<span>Chap</span></div>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="/">
+      <div class="logo">JC</div>
+      <div class="brand-text">
+        <div class="brand-name">JobChap</div>
+        <div class="brand-sub">Jobcenter online · quick cash jobs</div>
+      </div>
+    </a>
+
     <nav class="nav">
       <a href="/">Home</a>
       <a href="/tasks">Tasks</a>
-      <a href="#">Post a job</a>
-      <a href="#">Contact</a>
+      <a class="btn-pill" href="/post">Post a job</a>
+      <a href="/about">About</a>
+      <a href="/contact">Contact</a>
     </nav>
-  </header>
+  </div>
+</header>
 
+<main class="container">
   {% block content %}{% endblock %}
+</main>
 
-  <footer class="footer">
-    © 2025 JobChap Online.
-    <a href="#">About</a>
-    <a href="#">Terms</a>
-    <a href="#">Privacy</a>
-  </footer>
+<footer class="footer">
+  <div>© 2025 JobChap Online. All rights reserved.</div>
+  <div class="footer-links">
+    <a href="/about">About</a> ·
+    <a href="/terms">Terms of Use</a> ·
+    <a href="/privacy">Privacy Policy</a>
+  </div>
+</footer>
 
 </body>
 </html>

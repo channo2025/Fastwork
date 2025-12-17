@@ -1,56 +1,30 @@
 {% extends "base.html" %}
-{% block title %}Post a job — JobChap{% endblock %}
-
 {% block content %}
-<section class="page">
-  <div class="page-head">
-    <div>
-      <h1>Post a job</h1>
-      <p class="muted">Fill this form — your job will appear on the Tasks page.</p>
-    </div>
-  </div>
+<section class="page-card">
+  <h1 class="page-title">Post a job</h1>
+  <p class="page-sub">Describe what you need done. Workers can apply right away.</p>
 
-  <form class="form" method="post" action="/post-job">
-    <label>Job title
-      <input name="title" placeholder="Example: Deep clean 1-bedroom" required />
-    </label>
+  <form class="form" method="post" action="/post">
+    <input class="input" name="title" placeholder="Job title (e.g., Deep clean 1-bedroom)" required />
 
     <div class="form-row">
-      <label>Location
-        <input name="location" placeholder="SE Portland" required />
-      </label>
-      <label>Price ($)
-        <input name="price" type="number" min="1" placeholder="85" required />
-      </label>
+      <input class="input" name="location" placeholder="Location (City / Area)" required />
+      <input class="input" name="time" placeholder="Duration (e.g., 3 hrs)" required />
     </div>
 
     <div class="form-row">
-      <label>Hours
-        <input name="hours" type="number" min="1" placeholder="2" required />
-      </label>
-      <label>Badge (optional)
-        <input name="badge" placeholder="Same-day" />
-      </label>
+      <input class="input" name="price" placeholder="Budget (USD)" type="number" min="1" required />
+      <input class="input" name="contact_email" placeholder="Your email (for applicants)" type="email" required />
     </div>
 
-    <label>Client name (optional)
-      <input name="client_name" placeholder="John / Sarah / Company" />
-    </label>
+    <textarea class="textarea" name="description" placeholder="Describe the task, requirements, preferred time, etc." required></textarea>
 
-    <label>Description
-      <textarea name="description" rows="5" placeholder="Describe the job clearly..."></textarea>
-    </label>
+    <button class="btn btn-primary" type="submit">Publish job</button>
 
-    <div class="form-row">
-      <label>Contact email
-        <input name="contact_email" type="email" placeholder="email@example.com" required />
-      </label>
-      <label>Contact SMS (optional)
-        <input name="contact_sms" placeholder="+1 555 123 4567" />
-      </label>
-    </div>
-
-    <button class="btn primary" type="submit">Publish job</button>
+    <p class="small-note">
+      Important: JobChap is a matching platform only. You are responsible for interviewing, choosing a worker, and any payment arrangements.
+      Do not post illegal, discriminatory, or unsafe requests. See <a href="/terms">Terms</a>.
+    </p>
   </form>
 </section>
 {% endblock %}

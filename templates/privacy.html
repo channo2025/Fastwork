@@ -1,61 +1,62 @@
-<h1>Privacy Policy</h1>
+{% extends "base.html" %}
+{% block content %}
+<section class="page-card">
+  <h1 class="page-title">Privacy Policy</h1>
+  <p class="page-sub">Last updated: 2025-12-17</p>
 
-<p>
-Your privacy matters to us. This policy explains how JobChap collects,
-uses, and protects your information.
-</p>
+  <p class="small-note">
+    This Privacy Policy explains how JobChap collects, uses, and shares information when you use our platform.
+  </p>
 
-<h2>1. Information We Collect</h2>
+  <hr class="sep"/>
 
-<ul>
-  <li>Name (optional)</li>
-  <li>Email address</li>
-  <li>Job-related information</li>
-  <li>Basic usage data</li>
-</ul>
+  <h3>1) Information we collect</h3>
+  <ul class="small-note">
+    <li><b>Information you provide:</b> name, email, messages, job postings, and application messages.</li>
+    <li><b>Basic technical data:</b> device/browser info, IP address, and logs for security and debugging.</li>
+    <li><b>Cookies:</b> we may use cookies for basic site functionality and analytics (if enabled).</li>
+  </ul>
 
-<h2>2. How We Use Information</h2>
+  <h3>2) How we use information</h3>
+  <ul class="small-note">
+    <li>To operate the platform (post jobs, submit applications, respond to messages).</li>
+    <li>To improve safety, prevent abuse, and troubleshoot issues.</li>
+    <li>To communicate with you about important updates.</li>
+  </ul>
 
-<p>
-Information is used to:
-</p>
+  <h3>3) Sharing</h3>
+  <p class="small-note">
+    We may share information with service providers (hosting, analytics) only as needed to run the site.
+    We may disclose information if required by law, to protect users, or to prevent fraud/abuse.
+  </p>
 
-<ul>
-  <li>Operate the platform</li>
-  <li>Display job listings</li>
-  <li>Enable communication between users</li>
-  <li>Improve user experience</li>
-</ul>
+  <h3>4) Data retention</h3>
+  <p class="small-note">
+    We keep data only as long as necessary for platform operations, security, and legal compliance. We may delete data periodically.
+  </p>
 
-<h2>3. Information Sharing</h2>
+  <h3>5) Security</h3>
+  <p class="small-note">
+    We use reasonable safeguards, but no system is 100% secure. Use the platform at your own risk and avoid posting sensitive data.
+  </p>
 
-<p>
-JobChap does not sell user data.
-Information may only be shared when required by law.
-</p>
+  <h3>6) Children</h3>
+  <p class="small-note">
+    JobChap is not intended for children under 13 (or the minimum age required in your region). Do not use the site if you do not meet the legal age requirement.
+  </p>
 
-<h2>4. Data Security</h2>
+  <h3>7) Your choices</h3>
+  <p class="small-note">
+    You can request deletion of messages you submitted by contacting us. We may need to retain certain records for legal or security reasons.
+  </p>
 
-<p>
-We take reasonable measures to protect user data,
-but no system is 100% secure.
-</p>
+  <h3>8) Contact</h3>
+  <p class="small-note">
+    For privacy requests, contact us via <a href="/contact">Contact</a>.
+  </p>
 
-<h2>5. Cookies</h2>
-
-<p>
-JobChap may use basic cookies for functionality and analytics.
-</p>
-
-<h2>6. User Rights</h2>
-
-<p>
-Users may request access, correction, or deletion of their data
-by contacting us.
-</p>
-
-<h2>7. Updates</h2>
-
-<p>
-This policy may be updated periodically.
-</p>
+  <p class="small-note" style="margin-top:16px;">
+    Note: This template is not legal advice. If you add payments, user accounts, background checks, or marketing emails, you should update this policy accordingly.
+  </p>
+</section>
+{% endblock %}
