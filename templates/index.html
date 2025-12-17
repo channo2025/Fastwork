@@ -1,10 +1,14 @@
 {% extends "base.html" %}
 {% block content %}
+
 <section class="hero-card">
   <div class="hero-grid">
-    <div>
+
+    <div class="hero-left">
       <div class="badge"><span class="dot"></span> Same-day help for real-life tasks</div>
+
       <h1 class="hero-title">Work today.<br/>Get paid today.</h1>
+
       <p class="hero-text">
         JobChap connects you with fast, local work: cleaning, moving, yard work, shopping and more.
         No resume. No interview. Just quick jobs and real money.
@@ -21,25 +25,33 @@
       </div>
     </div>
 
-    <aside class="tasks-box">
-      <div class="tasks-box-header">
+    <aside class="popular-card">
+      <div class="popular-head">
         <div>
-          <h3>Popular tasks on JobChap</h3>
-          <p>What people usually book in your city:</p>
+          <div class="popular-title">Popular tasks</div>
+          <div class="popular-sub">What people usually book in your city:</div>
         </div>
-        <a class="view-all" href="/tasks">View all tasks →</a>
+        <a class="view-all" href="/tasks">View all →</a>
       </div>
 
-      {% for t in popular %}
-      <div class="task-mini">
-        <div>
-          <div class="task-mini-title">{{ t.title }}</div>
-          <div class="task-mini-meta">{{ t.time }} · {{ t.location }}</div>
-        </div>
-        <div class="task-mini-price">${{ t.price }}</div>
+      <div class="popular-list">
+        {% for t in popular %}
+        <a class="popular-item" href="/apply/{{ t.id }}">
+          <div class="p-left">
+            <div class="p-title">{{ t.title }}</div>
+            <div class="p-meta">{{ t.time }} · {{ t.location }}</div>
+          </div>
+          <div class="p-price">${{ t.price }}</div>
+        </a>
+        {% endfor %}
       </div>
-      {% endfor %}
+
+      <div class="popular-foot">
+        Tip: click a task to apply instantly.
+      </div>
     </aside>
+
   </div>
 </section>
+
 {% endblock %}
