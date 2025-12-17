@@ -1,57 +1,59 @@
 {% extends "base.html" %}
-{% block title %}JobChap — Work today. Get paid today.{% endblock %}
 
 {% block content %}
-<section class="hero">
-  <div class="hero-card">
-    <div class="hero-left">
-      <div class="pill-dot">
-        <span class="dot"></span>
-        Same-day help for real-life tasks
-      </div>
 
-      <h1 class="headline">
-        Work today.<br>
-        Get paid today.
-      </h1>
+<div class="hero-card">
 
-      <p class="lead">
-        JobChap connects you with fast, local work: cleaning, moving, yard work, shopping and more.
-        No resume. No interview. Just quick jobs and real money.
-      </p>
+  <!-- LEFT -->
+  <div>
+    <span class="hero-badge">Same-day help for real-life tasks</span>
 
-      <div class="hero-actions">
-        <a class="btn primary" href="/tasks">Browse tasks</a>
-        <a class="btn outline" href="/post-job">Post a job</a>
-      </div>
+    <h1 class="hero-title">
+      Work today.<br>Get paid today.
+    </h1>
 
-      <div class="subtext">
-        <strong>For workers:</strong> sign up in minutes, choose your own jobs.<br>
-        <strong>For clients:</strong> get reliable help for same-day or next-day tasks.
-      </div>
+    <p class="hero-text">
+      JobChap connects you with fast, local work:
+      cleaning, moving, yard work, shopping and more.
+      No resume. No interview. Just quick jobs and real money.
+    </p>
+
+    <div class="hero-buttons">
+      <a href="/tasks" class="btn-primary">Browse tasks</a>
+      <a href="/post-job" class="btn-secondary">Post a job</a>
     </div>
 
-    <div class="hero-right">
-      <div class="box-title">
-        <div>
-          <h3>Popular tasks on JobChap</h3>
-          <p>What people usually book in your city:</p>
-        </div>
-        <a class="link" href="/tasks">View all tasks →</a>
-      </div>
-
-      <div class="mini-grid">
-        {% for t in popular %}
-        <div class="mini-card">
-          <div class="mini-top">
-            <div class="mini-name">{{ t.title }}</div>
-          </div>
-          <div class="mini-meta">Today · {{ t.location }}</div>
-          <div class="mini-price">${{ t.price }}</div>
-        </div>
-        {% endfor %}
-      </div>
-    </div>
+    <p class="hero-text" style="font-size:14px;">
+      <strong>For workers:</strong> sign up in minutes, choose your own jobs.<br>
+      <strong>For clients:</strong> get reliable help for same-day or next-day tasks.
+    </p>
   </div>
-</section>
+
+  <!-- RIGHT -->
+  <div class="popular-box">
+    <div class="popular-header">
+      <h3>Popular tasks on JobChap</h3>
+      <a href="/tasks">View all</a>
+    </div>
+
+    <div class="task-mini">
+      <div>
+        <div class="task-mini-title">House cleaning</div>
+        <div class="task-mini-sub">3 hrs · Portland</div>
+      </div>
+      <div class="task-mini-price">$85</div>
+    </div>
+
+    <div class="task-mini">
+      <div>
+        <div class="task-mini-title">Move boxes to storage</div>
+        <div class="task-mini-sub">2 hrs · Gresham</div>
+      </div>
+      <div class="task-mini-price">$60</div>
+    </div>
+
+  </div>
+
+</div>
+
 {% endblock %}
