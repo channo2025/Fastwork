@@ -1,57 +1,59 @@
 {% extends "base.html" %}
+{% block title %}JobChap{% endblock %}
+
 {% block content %}
-
 <section class="hero-card">
-  <div class="hero-grid">
+  <div class="hero-left">
+    <div class="chip"><span class="dot"></span> Same-day help for real-life tasks</div>
 
-    <div class="hero-left">
-      <div class="badge"><span class="dot"></span> Same-day help for real-life tasks</div>
+    <h1 class="hero-title">Work today.<br/>Get paid today.</h1>
 
-      <h1 class="hero-title">Work today.<br/>Get paid today.</h1>
+    <p class="hero-sub">
+      JobChap connects you with fast, local work: cleaning, moving, yard work, shopping and more.
+      No resume. No interview. Just quick jobs and real money.
+    </p>
 
-      <p class="hero-text">
-        JobChap connects you with fast, local work: cleaning, moving, yard work, shopping and more.
-        No resume. No interview. Just quick jobs and real money.
-      </p>
-
-      <div class="hero-actions">
-        <a class="btn btn-primary" href="/tasks">Browse tasks</a>
-        <a class="btn" href="/post">Post a job</a>
-      </div>
-
-      <div class="helper-box">
-        <b>For workers:</b> sign up in minutes, choose your own jobs.<br/>
-        <b>For clients:</b> get reliable help for same-day or next-day tasks.
-      </div>
+    <div class="hero-actions">
+      <a class="btn-primary" href="/tasks">Browse tasks</a>
+      <a class="btn-secondary" href="/post-a-job">Post a job</a>
     </div>
 
-    <aside class="popular-card">
-      <div class="popular-head">
-        <div>
-          <div class="popular-title">Popular tasks</div>
-          <div class="popular-sub">What people usually book in your city:</div>
-        </div>
-        <a class="view-all" href="/tasks">View all →</a>
-      </div>
+    <div class="hero-note">
+      <strong>For workers:</strong> sign up in minutes, choose your own jobs.<br/>
+      <strong>For clients:</strong> get reliable help for same-day or next-day tasks.
+    </div>
+  </div>
 
+  <aside class="popular-card">
+    <div class="popular-head">
+      <div>
+        <div class="popular-title">Popular tasks</div>
+        <div class="popular-sub">What people usually book in your city:</div>
+      </div>
+      <a class="popular-link" href="/tasks">View all →</a>
+    </div>
+
+    {% if popular_jobs and popular_jobs|length > 0 %}
       <div class="popular-list">
-        {% for t in popular %}
-        <a class="popular-item" href="/apply/{{ t.id }}">
-          <div class="p-left">
-            <div class="p-title">{{ t.title }}</div>
-            <div class="p-meta">{{ t.time }} · {{ t.location }}</div>
-          </div>
-          <div class="p-price">${{ t.price }}</div>
-        </a>
+        {% for j in popular_jobs %}
+          <a class="task-mini" href="/tasks">
+            <div>
+              <div class="task-mini-title">{{ j.title }}</div>
+              <div class="task-mini-meta">{{ j.when_text }} · {{ j.location }}</div>
+            </div>
+            <div class="task-mini-price">{{ j.pay }}</div>
+          </a>
         {% endfor %}
       </div>
-
-      <div class="popular-foot">
-        Tip: click a task to apply instantly.
+      <div class="popular-tip">Tip: tasks here come from the database ✅</div>
+    {% else %}
+      <div class="empty-state">
+        No jobs yet. Post the first one!
+        <div style="margin-top:10px;">
+          <a class="btn-secondary" href="/post-a-job">Post a job</a>
+        </div>
       </div>
-    </aside>
-
-  </div>
+    {% endif %}
+  </aside>
 </section>
-
 {% endblock %}

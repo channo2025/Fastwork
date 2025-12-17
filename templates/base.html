@@ -3,44 +3,41 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>{{ page_title if page_title else "JobChap" }}</title>
-
-  <!-- IMPORTANT: le CSS -->
-  <link rel="stylesheet" href="/static/style.css?v=7" />
+  <title>{% block title %}JobChap{% endblock %}</title>
+  <link rel="stylesheet" href="/static/style.css" />
 </head>
-
 <body>
-<header class="topbar">
-  <div class="topbar-inner">
-    <a class="brand" href="/">
-      <div class="logo">JC</div>
-      <div class="brand-text">
-        <div class="brand-name">JobChap</div>
-        <div class="brand-sub">Jobcenter online · quick cash jobs</div>
-      </div>
-    </a>
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <a class="brand" href="/">
+        <div class="brand-badge">JC</div>
+        <div>
+          <div class="brand-name">JobChap</div>
+          <div class="brand-tag">Jobcenter online · quick cash jobs</div>
+        </div>
+      </a>
 
-    <nav class="nav">
-      <a href="/">Home</a>
-      <a href="/tasks">Tasks</a>
-      <a class="btn-pill" href="/post">Post a job</a>
+      <nav class="nav">
+        <a href="/" class="{% if request.url.path=='/' %}active{% endif %}">Home</a>
+        <a href="/tasks" class="{% if request.url.path.startswith('/tasks') %}active{% endif %}">Tasks</a>
+        <a href="/post-a-job" class="btn-pill {% if request.url.path.startswith('/post-a-job') %}active{% endif %}">Post a job</a>
+        <a href="/about" class="{% if request.url.path.startswith('/about') %}active{% endif %}">About</a>
+        <a href="/contact" class="{% if request.url.path.startswith('/contact') %}active{% endif %}">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="footer container">
+    <div>© 2025 JobChap Online. All rights reserved.</div>
+    <div class="footer-links">
       <a href="/about">About</a>
-      <a href="/contact">Contact</a>
-    </nav>
-  </div>
-</header>
-
-<main class="container">
-  {% block content %}{% endblock %}
-</main>
-
-<footer class="footer">
-  <div>© 2025 JobChap Online. All rights reserved.</div>
-  <div class="footer-links">
-    <a href="/about">About</a> ·
-    <a href="/terms">Terms of Use</a> ·
-    <a href="/privacy">Privacy Policy</a>
-  </div>
-</footer>
+      <a href="/terms">Terms of Use</a>
+      <a href="/privacy">Privacy Policy</a>
+    </div>
+  </footer>
 </body>
 </html>

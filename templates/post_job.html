@@ -1,30 +1,38 @@
 {% extends "base.html" %}
+{% block title %}Post a job · JobChap{% endblock %}
+
 {% block content %}
 <section class="page-card">
-  <h1 class="page-title">Post a job</h1>
-  <p class="page-sub">Describe what you need done. Workers can apply right away.</p>
+  <div class="page-head">
+    <h2>Post a job</h2>
+    <a class="btn-secondary" href="/tasks">Browse tasks</a>
+  </div>
 
-  <form class="form" method="post" action="/post">
-    <input class="input" name="title" placeholder="Job title (e.g., Deep clean 1-bedroom)" required />
+  <form class="form" method="post" action="/post-a-job">
+    <label>
+      Job title
+      <input name="title" placeholder="e.g. House cleaning" required />
+    </label>
 
     <div class="form-row">
-      <input class="input" name="location" placeholder="Location (City / Area)" required />
-      <input class="input" name="time" placeholder="Duration (e.g., 3 hrs)" required />
+      <label>
+        Location
+        <input name="location" placeholder="e.g. Portland" required />
+      </label>
+
+      <label>
+        Pay
+        <input name="pay" placeholder="e.g. $85" required />
+      </label>
     </div>
 
-    <div class="form-row">
-      <input class="input" name="price" placeholder="Budget (USD)" type="number" min="1" required />
-      <input class="input" name="contact_email" placeholder="Your email (for applicants)" type="email" required />
-    </div>
+    <label>
+      When
+      <input name="when_text" placeholder="e.g. Today / Tomorrow / This weekend" required />
+    </label>
 
-    <textarea class="textarea" name="description" placeholder="Describe the task, requirements, preferred time, etc." required></textarea>
-
-    <button class="btn btn-primary" type="submit">Publish job</button>
-
-    <p class="small-note">
-      Important: JobChap is a matching platform only. You are responsible for interviewing, choosing a worker, and any payment arrangements.
-      Do not post illegal, discriminatory, or unsafe requests. See <a href="/terms">Terms</a>.
-    </p>
+    <button class="btn-primary" type="submit">Publish job</button>
+    <p class="form-hint">This will be saved in the database ✅</p>
   </form>
 </section>
 {% endblock %}

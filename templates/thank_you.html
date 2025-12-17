@@ -1,8 +1,13 @@
 {% extends "base.html" %}
+{% block title %}Thank you · JobChap{% endblock %}
+
 {% block content %}
 <section class="page-card">
-  <h1 class="page-title">{{ title }}</h1>
-  <p class="page-sub">{{ message }}</p>
-  <a class="btn btn-primary" href="/tasks">Back to tasks</a>
+  <h2>✅ Job posted!</h2>
+  <p>Your task is now live and saved in the database.</p>
+  <div style="margin-top:14px;">
+    <a class="btn-primary" href="/tasks">View tasks</a>
+    <a class="btn-secondary" href="/post-a-job">Post another</a>
+  </div>
 </section>
 {% endblock %}

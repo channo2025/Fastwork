@@ -1,57 +1,30 @@
 {% extends "base.html" %}
-{% block title %}Tasks — JobChap{% endblock %}
+{% block title %}Tasks · JobChap{% endblock %}
+
 {% block content %}
-
-<section class="page">
+<section class="page-card">
   <div class="page-head">
-    <div>
-      <h1>Available Tasks</h1>
-      <p class="muted">Browse real local jobs posted on JobChap.</p>
-    </div>
-
-    <a class="btn primary" href="/post-job">Post a job</a>
+    <h2>Tasks</h2>
+    <a class="btn-secondary" href="/post-a-job">Post a job</a>
   </div>
 
   {% if jobs and jobs|length > 0 %}
-    <div class="grid">
-      {% for job in jobs %}
-        <article class="card">
-          <div class="card-top">
-            <h3 class="card-title">{{ job["title"] }}</h3>
-            <span class="pill">${{ job["price"] }}</span>
-          </div>
-
-          <div class="card-meta">
-            <span>📍 {{ job["location"] }}</span>
-            <span>⏱ {{ job["hours"] }} hrs</span>
-
-            {% if job.get("badge") %}
-              <span class="badge">{{ job["badge"] }}</span>
-            {% endif %}
-          </div>
-
-          {% if job.get("description") %}
-            <p class="card-desc">{{ job["description"] }}</p>
-          {% endif %}
-
-          <div class="card-actions">
-            <a class="btn outline" href="/apply/{{ job['id'] }}">Apply</a>
-            {% if job.get("contact_email") %}
-              <a class="btn ghost" href="mailto:{{ job['contact_email'] }}">Email</a>
-            {% else %}
-              <a class="btn ghost" href="/contact">Contact</a>
-            {% endif %}
-          </div>
-        </article>
+    <div class="tasks-grid">
+      {% for j in jobs %}
+        <div class="task-card">
+          <div class="task-title">{{ j.title }}</div>
+          <div class="task-meta">{{ j.when_text }} · {{ j.location }}</div>
+          <div class="task-pay">{{ j.pay }}</div>
+        </div>
       {% endfor %}
     </div>
   {% else %}
-    <div class="card" style="padding:18px;">
-      <h3 style="margin:0 0 6px;">No tasks yet</h3>
-      <p class="muted" style="margin:0 0 12px;">Be the first to post a job.</p>
-      <a class="btn primary" href="/post-job">Post a job</a>
+    <div class="empty-state">
+      No tasks yet. Be the first to post one.
+      <div style="margin-top:12px;">
+        <a class="btn-primary" href="/post-a-job">Post a job</a>
+      </div>
     </div>
   {% endif %}
 </section>
-
 {% endblock %}
