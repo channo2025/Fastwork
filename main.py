@@ -7,9 +7,15 @@ from fastapi.staticfiles import StaticFiles
 from starlette.templating import Jinja2Templates
 from starlette.status import HTTP_303_SEE_OTHER
 
-from sqlalchemy import create_engine, Column, Integer, String, DateTime
-from sqlalchemy.orm import declarative_base, sessionmaker
+from sqlalchemy import create_engine
+import os
 
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+# sécurité Render
+DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://")
+
+engine = create_engine(DATABASE_URL, pool_pre_ping=True)
 
 # -----------------------------
 # Config
