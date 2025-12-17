@@ -5,10 +5,7 @@ from fastapi.staticfiles import StaticFiles
 from starlette.templating import Jinja2Templates
 from starlette.status import HTTP_303_SEE_OTHER
 from sqlalchemy import create_engine
-
-# --------------------
-# App
-# --------------------
+ 
 app = FastAPI()
 
 DATABASE_URL = os.getenv("DATABASE_URL")
