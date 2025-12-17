@@ -1,52 +1,29 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>JobChap</title>
-
-  <!-- Police -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-
-  <link rel="stylesheet" href="/static/style.css" />
+  <meta charset="UTF-8" />
+  <title>JobChap – Quick cash jobs</title>
+  <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
 
-  <header class="topbar">
-    <div class="container topbar-inner">
-      <a class="brand" href="/">
-        <div class="logo-badge">JC</div>
-        <div class="brand-text">
-          <div class="brand-name">JobChap</div>
-          <div class="brand-sub">Jobcenter online · quick cash jobs</div>
-        </div>
-      </a>
-
-      <nav class="nav">
-        <a href="/">Home</a>
-        <a href="/tasks">Tasks</a>
-        <a class="pill" href="/post-job">Post a job</a>
-        <a href="/about">About</a>
-        <a href="/contact">Contact</a>
-      </nav>
-    </div>
+  <header class="header">
+    <div class="logo">Job<span>Chap</span></div>
+    <nav class="nav">
+      <a href="/">Home</a>
+      <a href="/tasks">Tasks</a>
+      <a href="#">Post a job</a>
+      <a href="#">Contact</a>
+    </nav>
   </header>
 
-  <main class="container">
-    {% block content %}{% endblock %}
-  </main>
+  {% block content %}{% endblock %}
 
   <footer class="footer">
-    <div class="container footer-inner">
-      <div>© 2025 JobChap Online. All rights reserved.</div>
-      <div class="footer-links">
-        <a href="/about">About</a> ·
-        <a href="/terms">Terms of Use</a> ·
-        <a href="/privacy">Privacy Policy</a>
-      </div>
-    </div>
+    © 2025 JobChap Online.
+    <a href="#">About</a>
+    <a href="#">Terms</a>
+    <a href="#">Privacy</a>
   </footer>
 
 </body>

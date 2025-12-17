@@ -1,3 +1,4 @@
+/* RESET */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -6,111 +7,124 @@
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
-               Roboto, Helvetica, Arial, sans-serif;
+    Inter, Roboto, Helvetica, Arial, sans-serif;
   background: #f9fafb;
   color: #111827;
-  line-height: 1.6;
 }
 
-/* ---------- HEADER ---------- */
+/* LINKS */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* HEADER */
 .header {
   max-width: 1100px;
   margin: 24px auto;
-  padding: 0 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
+.logo {
+  font-weight: 700;
+  font-size: 20px;
+}
+
+.logo span {
+  color: #2563eb;
+}
+
 .nav a {
-  margin-left: 16px;
-  text-decoration: none;
+  margin-left: 20px;
+  font-size: 14px;
   color: #374151;
-  font-weight: 500;
 }
 
-.nav a:hover {
-  text-decoration: underline;
-}
-
-/* ---------- HERO CARD ---------- */
+/* HERO CARD */
 .hero-card {
-  max-width: 1100px;
-  margin: 40px auto;
-  padding: 32px;
   background: #f3f4f6;
   border: 1px solid #e5e7eb;
   border-radius: 20px;
+  padding: 32px;
+  max-width: 1100px;
+  margin: 40px auto;
+}
 
+.hero-grid {
   display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
+  grid-template-columns: 1.4fr 1fr;
   gap: 32px;
 }
 
-.hero-badge {
+/* HERO LEFT */
+.badge {
   display: inline-block;
   background: #e5f0ff;
   color: #2563eb;
-  font-size: 14px;
+  font-size: 12px;
   padding: 6px 12px;
   border-radius: 999px;
   margin-bottom: 16px;
 }
 
 .hero-title {
-  font-size: 42px;
+  font-size: 44px;
   font-weight: 800;
+  line-height: 1.1;
   margin-bottom: 16px;
 }
 
 .hero-text {
-  color: #374151;
+  font-size: 16px;
+  color: #4b5563;
   margin-bottom: 24px;
-  max-width: 520px;
 }
 
-.hero-buttons {
+.hero-actions {
   display: flex;
   gap: 12px;
-  margin-bottom: 16px;
 }
 
 .btn-primary {
   background: #2563eb;
   color: white;
-  padding: 12px 18px;
+  padding: 12px 20px;
   border-radius: 999px;
-  text-decoration: none;
-  font-weight: 600;
+  font-size: 14px;
 }
 
 .btn-secondary {
   border: 1px solid #d1d5db;
-  padding: 12px 18px;
+  padding: 12px 20px;
   border-radius: 999px;
-  text-decoration: none;
-  color: #111827;
+  font-size: 14px;
+  background: white;
+}
+
+/* HERO RIGHT - TASKS */
+.tasks-box {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.tasks-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.tasks-header h3 {
+  font-size: 14px;
   font-weight: 600;
 }
 
-/* ---------- POPULAR TASKS ---------- */
-.popular-box {
-  background: white;
-  border-radius: 16px;
-  padding: 20px;
-  border: 1px solid #e5e7eb;
-}
-
-.popular-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
-}
-
-.popular-header h3 {
-  font-size: 16px;
-  font-weight: 700;
+.tasks-header a {
+  font-size: 12px;
+  color: #2563eb;
 }
 
 .task-mini {
@@ -123,28 +137,34 @@ body {
   margin-bottom: 10px;
 }
 
-.task-mini-title {
+.task-mini h4 {
+  font-size: 14px;
   font-weight: 600;
 }
 
-.task-mini-sub {
-  font-size: 13px;
+.task-mini p {
+  font-size: 12px;
   color: #6b7280;
 }
 
 .task-mini-price {
-  background: #dcfce7;
-  color: #166534;
+  background: #e5f0ff;
+  color: #2563eb;
   padding: 6px 10px;
   border-radius: 999px;
-  font-weight: 700;
+  font-size: 13px;
+  font-weight: 600;
 }
 
-/* ---------- FOOTER ---------- */
+/* FOOTER */
 .footer {
   max-width: 1100px;
   margin: 48px auto 24px;
-  padding: 0 16px;
   font-size: 14px;
+  color: #6b7280;
+}
+
+.footer a {
+  margin-left: 10px;
   color: #6b7280;
 }
