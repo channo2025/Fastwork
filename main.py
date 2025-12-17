@@ -1,41 +1,38 @@
 import os
-from datetime import datetime
-
 from fastapi import FastAPI, Request, Form
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from starlette.templating import Jinja2Templates
 from starlette.status import HTTP_303_SEE_OTHER
-
 from sqlalchemy import create_engine
-import os
 
-DATABASE_URL = os.getenv("DATABASE_URL")
+# --------------------
+# App
+# --------------------
+app = FastAPI()
 
-# sécurité Render
-DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://")
-
-engine = create_engine(DATABASE_URL, pool_pre_ping=True)
-
-# -----------------------------
+# --------------------
 # Config
-# -----------------------------
-DATABASE_URL = os.getenv("DATABASE_URL", "").strip()
-ENV = os.getenv("ENV", "development").lower()
-
-# Render fournit souvent DATABASE_URL commençant par "postgres://"
-# SQLAlchemy préfère "postgresql://"
-if DATABASE_URL.startswith("postgres://"):
-    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+# --------------------
+DATABASE_URL = os.getenv("DATABASE_URL")
+ENV = os.getenv("ENV", "production").lower()
 
 if not DATABASE_URL:
-    raise RuntimeError("DATABASE_URL is missing. Add it in Render env vars.")
+    raise RuntimeError("DATABASE_URL is not set")
 
+# --------------------
+# Database
+# --------------------
+engine = create_engine(
+    DATABASE_URL,
+    pool_pre_ping=True
+)
 
-engine = create_engine(DATABASE_URL, pool_pre_ping=True)
-SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
-Base = declarative_base()
-
+# --------------------
+# Static + templates
+# --------------------
+app.mount("/static", StaticFiles(directory="static"), name="static")
+templates = Jinja2Templates(directory="templates")
 
 # -----------------------------
 # DB Model
