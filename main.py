@@ -11,9 +11,6 @@ from sqlalchemy import create_engine
 # --------------------
 app = FastAPI()
 
-# --------------------
-# Config
-# --------------------
 DATABASE_URL = os.getenv("DATABASE_URL")
 ENV = os.getenv("ENV", "production").lower()
 
