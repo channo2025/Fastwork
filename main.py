@@ -8,12 +8,7 @@ from sqlalchemy import create_engine
  
 app = FastAPI()
 
-DATABASE_URL = os.getenv("DATABASE_URL")
-ENV = os.getenv("ENV", "production").lower()
-
-if not DATABASE_URL:
-    raise RuntimeError("DATABASE_URL is not set")
-
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./fastwork_db.db")
 # --------------------
 # Database
 # --------------------
