@@ -4,11 +4,17 @@ from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from starlette.templating import Jinja2Templates
 from starlette.status import HTTP_303_SEE_OTHER
-from sqlalchemy import create_engine
- 
-app = FastAPI()
 
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./fastwork_db.db")
+from sqlalchemy import Column, Integer, String
+from sqlalchemy.orm import declarative_base
+
+Base = declarative_base()
+
+class Job(Base):
+    __tablename__ = "jobs"
+    id = Column(Integer, primary_key=True)
+    title = Column(String)
+
 # --------------------
 # Database
 # --------------------
