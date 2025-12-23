@@ -1,81 +1,202 @@
+from fastapi import FastAPI, HTTPException, Query
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from pydantic import BaseModel, Field
+from typing import Optional, List
+import sqlite3
 import os
-from fastapi import FastAPI, Depends
-from sqlalchemy import create_engine, Column, Integer, String
-from sqlalchemy.orm import declarative_base, sessionmaker, Session
+from datetime import datetime
 
-# ======================
-# DATABASE CONFIG
-# ======================
+APP_NAME = "BaraConnect"
+DB_PATH = os.path.join("data", "baraconnect.db")
 
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./fastwork_db.db")
+app = FastAPI(title=APP_NAME)
 
-engine = create_engine(
-    DATABASE_URL,
-    connect_args={"check_same_thread": False}
-    if DATABASE_URL.startswith("sqlite")
-    else {}
+# CORS (si plus tard tu as un autre domaine)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-Base = declarative_base()
+def db_conn():
+    os.makedirs("data", exist_ok=True)
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row
+    return conn
 
+def init_db():
+    conn = db_conn()
+    cur = conn.cursor()
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS jobs (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        title TEXT NOT NULL,
+        category TEXT NOT NULL,
+        city TEXT NOT NULL,
+        pay_amount REAL NOT NULL,
+        pay_type TEXT NOT NULL,
+        duration_hours REAL,
+        description TEXT,
+        contact TEXT,
+        created_at TEXT NOT NULL
+    )
+    """)
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS applications (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        job_id INTEGER NOT NULL,
+        name TEXT NOT NULL,
+        phone_or_email TEXT NOT NULL,
+        message TEXT,
+        created_at TEXT NOT NULL,
+        FOREIGN KEY(job_id) REFERENCES jobs(id)
+    )
+    """)
+    conn.commit()
+    conn.close()
 
-# ======================
-# MODELS
-# ======================
+init_db()
 
-class Job(Base):
-    __tablename__ = "jobs"
+# ---- Models ----
+class JobCreate(BaseModel):
+    title: str = Field(..., min_length=3, max_length=80)
+    category: str = Field(..., min_length=2, max_length=30)   # Cleaning, Moving, Yard, Delivery...
+    city: str = Field(..., min_length=2, max_length=40)
+    pay_amount: float = Field(..., gt=0)
+    pay_type: str = Field(..., min_length=2, max_length=20)   # "cash", "same-day", "hourly"
+    duration_hours: Optional[float] = Field(None, gt=0)
+    description: Optional[str] = Field(None, max_length=600)
+    contact: Optional[str] = Field(None, max_length=120)
 
-    id = Column(Integer, primary_key=True, index=True)
-    title = Column(String, nullable=False)
-    description = Column(String, nullable=True)
+class JobOut(BaseModel):
+    id: int
+    title: str
+    category: str
+    city: str
+    pay_amount: float
+    pay_type: str
+    duration_hours: Optional[float] = None
+    description: Optional[str] = None
+    contact: Optional[str] = None
+    created_at: str
 
+class ApplyCreate(BaseModel):
+    name: str = Field(..., min_length=2, max_length=60)
+    phone_or_email: str = Field(..., min_length=6, max_length=80)
+    message: Optional[str] = Field(None, max_length=500)
 
-# ======================
-# CREATE TABLES
-# ======================
+# ---- API ----
+@app.get("/api/health")
+def health():
+    return {"status": "BaraConnect API is running 🚀"}
 
-Base.metadata.create_all(bind=engine)
+@app.post("/api/jobs", response_model=JobOut)
+def create_job(job: JobCreate):
+    conn = db_conn()
+    cur = conn.cursor()
+    now = datetime.utcnow().isoformat()
 
+    cur.execute("""
+        INSERT INTO jobs (title, category, city, pay_amount, pay_type, duration_hours, description, contact, created_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    """, (
+        job.title.strip(),
+        job.category.strip(),
+        job.city.strip(),
+        float(job.pay_amount),
+        job.pay_type.strip().lower(),
+        job.duration_hours,
+        (job.description or "").strip(),
+        (job.contact or "").strip(),
+        now
+    ))
+    conn.commit()
+    job_id = cur.lastrowid
+    conn.close()
 
-# ======================
-# FASTAPI APP
-# ======================
+    return JobOut(
+        id=job_id,
+        title=job.title,
+        category=job.category,
+        city=job.city,
+        pay_amount=job.pay_amount,
+        pay_type=job.pay_type,
+        duration_hours=job.duration_hours,
+        description=job.description,
+        contact=job.contact,
+        created_at=now
+    )
 
-app = FastAPI(title="JobDash API")
+@app.get("/api/jobs", response_model=List[JobOut])
+def list_jobs(
+    q: Optional[str] = Query(None, description="search keyword"),
+    city: Optional[str] = Query(None),
+    category: Optional[str] = Query(None),
+    limit: int = Query(30, ge=1, le=100)
+):
+    conn = db_conn()
+    cur = conn.cursor()
 
+    sql = "SELECT * FROM jobs"
+    params = []
+    where = []
 
-# ======================
-# DEPENDENCIES
-# ======================
+    if q:
+        where.append("(title LIKE ? OR description LIKE ? OR category LIKE ?)")
+        kw = f"%{q}%"
+        params += [kw, kw, kw]
+    if city:
+        where.append("city LIKE ?")
+        params.append(f"%{city}%")
+    if category:
+        where.append("category LIKE ?")
+        params.append(f"%{category}%")
 
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+    if where:
+        sql += " WHERE " + " AND ".join(where)
 
+    sql += " ORDER BY id DESC LIMIT ?"
+    params.append(limit)
 
-# ======================
-# ROUTES
-# ======================
+    cur.execute(sql, params)
+    rows = cur.fetchall()
+    conn.close()
 
-@app.get("/")
-def root():
-    return {"status": "JobDash API is running 🚀"}
+    return [JobOut(**dict(r)) for r in rows]
 
+@app.get("/api/jobs/{job_id}", response_model=JobOut)
+def get_job(job_id: int):
+    conn = db_conn()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM jobs WHERE id = ?", (job_id,))
+    row = cur.fetchone()
+    conn.close()
+    if not row:
+        raise HTTPException(status_code=404, detail="Job not found")
+    return JobOut(**dict(row))
 
-@app.post("/jobs")
-def create_job(title: str, description: str = "", db: Session = Depends(get_db)):
-    job = Job(title=title, description=description)
-    db.add(job)
-    db.commit()
-    db.refresh(job)
-    return job
+@app.post("/api/jobs/{job_id}/apply")
+def apply_job(job_id: int, appy: ApplyCreate):
+    conn = db_conn()
+    cur = conn.cursor()
+    cur.execute("SELECT id FROM jobs WHERE id = ?", (job_id,))
+    exists = cur.fetchone()
+    if not exists:
+        conn.close()
+        raise HTTPException(status_code=404, detail="Job not found")
 
+    now = datetime.utcnow().isoformat()
+    cur.execute("""
+        INSERT INTO applications (job_id, name, phone_or_email, message, created_at)
+        VALUES (?, ?, ?, ?, ?)
+    """, (job_id, appy.name.strip(), appy.phone_or_email.strip(), (appy.message or "").strip(), now))
+    conn.commit()
+    conn.close()
+    return {"ok": True, "message": "Application sent ✅"}
 
-@app.get("/jobs")
-def list_jobs(db: Session = Depends(get_db)):
-    return db.query(Job).all()
+# ---- Serve the site (frontend) ----
+# This makes "/" show static/index.html
+app.mount("/", StaticFiles(directory="static", html=True), name="static")
