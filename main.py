@@ -1,13 +1,27 @@
-from fastapi import FastAPI, Request
+import os
+import sqlite3
+from datetime import datetime
+from typing import List, Optional
+
+from fastapi import FastAPI, Request, HTTPException, Query
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from pydantic import BaseModel, Field
 
+APP_NAME = "BaraConnect"
+DB_PATH = os.path.join("data", "baraconnect.db")
+
+# -------------------------
+# App init (ORDER MATTERS)
+# -------------------------
+app = FastAPI(title=APP_NAME)
+
+# Templates + Static
 templates = Jinja2Templates(directory="templates")
-
-# 🔥 CECI MANQUAIT — sert /static/*
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-# CORS (si plus tard tu as un autre domaine)
+# CORS (ok for beta)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -16,6 +30,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# -------------------------
+# DB helpers (SQLite)
+# -------------------------
 def db_conn():
     os.makedirs("data", exist_ok=True)
     conn = sqlite3.connect(DB_PATH)
@@ -25,6 +42,7 @@ def db_conn():
 def init_db():
     conn = db_conn()
     cur = conn.cursor()
+
     cur.execute("""
     CREATE TABLE IF NOT EXISTS jobs (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -39,6 +57,7 @@ def init_db():
         created_at TEXT NOT NULL
     )
     """)
+
     cur.execute("""
     CREATE TABLE IF NOT EXISTS applications (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -50,18 +69,21 @@ def init_db():
         FOREIGN KEY(job_id) REFERENCES jobs(id)
     )
     """)
+
     conn.commit()
     conn.close()
 
 init_db()
 
-# ---- Models ----
+# -------------------------
+# Pydantic Models
+# -------------------------
 class JobCreate(BaseModel):
     title: str = Field(..., min_length=3, max_length=80)
-    category: str = Field(..., min_length=2, max_length=30)   # Cleaning, Moving, Yard, Delivery...
+    category: str = Field(..., min_length=2, max_length=30)
     city: str = Field(..., min_length=2, max_length=40)
     pay_amount: float = Field(..., gt=0)
-    pay_type: str = Field(..., min_length=2, max_length=20)   # "cash", "same-day", "hourly"
+    pay_type: str = Field(..., min_length=2, max_length=20)  # cash, same-day, hourly, fixed
     duration_hours: Optional[float] = Field(None, gt=0)
     description: Optional[str] = Field(None, max_length=600)
     contact: Optional[str] = Field(None, max_length=120)
@@ -83,7 +105,44 @@ class ApplyCreate(BaseModel):
     phone_or_email: str = Field(..., min_length=6, max_length=80)
     message: Optional[str] = Field(None, max_length=500)
 
-# ---- API ----
+# -------------------------
+# Pages (same style via templates)
+# -------------------------
+@app.get("/")
+def page_home(request: Request):
+    return templates.TemplateResponse("home.html", {"request": request})
+
+@app.get("/tasks")
+def page_tasks(request: Request):
+    return templates.TemplateResponse("tasks.html", {"request": request})
+
+@app.get("/jobs")
+def page_jobs(request: Request):
+    return templates.TemplateResponse("jobs.html", {"request": request})
+
+@app.get("/post")
+def page_post(request: Request):
+    return templates.TemplateResponse("post.html", {"request": request})
+
+@app.get("/about")
+def page_about(request: Request):
+    return templates.TemplateResponse("about.html", {"request": request})
+
+@app.get("/contact")
+def page_contact(request: Request):
+    return templates.TemplateResponse("contact.html", {"request": request})
+
+@app.get("/terms")
+def page_terms(request: Request):
+    return templates.TemplateResponse("terms.html", {"request": request})
+
+@app.get("/privacy")
+def page_privacy(request: Request):
+    return templates.TemplateResponse("privacy.html", {"request": request})
+
+# -------------------------
+# API
+# -------------------------
 @app.get("/api/health")
 def health():
     return {"status": "BaraConnect API is running 🚀"}
@@ -143,9 +202,11 @@ def list_jobs(
         where.append("(title LIKE ? OR description LIKE ? OR category LIKE ?)")
         kw = f"%{q}%"
         params += [kw, kw, kw]
+
     if city:
         where.append("city LIKE ?")
         params.append(f"%{city}%")
+
     if category:
         where.append("category LIKE ?")
         params.append(f"%{category}%")
@@ -169,14 +230,17 @@ def get_job(job_id: int):
     cur.execute("SELECT * FROM jobs WHERE id = ?", (job_id,))
     row = cur.fetchone()
     conn.close()
+
     if not row:
         raise HTTPException(status_code=404, detail="Job not found")
+
     return JobOut(**dict(row))
 
 @app.post("/api/jobs/{job_id}/apply")
-def apply_job(job_id: int, appy: ApplyCreate):
+def apply_job(job_id: int, payload: ApplyCreate):
     conn = db_conn()
     cur = conn.cursor()
+
     cur.execute("SELECT id FROM jobs WHERE id = ?", (job_id,))
     exists = cur.fetchone()
     if not exists:
@@ -187,50 +251,24 @@ def apply_job(job_id: int, appy: ApplyCreate):
     cur.execute("""
         INSERT INTO applications (job_id, name, phone_or_email, message, created_at)
         VALUES (?, ?, ?, ?, ?)
-    """, (job_id, appy.name.strip(), appy.phone_or_email.strip(), (appy.message or "").strip(), now))
+    """, (
+        job_id,
+        payload.name.strip(),
+        payload.phone_or_email.strip(),
+        (payload.message or "").strip(),
+        now
+    ))
+
     conn.commit()
     conn.close()
     return {"ok": True, "message": "Application sent ✅"}
 
-# ---- Serve the site (frontend) ----
-# This makes "/" show static/index.html
-app.mount("/", StaticFiles(directory="static", html=True), name="static")
-
-from fastapi import Request
-from fastapi.templating import Jinja2Templates
-from fastapi.staticfiles import StaticFiles
-
-templates = Jinja2Templates(directory="templates")
-app.mount("/static", StaticFiles(directory="static"), name="static")
-
-@app.get("/")
-def home(request: Request):
-    return templates.TemplateResponse("home.html", {"request": request})
-
-@app.get("/tasks")
-def tasks(request: Request):
-    return templates.TemplateResponse("tasks.html", {"request": request})
-
-@app.get("/jobs")
-def jobs_page(request: Request):
-    return templates.TemplateResponse("jobs.html", {"request": request})
-
-@app.get("/post")
-def post_page(request: Request):
-    return templates.TemplateResponse("post.html", {"request": request})
-
-@app.get("/about")
-def about(request: Request):
-    return templates.TemplateResponse("about.html", {"request": request})
-
-@app.get("/contact")
-def contact(request: Request):
-    return templates.TemplateResponse("contact.html", {"request": request})
-
-@app.get("/terms")
-def terms(request: Request):
-    return templates.TemplateResponse("terms.html", {"request": request})
-
-@app.get("/privacy")
-def privacy(request: Request):
-    return templates.TemplateResponse("privacy.html", {"request": request})
+# Optional: admin endpoint (basic) to view applications count
+@app.get("/api/admin/applications_count")
+def applications_count():
+    conn = db_conn()
+    cur = conn.cursor()
+    cur.execute("SELECT COUNT(*) as c FROM applications")
+    c = cur.fetchone()["c"]
+    conn.close()
+    return {"applications": c}
