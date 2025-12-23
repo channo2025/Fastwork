@@ -1,16 +1,11 @@
-from fastapi import FastAPI, HTTPException, Query
-from fastapi.middleware.cors import CORSMiddleware
+from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
-from pydantic import BaseModel, Field
-from typing import Optional, List
-import sqlite3
-import os
-from datetime import datetime
+from fastapi.templating import Jinja2Templates
 
-APP_NAME = "BaraConnect"
-DB_PATH = os.path.join("data", "baraconnect.db")
+templates = Jinja2Templates(directory="templates")
 
-app = FastAPI(title=APP_NAME)
+# 🔥 CECI MANQUAIT — sert /static/*
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # CORS (si plus tard tu as un autre domaine)
 app.add_middleware(
