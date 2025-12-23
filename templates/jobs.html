@@ -1,23 +1,20 @@
 {% extends "base.html" %}
+{% block title %}Jobs — BaraConnect{% endblock %}
 {% block content %}
-<section class="page-card">
-  <h1 class="page-title">Tasks</h1>
-  <p class="page-sub">Browse available jobs and apply in one click.</p>
-
-  <div class="form" style="gap:10px;">
-    {% for j in jobs %}
-      <div class="task-mini" style="margin-top:0;">
-        <div>
-          <div class="task-mini-title">{{ j.title }}</div>
-          <div class="task-mini-meta">{{ j.time }} · {{ j.location }}</div>
-          <div class="task-mini-meta">{{ j.description }}</div>
-        </div>
-        <div style="display:flex; flex-direction:column; gap:10px; align-items:flex-end;">
-          <div class="task-mini-price">${{ j.price }}</div>
-          <a class="btn btn-primary" href="/apply/{{ j.id }}">Apply</a>
-        </div>
-      </div>
-    {% endfor %}
+<section class="section">
+  <div class="wrap">
+    <div class="row">
+      <h2>Jobs</h2>
+      <div class="small">Search and apply to fast gigs near you.</div>
+    </div>
+    <div class="search" style="margin:14px 0;">
+      <input id="q" placeholder="Search jobs..." />
+      <input id="city" placeholder="City or ZIP" />
+      <button class="btn btn--primary" id="searchBtn">Search</button>
+    </div>
+    <div id="jobsList" class="jobs"></div>
+    <div id="emptyState" class="empty" style="display:none;">No jobs yet. <a href="/post">Post a job</a>.</div>
   </div>
 </section>
 {% endblock %}
+{% block scripts %}<script src="/static/app.js"></script>{% endblock %}

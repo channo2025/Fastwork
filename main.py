@@ -200,3 +200,42 @@ def apply_job(job_id: int, appy: ApplyCreate):
 # ---- Serve the site (frontend) ----
 # This makes "/" show static/index.html
 app.mount("/", StaticFiles(directory="static", html=True), name="static")
+
+from fastapi import Request
+from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles
+
+templates = Jinja2Templates(directory="templates")
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+@app.get("/")
+def home(request: Request):
+    return templates.TemplateResponse("home.html", {"request": request})
+
+@app.get("/tasks")
+def tasks(request: Request):
+    return templates.TemplateResponse("tasks.html", {"request": request})
+
+@app.get("/jobs")
+def jobs_page(request: Request):
+    return templates.TemplateResponse("jobs.html", {"request": request})
+
+@app.get("/post")
+def post_page(request: Request):
+    return templates.TemplateResponse("post.html", {"request": request})
+
+@app.get("/about")
+def about(request: Request):
+    return templates.TemplateResponse("about.html", {"request": request})
+
+@app.get("/contact")
+def contact(request: Request):
+    return templates.TemplateResponse("contact.html", {"request": request})
+
+@app.get("/terms")
+def terms(request: Request):
+    return templates.TemplateResponse("terms.html", {"request": request})
+
+@app.get("/privacy")
+def privacy(request: Request):
+    return templates.TemplateResponse("privacy.html", {"request": request})

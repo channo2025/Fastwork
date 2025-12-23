@@ -1,30 +1,17 @@
 {% extends "base.html" %}
-{% block title %}Tasks · JobChap{% endblock %}
-
+{% block title %}Popular tasks — BaraConnect{% endblock %}
 {% block content %}
-<section class="page-card">
-  <div class="page-head">
-    <h2>Tasks</h2>
-    <a class="btn-secondary" href="/post-a-job">Post a job</a>
+<section class="section">
+  <div class="wrap">
+    <h2>Popular tasks</h2>
+    <div class="grid3">
+      <div class="box"><h3>Cleaning</h3><p>Home, office, deep clean.</p></div>
+      <div class="box"><h3>Moving help</h3><p>Loading, unloading, furniture.</p></div>
+      <div class="box"><h3>Yard work</h3><p>Leaves, mowing, trimming.</p></div>
+      <div class="box"><h3>Delivery</h3><p>Same-day errands & drop-offs.</p></div>
+      <div class="box"><h3>Handyman</h3><p>Small fixes & mounting.</p></div>
+      <div class="box"><h3>Shopping</h3><p>Groceries and pickups.</p></div>
+    </div>
   </div>
-
-  {% if jobs and jobs|length > 0 %}
-    <div class="tasks-grid">
-      {% for j in jobs %}
-        <div class="task-card">
-          <div class="task-title">{{ j.title }}</div>
-          <div class="task-meta">{{ j.when_text }} · {{ j.location }}</div>
-          <div class="task-pay">{{ j.pay }}</div>
-        </div>
-      {% endfor %}
-    </div>
-  {% else %}
-    <div class="empty-state">
-      No tasks yet. Be the first to post one.
-      <div style="margin-top:12px;">
-        <a class="btn-primary" href="/post-a-job">Post a job</a>
-      </div>
-    </div>
-  {% endif %}
 </section>
 {% endblock %}

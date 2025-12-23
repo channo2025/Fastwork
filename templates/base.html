@@ -3,41 +3,55 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>{% block title %}JobChap{% endblock %}</title>
+  <title>{% block title %}BaraConnect — Your online job hub{% endblock %}</title>
+  <meta name="description" content="{% block desc %}Find fast, local work and get paid—moving, cleaning, yard work, deliveries, and more.{% endblock %}" />
   <link rel="stylesheet" href="/static/style.css" />
 </head>
+
 <body>
-  <header class="topbar">
-    <div class="container topbar-inner">
-      <a class="brand" href="/">
-        <div class="brand-badge">JC</div>
-        <div>
-          <div class="brand-name">JobChap</div>
-          <div class="brand-tag">Jobcenter online · quick cash jobs</div>
+  <header class="nav">
+    <div class="nav__inner">
+      <a class="brand" href="/" style="text-decoration:none;color:inherit">
+        <div class="brand__icon" aria-hidden="true"></div>
+        <div class="brand__text">
+          <div class="brand__name"><span class="b1">Bara</span><span class="b2">Connect</span></div>
+          <div class="brand__tag">Your online job hub</div>
         </div>
       </a>
 
-      <nav class="nav">
-        <a href="/" class="{% if request.url.path=='/' %}active{% endif %}">Home</a>
-        <a href="/tasks" class="{% if request.url.path.startswith('/tasks') %}active{% endif %}">Tasks</a>
-        <a href="/post-a-job" class="btn-pill {% if request.url.path.startswith('/post-a-job') %}active{% endif %}">Post a job</a>
-        <a href="/about" class="{% if request.url.path.startswith('/about') %}active{% endif %}">About</a>
-        <a href="/contact" class="{% if request.url.path.startswith('/contact') %}active{% endif %}">Contact</a>
+      <nav class="nav__links">
+        <a href="/tasks">Popular tasks</a>
+        <a href="/jobs">Jobs</a>
+        <a href="/post">Post a job</a>
+        <a href="/contact">Contact</a>
       </nav>
+
+      <div class="nav__cta">
+        <a class="btn btn--ghost" href="/about">About</a>
+        <a class="btn btn--primary" href="/post">Get Started</a>
+      </div>
     </div>
   </header>
 
-  <main class="container">
-    {% block content %}{% endblock %}
-  </main>
+  {% block content %}{% endblock %}
 
-  <footer class="footer container">
-    <div>© 2025 JobChap Online. All rights reserved.</div>
-    <div class="footer-links">
-      <a href="/about">About</a>
-      <a href="/terms">Terms of Use</a>
-      <a href="/privacy">Privacy Policy</a>
+  <footer class="footer">
+    <div class="wrap">
+      <div class="footrow">
+        <div>
+          <strong>BaraConnect</strong>
+          <div class="small">Your online job hub</div>
+        </div>
+        <div class="small">
+          <a href="/terms">Terms</a> • <a href="/privacy">Privacy</a> • © <span id="year"></span>
+        </div>
+      </div>
     </div>
   </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+  {% block scripts %}{% endblock %}
 </body>
 </html>
