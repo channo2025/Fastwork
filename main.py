@@ -126,9 +126,18 @@ def apply_job(
     create_application(job_id, name.strip(), phone_or_email.strip(), message.strip())
     return RedirectResponse(url="/apply-success", status_code=303)
 
+from datetime import datetime
+
 @app.get("/apply-success")
 def apply_success(request: Request):
-    return templates.TemplateResponse("apply_success.html", common_ctx(request, "Success"))
+    return templates.TemplateResponse(
+        "apply_success.html",
+        {
+            "request": request,
+            "year": datetime.now().year,
+            "title": "Application sent"
+        }
+    )
 
 @app.get("/apply-not-found")
 def apply_not_found(request: Request):

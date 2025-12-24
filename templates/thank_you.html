@@ -11,3 +11,8 @@
   </div>
 </section>
 {% endblock %}
+return templates.TemplateResponse("thank_you.html", {
+    "request": request,
+    "year": datetime.now().year,
+    "title": "Thank you"
+})
