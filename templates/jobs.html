@@ -1,20 +1,49 @@
 {% extends "base.html" %}
-{% block title %}Jobs — BaraConnect{% endblock %}
 {% block content %}
-<section class="section">
-  <div class="wrap">
-    <div class="row">
-      <h2>Jobs</h2>
-      <div class="small">Search and apply to fast gigs near you.</div>
+<section class="page">
+  <h1 class="h1">Browse jobs</h1>
+  <p class="muted">Search local jobs and apply in minutes.</p>
+
+  <form class="searchbar" method="get" action="/jobs">
+    <input class="input" name="q" placeholder="Search jobs (e.g., moving, cleaning)" value="{{ q or '' }}">
+    <input class="input" name="city" placeholder="City or ZIP" value="{{ city or '' }}">
+    <button class="btn btn-primary" type="submit">Search</button>
+    <a class="btn btn-ghost" href="/jobs">Reset</a>
+  </form>
+
+  {% if not jobs %}
+    <div class="card empty">
+      <div class="empty-title">No jobs found</div>
+      <div class="muted">Try a different keyword or city.</div>
+      <div style="margin-top:12px;">
+        <a class="btn btn-primary" href="/post">Post a job</a>
+      </div>
     </div>
-    <div class="search" style="margin:14px 0;">
-      <input id="q" placeholder="Search jobs..." />
-      <input id="city" placeholder="City or ZIP" />
-      <button class="btn btn--primary" id="searchBtn">Search</button>
+  {% else %}
+    <div class="grid">
+      {% for j in jobs %}
+        <div class="card job-card">
+          <div class="job-top">
+            <div>
+              <div class="job-title">{{ j.title }}</div>
+              <div class="job-meta">{{ j.city }} • {{ j.category }} • <b>${{ j.pay_amount }}</b> ({{ j.pay_type }})</div>
+            </div>
+            {% if j.is_urgent %}
+              <span class="badge">Today</span>
+            {% endif %}
+          </div>
+
+          <div class="job-desc">
+            {{ (j.description or "No description.")[:170] }}{% if j.description and j.description|length > 170 %}…{% endif %}
+          </div>
+
+          <div class="job-actions">
+            <a class="btn btn-primary" href="/jobs/{{ j.id }}">View details</a>
+            <a class="btn btn-ghost" href="/jobs/{{ j.id }}#apply">Apply</a>
+          </div>
+        </div>
+      {% endfor %}
     </div>
-    <div id="jobsList" class="jobs"></div>
-    <div id="emptyState" class="empty" style="display:none;">No jobs yet. <a href="/post">Post a job</a>.</div>
-  </div>
+  {% endif %}
 </section>
 {% endblock %}
-{% block scripts %}<script src="/static/app.js"></script>{% endblock %}

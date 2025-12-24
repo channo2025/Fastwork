@@ -1,8 +1,14 @@
 {% extends "base.html" %}
 {% block content %}
-<section class="page-card">
-  <h1 class="page-title">{{ title }}</h1>
-  <p class="page-sub">{{ message }}</p>
-  <a class="btn btn-primary" href="/">Back home</a>
+<section class="page">
+  <div class="card center">
+    <h1 class="h1">Thank you! 🎉</h1>
+    <p class="muted">{{ message or "We received your request." }}</p>
+
+    <div class="job-actions" style="justify-content:center;">
+      <a class="btn btn-primary" href="/">Back home</a>
+      <a class="btn btn-ghost" href="/jobs">Find jobs</a>
+    </div>
+  </div>
 </section>
 {% endblock %}

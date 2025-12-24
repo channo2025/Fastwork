@@ -1,38 +1,45 @@
 {% extends "base.html" %}
-{% block title %}Post a job · JobChap{% endblock %}
-
 {% block content %}
-<section class="page-card">
-  <div class="page-head">
-    <h2>Post a job</h2>
-    <a class="btn-secondary" href="/tasks">Browse tasks</a>
-  </div>
+<section class="page">
+  <h1 class="h1">Post a job</h1>
+  <p class="muted">Create a job in seconds. Get applicants fast.</p>
 
-  <form class="form" method="post" action="/post-a-job">
-    <label>
-      Job title
-      <input name="title" placeholder="e.g. House cleaning" required />
-    </label>
+  {% if error %}
+    <div class="alert">{{ error }}</div>
+  {% endif %}
 
-    <div class="form-row">
-      <label>
-        Location
-        <input name="location" placeholder="e.g. Portland" required />
-      </label>
-
-      <label>
-        Pay
-        <input name="pay" placeholder="e.g. $85" required />
-      </label>
+  <form method="post" action="/post" class="card form">
+    <div class="row">
+      <input class="input" name="title" placeholder="Job title (e.g., Moving help)" required>
+      <input class="input" name="city" placeholder="City or ZIP" required>
     </div>
 
-    <label>
-      When
-      <input name="when_text" placeholder="e.g. Today / Tomorrow / This weekend" required />
+    <div class="row">
+      <input class="input" name="category" placeholder="Category (moving, cleaning, yard work...)" required>
+      <select class="input" name="pay_type" required>
+        <option value="flat">Flat</option>
+        <option value="hourly">Hourly</option>
+      </select>
+    </div>
+
+    <div class="row">
+      <input class="input" name="pay_amount" type="number" step="0.01" min="1" placeholder="Pay amount (e.g., 90)" required>
+      <input class="input" name="duration_hours" type="number" step="0.5" min="0" placeholder="Duration hours (optional)">
+    </div>
+
+    <textarea class="textarea" name="description" placeholder="Describe the job (location details, time, tools needed, etc.)"></textarea>
+
+    <label class="check">
+      <input type="checkbox" name="is_urgent" value="1">
+      <span>Mark as “Today / Urgent”</span>
     </label>
 
-    <button class="btn-primary" type="submit">Publish job</button>
-    <p class="form-hint">This will be saved in the database ✅</p>
+    <button class="btn btn-primary" type="submit">Post job</button>
+    <a class="btn btn-ghost" href="/jobs">View jobs</a>
+
+    <p class="muted" style="margin-top:10px;">
+      Don’t ask for SSN or upfront payments. Keep it safe and legal.
+    </p>
   </form>
 </section>
 {% endblock %}
