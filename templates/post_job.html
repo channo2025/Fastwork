@@ -1,46 +1,36 @@
 {% extends "base.html" %}
 {% block content %}
-<section class="page">
-  <h1 class="h1">Post a job</h1>
-  <p class="muted">Create a job in seconds. Get applicants fast.</p>
+<h2 class="section-title">Post a job</h2>
 
-  {% if error %}
-    <div class="alert">{{ error }}</div>
-  {% endif %}
-
-  <form method="post" action="/post" class="card form">
-    <div class="row">
-      <input class="input" name="title" placeholder="Job title (e.g., Moving help)" required>
-      <input class="input" name="city" placeholder="City or ZIP" required>
+<div class="card card-pad">
+  <form action="/post-a-job" method="post" class="grid-3">
+    <div>
+      <label class="muted">Title</label>
+      <input name="title" placeholder="Moving help" required>
+    </div>
+    <div>
+      <label class="muted">Category</label>
+      <input name="category" placeholder="Moving" required>
+    </div>
+    <div>
+      <label class="muted">City</label>
+      <input name="city" placeholder="Portland, OR" required>
     </div>
 
-    <div class="row">
-      <input class="input" name="category" placeholder="Category (moving, cleaning, yard work...)" required>
-      <select class="input" name="pay_type" required>
-        <option value="flat">Flat</option>
-        <option value="hourly">Hourly</option>
-      </select>
+    <div>
+      <label class="muted">Pay</label>
+      <input name="pay" placeholder="$90 (2 hours)" required>
     </div>
 
-    <div class="row">
-      <input class="input" name="pay_amount" type="number" step="0.01" min="1" placeholder="Pay amount (e.g., 90)" required>
-      <input class="input" name="duration_hours" type="number" step="0.5" min="0" placeholder="Duration hours (optional)">
+    <div style="grid-column: span 2;">
+      <label class="muted">Description</label>
+      <textarea name="description" placeholder="Describe the job…" required></textarea>
     </div>
 
-    <textarea class="textarea" name="description" placeholder="Describe the job (location details, time, tools needed, etc.)"></textarea>
-
-    <label class="check">
-      <input type="checkbox" name="is_urgent" value="1">
-      <span>Mark as “Today / Urgent”</span>
-    </label>
-
-    <button class="btn btn-primary" type="submit">Post job</button>
-    <a class="btn btn-ghost" href="/jobs">View jobs</a>
-
-    <p class="muted" style="margin-top:10px;">
-      Don’t ask for SSN or upfront payments. Keep it safe and legal.
-    </p>
+    <div class="actions" style="grid-column: 1 / -1;">
+      <button class="btn btn-primary" type="submit">Post job</button>
+      <a class="btn btn-ghost" href="/jobs">Browse jobs</a>
+    </div>
   </form>
-</section>
+</div>
 {% endblock %}
-return RedirectResponse(url="/post-success", status_code=303)

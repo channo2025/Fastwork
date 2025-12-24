@@ -1,49 +1,37 @@
 {% extends "base.html" %}
 {% block content %}
-<section class="page">
-  <h1 class="h1">Browse jobs</h1>
-  <p class="muted">Search local jobs and apply in minutes.</p>
+<h2 class="section-title">Browse jobs</h2>
 
-  <form class="searchbar" method="get" action="/jobs">
-    <input class="input" name="q" placeholder="Search jobs (e.g., moving, cleaning)" value="{{ q or '' }}">
-    <input class="input" name="city" placeholder="City or ZIP" value="{{ city or '' }}">
+<div class="card card-pad">
+  <form action="/jobs" method="get" class="searchbar">
+    <input name="q" value="{{ q }}" placeholder="Search jobs (e.g., moving, cleaning)" />
+    <input name="city" value="{{ city }}" placeholder="City or ZIP" />
     <button class="btn btn-primary" type="submit">Search</button>
-    <a class="btn btn-ghost" href="/jobs">Reset</a>
   </form>
+</div>
 
-  {% if not jobs %}
-    <div class="card empty">
-      <div class="empty-title">No jobs found</div>
-      <div class="muted">Try a different keyword or city.</div>
-      <div style="margin-top:12px;">
-        <a class="btn btn-primary" href="/post">Post a job</a>
+<div style="height:14px;"></div>
+
+{% if jobs|length == 0 %}
+  <div class="card card-pad">
+    <div class="muted">No jobs found. Try another search or post a job.</div>
+    <div class="actions" style="margin-top:12px;">
+      <a class="btn btn-primary" href="/post-a-job">Post a job</a>
+    </div>
+  </div>
+{% else %}
+  <div class="grid-3">
+    {% for j in jobs %}
+    <div class="card card-pad job-item">
+      <h3>{{ j.title }}</h3>
+      <div class="job-meta">{{ j.city }} · {{ j.category }} · {{ j.pay }}</div>
+      <div class="job-desc">{{ j.description }}</div>
+      <div class="actions">
+        <a class="btn btn-ghost" href="/job/{{ j.id }}">View details</a>
+        <a class="btn btn-primary" href="/apply?job_id={{ j.id }}">Apply</a>
       </div>
     </div>
-  {% else %}
-    <div class="grid">
-      {% for j in jobs %}
-        <div class="card job-card">
-          <div class="job-top">
-            <div>
-              <div class="job-title">{{ j.title }}</div>
-              <div class="job-meta">{{ j.city }} • {{ j.category }} • <b>${{ j.pay_amount }}</b> ({{ j.pay_type }})</div>
-            </div>
-            {% if j.is_urgent %}
-              <span class="badge">Today</span>
-            {% endif %}
-          </div>
-
-          <div class="job-desc">
-            {{ (j.description or "No description.")[:170] }}{% if j.description and j.description|length > 170 %}…{% endif %}
-          </div>
-
-          <div class="job-actions">
-            <a class="btn btn-primary" href="/jobs/{{ j.id }}">View details</a>
-            <a class="btn btn-ghost" href="/jobs/{{ j.id }}#apply">Apply</a>
-          </div>
-        </div>
-      {% endfor %}
-    </div>
-  {% endif %}
-</section>
+    {% endfor %}
+  </div>
+{% endif %}
 {% endblock %}

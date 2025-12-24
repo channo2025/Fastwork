@@ -1,39 +1,15 @@
 {% extends "base.html" %}
 {% block content %}
-<section class="page">
-  <a class="link-back" href="/jobs">← Back to jobs</a>
+<h2 class="section-title">Job details</h2>
 
-  <div class="card">
-    <div class="job-top">
-      <div>
-        <h1 class="h1" style="margin:0">{{ job.title }}</h1>
-        <div class="job-meta">{{ job.city }} • {{ job.category }} • <b>${{ job.pay_amount }}</b> ({{ job.pay_type }})</div>
-      </div>
-      {% if job.is_urgent %}
-        <span class="badge">Today</span>
-      {% endif %}
-    </div>
+<div class="card card-pad">
+  <h1 style="margin:0 0 8px;">{{ job.title }}</h1>
+  <div class="job-meta">{{ job.city }} · {{ job.category }} · {{ job.pay }}</div>
+  <p class="muted" style="font-weight:700;">{{ job.description }}</p>
 
-    <div class="job-desc big">
-      {{ job.description or "No description." }}
-    </div>
-
-    <div class="divider"></div>
-
-    <h2 class="h2" id="apply">Apply for this job</h2>
-
-    <form method="post" action="/jobs/{{ job.id }}/apply" class="form">
-      <div class="row">
-        <input class="input" name="name" placeholder="Your name" required>
-        <input class="input" name="phone_or_email" placeholder="Phone or email" required>
-      </div>
-      <textarea class="textarea" name="message" placeholder="Message (optional)"></textarea>
-
-      <button class="btn btn-primary" type="submit">Send application</button>
-      <p class="muted" style="margin-top:10px;">
-        Tip: never send money upfront. BaraConnect is a job hub and does not handle payments.
-      </p>
-    </form>
+  <div class="actions">
+    <a class="btn btn-primary" href="/apply?job_id={{ job.id }}">Apply now</a>
+    <a class="btn btn-ghost" href="/jobs">Back to jobs</a>
   </div>
-</section>
+</div>
 {% endblock %}

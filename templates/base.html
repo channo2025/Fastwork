@@ -1,41 +1,50 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>{{ title or "BaraConnect" }}</title>
-  <link rel="stylesheet" href="/static/style.css" />
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>BaraConnect — Your online job hub</title>
+  <link rel="stylesheet" href="/static/style.css"/>
 </head>
-<body class="app">
-  <header class="topbar">
-    <a class="brand" href="/">
-      <span class="logo-dot"></span>
-      <span class="brand-name">Bara<span class="brand-accent">Connect</span></span>
-      <span class="brand-tag">Your online job hub</span>
-    </a>
+<body>
 
-    <nav class="nav">
-      <a href="/popular">Popular tasks</a>
-      <a href="/jobs">Jobs</a>
-      <a href="/post">Post a job</a>
-      <a href="/contact">Contact</a>
-      <a href="/about">About</a>
-      <a class="btn btn-primary" href="/get-started">Get Started</a>
-    </nav>
-  </header>
+  <div class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="/">
+        <span class="logo-dot"></span>
+        <span>
+          BaraConnect
+          <small>Your online job hub</small>
+        </span>
+      </a>
 
-  <main class="container">
+      <div class="nav-links">
+        <a href="/popular-tasks">Popular tasks</a>
+        <a href="/jobs">Jobs</a>
+        <a href="/post-a-job">Post a job</a>
+        <a href="/contact">Contact</a>
+        <a href="/about">About</a>
+        <a class="btn btn-primary" href="/jobs">Get Started</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
     {% block content %}{% endblock %}
-  </main>
 
-  <footer class="footer">
-    <div class="footer-left">
-      <div class="footer-brand">BaraConnect</div>
-      <div class="footer-sub">Your online job hub</div>
+    <!-- Footer must appear on home AND all pages -->
+    <div class="footer">
+      <div>
+        <div style="font-weight:1000;color:var(--text)">BaraConnect</div>
+        <div class="muted">Your online job hub</div>
+      </div>
+      <div>
+        <a href="/terms">Terms</a> ·
+        <a href="/privacy">Privacy</a> ·
+        <span>© 2025</span>
+      </div>
     </div>
-    <div class="footer-right">
-      <a href="/terms">Terms</a> · <a href="/privacy">Privacy</a> · © {{ year }}
-    </div>
-  </footer>
+  </div>
+
 </body>
 </html>

@@ -1,32 +1,40 @@
 {% extends "base.html" %}
 {% block content %}
-<section class="page-card">
-  <h1 class="page-title">Apply for job</h1>
+<h2 class="section-title">Apply for job</h2>
 
-  <div class="task-mini" style="margin-top:14px;">
+<div class="card card-pad">
+  <h3 style="margin:0 0 6px;">{{ job.title }}</h3>
+  <div class="muted">{{ job.city }} · {{ job.pay }}</div>
+
+  <div style="height:12px;"></div>
+
+  <form action="/apply" method="post" class="grid-3">
+    <input type="hidden" name="job_id" value="{{ job.id }}"/>
+
     <div>
-      <div class="task-mini-title">{{ job.title }}</div>
-      <div class="task-mini-meta">{{ job.location }} · {{ job.time }}</div>
-      <div class="task-mini-meta">{{ job.description }}</div>
+      <label class="muted">Full name</label>
+      <input name="full_name" required placeholder="Your name">
     </div>
-    <div class="task-mini-price">${{ job.price }}</div>
-  </div>
 
-  <hr class="sep"/>
-
-  <form class="form" method="post" action="/apply/{{ job.id }}">
-    <div class="form-row">
-      <input class="input" name="full_name" placeholder="Full name" required />
-      <input class="input" name="email" placeholder="Email" type="email" required />
+    <div>
+      <label class="muted">Email</label>
+      <input name="email" type="email" required placeholder="name@email.com">
     </div>
-    <textarea class="textarea" name="message" placeholder="Message" required></textarea>
-    <button class="btn btn-primary" type="submit">Submit application</button>
 
-    <p class="small-note">
-      By submitting, you agree to our <a href="/terms">Terms</a> and <a href="/privacy">Privacy Policy</a>.
-      JobChap is a digital jobcenter platform connecting clients and workers. We do not guarantee hiring or earnings.
-    </p>
+    <div>
+      <label class="muted">Phone</label>
+      <input name="phone" required placeholder="(000) 000-0000">
+    </div>
+
+    <div style="grid-column: 1 / -1;">
+      <label class="muted">Message (optional)</label>
+      <textarea name="message" placeholder="Short note…"></textarea>
+    </div>
+
+    <div class="actions" style="grid-column: 1 / -1;">
+      <button class="btn btn-primary" type="submit">Send application</button>
+      <a class="btn btn-ghost" href="/job/{{ job.id }}">Back</a>
+    </div>
   </form>
-</section>
+</div>
 {% endblock %}
-return RedirectResponse(url="/apply-success", status_code=303)

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 class="section-title">Popular tasks</h2>
+<div class="grid-3">
+  {% for p in popular %}
+  <div class="card card-pad">
+    <h3 style="margin:0 0 6px;">{{ p.name }}</h3>
+    <div class="muted">{{ p.tag }}</div>
+    <div class="actions" style="margin-top:12px;">
+      <a class="btn btn-primary" href="/jobs?q={{ p.name }}">Browse jobs</a>
+      <a class="btn btn-ghost" href="/post-a-job">Post a job</a>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}
