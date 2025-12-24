@@ -434,4 +434,19 @@ h1 span{color:var(--blue)}
   .home-grid{ grid-template-columns: 1fr; }
   .popular-grid{ grid-template-columns: 1fr; }
 }
+body { font-family: Arial, sans-serif; margin: 0; background:#f6f7fb; color:#111; }
+.top { display:flex; justify-content:space-between; align-items:center; padding:14px 18px; background:white; border-bottom:1px solid #e6e8ef; }
+.brand { font-weight:700; text-decoration:none; color:#0b5cff; }
+nav a { margin-left:12px; text-decoration:none; color:#222; }
+.wrap { max-width:900px; margin: 24px auto; padding: 0 16px; }
+.form { display:grid; gap:10px; margin: 12px 0 18px; }
+input, textarea { padding:10px; border:1px solid #d7dbe7; border-radius:10px; }
+textarea{ min-height:120px; }
+.btn { display:inline-block; padding:10px 14px; background:#0b5cff; color:white; border-radius:10px; text-decoration:none; border:none; cursor:pointer; }
+.link { margin-left:12px; color:#0b5cff; text-decoration:none; }
+.list { list-style:none; padding:0; display:grid; gap:10px; }
+.card { background:white; padding:12px; border:1px solid #e6e8ef; border-radius:12px; }
+.row { display:flex; gap:10px; align-items:center; margin-top:10px; }
+.muted { color:#555; }
+.actions { margin-top:12px; }
 

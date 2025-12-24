@@ -1,27 +1,20 @@
 <!doctype html>
-<html lang="en">
+<html>
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Application sent • BaraConnect</title>
-  <link rel="stylesheet" href="/static/styles.css" />
+  <title>Application sent - BaraConnect</title>
+  <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
-  {% include "partials/nav.html" %}
-
-  <main class="container" style="padding:32px 16px;">
-    <div class="card" style="max-width:720px;margin:0 auto;">
-      <h1>✅ Application sent!</h1>
-      <p class="muted">
-        Your application was successfully sent to the employer. If selected, they may contact you directly.
-      </p>
-      <div style="display:flex;gap:12px;margin-top:16px;flex-wrap:wrap;">
-        <a class="btn btn-primary" href="/jobs">Browse more jobs</a>
-        <a class="btn btn-ghost" href="/">Go home</a>
-      </div>
-    </div>
+  <main class="wrap">
+    <h1>✅ Application sent!</h1>
+    {% if job %}
+      <p>Your application for <b>{{ job.title }}</b> has been sent.</p>
+    {% else %}
+      <p>Your application has been sent.</p>
+    {% endif %}
+    <a class="btn" href="/jobs">Browse more jobs</a>
+    <a class="link" href="/">Go home</a>
   </main>
-
-  {% include "partials/footer.html" %}
 </body>
 </html>

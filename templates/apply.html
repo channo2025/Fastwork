@@ -1,40 +1,30 @@
-{% extends "base.html" %}
-{% block content %}
-<h2 class="section-title">Apply for job</h2>
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Apply - BaraConnect</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <header class="top">
+    <a href="/" class="brand">BaraConnect</a>
+    <nav>
+      <a href="/jobs">Jobs</a>
+      <a href="/post-job">Post a job</a>
+    </nav>
+  </header>
 
-<div class="card card-pad">
-  <h3 style="margin:0 0 6px;">{{ job.title }}</h3>
-  <div class="muted">{{ job.city }} · {{ job.pay }}</div>
+  <main class="wrap">
+    <h1>Apply</h1>
+    <p><b>{{ job.title }}</b> • {{ job.city }} • {{ job.pay }}</p>
 
-  <div style="height:12px;"></div>
-
-  <form action="/apply" method="post" class="grid-3">
-    <input type="hidden" name="job_id" value="{{ job.id }}"/>
-
-    <div>
-      <label class="muted">Full name</label>
-      <input name="full_name" required placeholder="Your name">
-    </div>
-
-    <div>
-      <label class="muted">Email</label>
-      <input name="email" type="email" required placeholder="name@email.com">
-    </div>
-
-    <div>
-      <label class="muted">Phone</label>
-      <input name="phone" required placeholder="(000) 000-0000">
-    </div>
-
-    <div style="grid-column: 1 / -1;">
-      <label class="muted">Message (optional)</label>
-      <textarea name="message" placeholder="Short note…"></textarea>
-    </div>
-
-    <div class="actions" style="grid-column: 1 / -1;">
-      <button class="btn btn-primary" type="submit">Send application</button>
-      <a class="btn btn-ghost" href="/job/{{ job.id }}">Back</a>
-    </div>
-  </form>
-</div>
-{% endblock %}
+    <form method="post" action="/apply/{{ job.id }}" class="form">
+      <input name="full_name" placeholder="Full name" required>
+      <input name="email" type="email" placeholder="Email" required>
+      <input name="phone" placeholder="Phone" required>
+      <textarea name="message" placeholder="Message (optional)"></textarea>
+      <button class="btn" type="submit">Send application</button>
+    </form>
+  </main>
+</body>
+</html>

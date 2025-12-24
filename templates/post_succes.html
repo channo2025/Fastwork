@@ -1,25 +1,17 @@
 <!doctype html>
-<html lang="en">
+<html>
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Job posted • BaraConnect</title>
-  <link rel="stylesheet" href="/static/styles.css" />
+  <title>Job posted - BaraConnect</title>
+  <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
-  {% include "partials/nav.html" %}
-
-  <main class="container" style="padding:32px 16px;">
-    <div class="card" style="max-width:720px;margin:0 auto;">
-      <h1>✅ Job posted!</h1>
-      <p class="muted">Your task is now live and saved in the database.</p>
-      <div style="display:flex;gap:12px;margin-top:16px;flex-wrap:wrap;">
-        <a class="btn btn-primary" href="/jobs">View jobs</a>
-        <a class="btn btn-ghost" href="/post-job">Post another</a>
-      </div>
-    </div>
+  <main class="wrap">
+    <h1>✅ Job posted!</h1>
+    <p>Your job is live.</p>
+    <a class="btn" href="/jobs">View jobs</a>
+    <a class="link" href="/post-job">Post another</a>
+    <a class="link" href="/">Go home</a>
   </main>
-
-  {% include "partials/footer.html" %}
 </body>
 </html>
