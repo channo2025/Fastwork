@@ -131,11 +131,9 @@ from datetime import datetime
 @app.get("/apply-success")
 def apply_success(request: Request):
     return templates.TemplateResponse(
-        "apply_success.html",
+        "thank_you.html",
         {
-            "request": request,
-            "year": datetime.now().year,
-            "title": "Application sent"
+            "request": request
         }
     )
 
