@@ -3,4 +3,3 @@ uvicorn
 jinja2
 sqlalchemy
 psycopg[binary]
-python-multipart
