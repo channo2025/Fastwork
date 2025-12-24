@@ -267,3 +267,17 @@ def privacy(request: Request):
 @app.exception_handler(404)
 def not_found(request: Request, exc):
     return templates.TemplateResponse("404.html", {"request": request}, status_code=404)
+from fastapi import FastAPI, Request
+from fastapi.responses import RedirectResponse
+from fastapi.templating import Jinja2Templates
+
+app = FastAPI()
+templates = Jinja2Templates(directory="templates")
+
+@app.get("/apply-success")
+def apply_success(request: Request):
+    return templates.TemplateResponse("apply_success.html", {"request": request})
+
+@app.get("/post-success")
+def post_success(request: Request):
+    return templates.TemplateResponse("post_success.html", {"request": request})
