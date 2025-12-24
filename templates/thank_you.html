@@ -1,18 +1,16 @@
 {% extends "base.html" %}
-{% block title %}Thank you · JobChap{% endblock %}
-
 {% block content %}
-<section class="page-card">
-  <h2>✅ Job posted!</h2>
-  <p>Your task is now live and saved in the database.</p>
-  <div style="margin-top:14px;">
-    <a class="btn-primary" href="/tasks">View tasks</a>
-    <a class="btn-secondary" href="/post-a-job">Post another</a>
+<section class="page">
+  <div class="card center">
+    <h1 class="h1">{{ headline or "✅ Success!" }}</h1>
+    <p class="muted">{{ subtitle or "Done." }}</p>
+
+    <div style="margin-top:16px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
+      <a class="btn btn--primary" href="{{ primary_href or '/' }}">{{ primary_text or "Go home" }}</a>
+      {% if secondary_href %}
+        <a class="btn btn--ghost" href="{{ secondary_href }}">{{ secondary_text or "Back" }}</a>
+      {% endif %}
+    </div>
   </div>
 </section>
 {% endblock %}
-return templates.TemplateResponse("thank_you.html", {
-    "request": request,
-    "year": datetime.now().year,
-    "title": "Thank you"
-})

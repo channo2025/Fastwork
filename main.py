@@ -186,3 +186,40 @@ def api_apply(job_id: int, payload: dict):
         str(payload.get("message","")).strip(),
     )
     return JSONResponse({"ok": True})
+
+from datetime import datetime
+from fastapi import Request
+
+@app.get("/post-success")
+def post_success(request: Request):
+    return templates.TemplateResponse(
+        "thank_you.html",
+        {
+            "request": request,
+            "year": datetime.now().year,
+            "title": "Job posted",
+            "headline": "✅ Job posted!",
+            "subtitle": "Your task is now live and saved in the database.",
+            "primary_href": "/jobs",
+            "primary_text": "View tasks",
+            "secondary_href": "/post",
+            "secondary_text": "Post another",
+        }
+    )
+
+@app.get("/apply-success")
+def apply_success(request: Request):
+    return templates.TemplateResponse(
+        "thank_you.html",
+        {
+            "request": request,
+            "year": datetime.now().year,
+            "title": "Application sent",
+            "headline": "✅ Application sent!",
+            "subtitle": "Your application was sent to the employer. They may contact you soon.",
+            "primary_href": "/jobs",
+            "primary_text": "Browse more jobs",
+            "secondary_href": "/contact",
+            "secondary_text": "Contact support",
+        }
+    )
