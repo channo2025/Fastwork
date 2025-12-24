@@ -1,16 +1,86 @@
-{% extends "base.html" %}
-{% block content %}
-<h2 class="section-title">Popular tasks</h2>
-<div class="grid-3">
-  {% for p in popular %}
-  <div class="card card-pad">
-    <h3 style="margin:0 0 6px;">{{ p.name }}</h3>
-    <div class="muted">{{ p.tag }}</div>
-    <div class="actions" style="margin-top:12px;">
-      <a class="btn btn-primary" href="/jobs?q={{ p.name }}">Browse jobs</a>
-      <a class="btn btn-ghost" href="/post-a-job">Post a job</a>
+<section class="home-grid">
+  <!-- LEFT COLUMN -->
+  <div class="left-col">
+
+    <!-- HERO (tu gardes ton hero existant ici si tu veux) -->
+    <!-- ... ton hero actuel ... -->
+
+    <!-- POPULAR TASKS (NOUVEAU BLOC PRO) -->
+    <div class="card popular-card" id="popular">
+      <div class="card-head">
+        <div>
+          <h2>Popular tasks</h2>
+          <p class="muted">Pick a category and start fast.</p>
+        </div>
+        <a class="link" href="/popular-tasks">See all</a>
+      </div>
+
+      <div class="popular-grid">
+        <!-- item -->
+        <div class="task-tile">
+          <div class="tile-title">Cleaning</div>
+          <div class="tile-sub">Home & office cleaning</div>
+          <div class="tile-actions">
+            <a class="btn btn-ghost" href="/jobs?category=Cleaning">Browse</a>
+            <a class="btn btn-primary" href="/post-job?category=Cleaning">Post a job</a>
+          </div>
+        </div>
+
+        <div class="task-tile">
+          <div class="tile-title">Moving</div>
+          <div class="tile-sub">Help moving & lifting</div>
+          <div class="tile-actions">
+            <a class="btn btn-ghost" href="/jobs?category=Moving">Browse</a>
+            <a class="btn btn-primary" href="/post-job?category=Moving">Post a job</a>
+          </div>
+        </div>
+
+        <div class="task-tile">
+          <div class="tile-title">Delivery</div>
+          <div class="tile-sub">Local deliveries</div>
+          <div class="tile-actions">
+            <a class="btn btn-ghost" href="/jobs?category=Delivery">Browse</a>
+            <a class="btn btn-primary" href="/post-job?category=Delivery">Post a job</a>
+          </div>
+        </div>
+
+        <div class="task-tile">
+          <div class="tile-title">Shopping</div>
+          <div class="tile-sub">Grocery & errands</div>
+          <div class="tile-actions">
+            <a class="btn btn-ghost" href="/jobs?category=Shopping">Browse</a>
+            <a class="btn btn-primary" href="/post-job?category=Shopping">Post a job</a>
+          </div>
+        </div>
+
+        <div class="task-tile">
+          <div class="tile-title">Yard work</div>
+          <div class="tile-sub">Garden & outdoor tasks</div>
+          <div class="tile-actions">
+            <a class="btn btn-ghost" href="/jobs?category=Yard%20work">Browse</a>
+            <a class="btn btn-primary" href="/post-job?category=Yard%20work">Post a job</a>
+          </div>
+        </div>
+
+        <div class="task-tile">
+          <div class="tile-title">Handyman</div>
+          <div class="tile-sub">Fixes & small repairs</div>
+          <div class="tile-actions">
+            <a class="btn btn-ghost" href="/jobs?category=Handyman">Browse</a>
+            <a class="btn btn-primary" href="/post-job?category=Handyman">Post a job</a>
+          </div>
+        </div>
+      </div>
     </div>
+
+    <!-- LATEST JOBS (tu gardes ton bloc latest jobs après) -->
+    <!-- ... -->
+
   </div>
-  {% endfor %}
-</div>
-{% endblock %}
+
+  <!-- RIGHT COLUMN -->
+  <aside class="right-col">
+    <!-- Ton bloc Quick actions reste ici -->
+    <!-- ... -->
+  </aside>
+</section>
