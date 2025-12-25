@@ -8,13 +8,22 @@ from datetime import datetime
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
 
-# ==============================
+# ============================
 # DATABASE (PostgreSQL on Render)
-# ==============================
+# ============================
+
 DATABASE_URL = os.getenv("DATABASE_URL")
 
 if not DATABASE_URL:
     raise RuntimeError("DATABASE_URL not set")
+
+# 🔥 IMPORTANT : forcer psycopg v3
+if DATABASE_URL.startswith("postgresql://"):
+    DATABASE_URL = DATABASE_URL.replace(
+        "postgresql://",
+        "postgresql+psycopg://",
+        1
+    )
 
 engine = create_engine(DATABASE_URL, pool_pre_ping=True)
 
