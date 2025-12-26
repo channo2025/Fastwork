@@ -1,27 +1,23 @@
-import os
-from fastapi import FastAPI
-from sqlalchemy import create_engine, text
+from fastapi import FastAPI, Request
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles
 
 app = FastAPI()
 
-DATABASE_URL = os.getenv("DATABASE_URL")
-if not DATABASE_URL:
-    raise RuntimeError("DATABASE_URL not set")
+# Templates
+templates = Jinja2Templates(directory="templates")
 
-# ✅ Force psycopg v3 (Render peut donner postgres:// ou postgresql://)
-if DATABASE_URL.startswith("postgres://"):
-    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql+psycopg://", 1)
+# Static files (optionnel pour plus tard)
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
-if DATABASE_URL.startswith("postgresql://"):
-    DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgresql+psycopg://", 1)
+@app.get("/", response_class=HTMLResponse)
+def home(request: Request):
+    return templates.TemplateResponse(
+        "index.html",
+        {"request": request}
+    )
 
-engine = create_engine(DATABASE_URL, pool_pre_ping=True)
-
-@app.get("/")
-def home():
+@app.get("/health")
+def health():
     return {"status": "JobChap is running 🚀"}
-
-@app.get("/db-test")
-def db_test():
-    with engine.connect() as conn:
-        return {"db": conn.execute(text("SELECT 1")).scalar()}

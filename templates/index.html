@@ -1,165 +1,43 @@
-{% extends "base.html" %}
-{% block content %}
-
-<div class="hero">
-  <div class="card card-pad">
-    <div class="pill" style="display:inline-flex;gap:8px;align-items:center;">
-      <span style="width:8px;height:8px;border-radius:999px;background:linear-gradient(135deg,var(--blue1),var(--blue2));display:inline-block;"></span>
-      BaraConnect — Your online job hub
-    </div>
-
-    <h1 style="margin-top:12px;">
-      Find work today.<br/>
-      <span class="grad">Get paid today.</span>
-    </h1>
-
-    <p>Fast, local jobs in minutes—cleaning, moving, yard work, deliveries and more. No resume. No interviews. Just real work and real pay.</p>
-
-    <form class="searchbar" action="/jobs" method="get" style="margin-top:16px;">
-      <input name="q" placeholder="Search jobs (e.g., moving, cleaning)" />
-      <input name="city" placeholder="City or ZIP" />
-      <button class="btn btn-primary" type="submit">Search jobs</button>
-    </form>
-
-    <div class="pills">
-      <div class="pill">Quick sign-up · Start in minutes</div>
-      <div class="pill">Verified gigs · Safer matching</div>
-      <div class="pill">Fast payouts · Get paid fast</div>
-    </div>
-
-    <div class="actions" style="margin-top:14px;">
-      <a class="btn btn-primary" href="/jobs">Browse jobs</a>
-      <a class="btn btn-ghost" href="/post-a-job">Post a job</a>
-    </div>
-  </div>
-
-  <div class="card card-pad">
-    <h3 style="margin:0 0 6px;">Quick actions</h3>
-    <div class="muted">Post a job or apply in seconds.</div>
-
-    <div class="actions" style="margin-top:14px;">
-      <a class="btn btn-primary" href="/post-a-job">Post a job</a>
-      <a class="btn btn-ghost" href="/popular-tasks">Popular tasks</a>
-    </div>
-
-    <div class="pills" style="margin-top:14px;">
-      <div class="pill">10k+ Tasks posted</div>
-      <div class="pill">4.8★ Average rating</div>
-      <div class="pill">24h Fast matches</div>
-    </div>
-  </div>
-</div>
-
-<!-- ✅ Popular tasks section on HOME -->
-<h2 class="section-title">Popular tasks</h2>
-<div class="grid-3">
-  {% for p in popular %}
-  <div class="card card-pad">
-    <h3 style="margin:0 0 6px;">{{ p.name }}</h3>
-    <div class="muted">{{ p.tag }}</div>
-    <div class="actions" style="margin-top:12px;">
-      <a class="btn btn-ghost" href="/jobs?q={{ p.name }}">Browse</a>
-      <a class="btn btn-primary" href="/post-a-job">Post a job</a>
-    </div>
-  </div>
-  {% endfor %}
-</div>
-
-<!-- ✅ Latest jobs on HOME -->
-<h2 class="section-title">Latest jobs</h2>
-{% if jobs|length == 0 %}
-  <div class="card card-pad">
-    <div class="muted">No jobs yet. Be the first to post one.</div>
-    <div class="actions" style="margin-top:12px;">
-      <a class="btn btn-primary" href="/post-a-job">Post a job</a>
-    </div>
-  </div>
-{% else %}
-  <div class="grid-3">
-    {% for j in jobs %}
-    <div class="card card-pad job-item">
-      <h3>{{ j.title }}</h3>
-      <div class="job-meta">{{ j.city }} · {{ j.category }} · {{ j.pay }}</div>
-      <div class="job-desc">{{ j.description }}</div>
-      <div class="actions">
-        <a class="btn btn-ghost" href="/job/{{ j.id }}">View details</a>
-        <a class="btn btn-primary" href="/apply?job_id={{ j.id }}">Apply</a>
-      </div>
-    </div>
-    {% endfor %}
-  </div>
-{% endif %}
-
-<!-- ✅ Post a job section on HOME -->
-<h2 class="section-title">Post a job (quick)</h2>
-<div class="card card-pad">
-  <form action="/post-a-job" method="post" class="grid-3">
-    <div>
-      <label class="muted">Title</label>
-      <input name="title" placeholder="Moving help" required>
-    </div>
-    <div>
-      <label class="muted">Category</label>
-      <input name="category" placeholder="Moving" required>
-    </div>
-    <div>
-      <label class="muted">City</label>
-      <input name="city" placeholder="Portland, OR" required>
-    </div>
-
-    <div>
-      <label class="muted">Pay</label>
-      <input name="pay" placeholder="$90 (2 hours)" required>
-    </div>
-    <div style="grid-column: span 2;">
-      <label class="muted">Description</label>
-      <input name="description" placeholder="Help move boxes. Same-day." required>
-    </div>
-
-    <div class="actions" style="grid-column: 1 / -1;">
-      <button class="btn btn-primary" type="submit">Post job</button>
-      <a class="btn btn-ghost" href="/post-a-job">Open full page</a>
-    </div>
-  </form>
-</div>
-
-<!-- ✅ Apply section on HOME (guidé) -->
-<h2 class="section-title">Apply for a job</h2>
-<div class="card card-pad">
-  <div class="muted">Open any job, then click “Apply”. If you want, start by browsing jobs here.</div>
-  <div class="actions" style="margin-top:12px;">
-    <a class="btn btn-primary" href="/jobs">Browse jobs</a>
-    <a class="btn btn-ghost" href="/popular-tasks">Popular tasks</a>
-  </div>
-</div>
-
-{% endblock %}
-
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <title>BaraConnect</title>
-  <link rel="stylesheet" href="/static/styles.css">
+    <meta charset="UTF-8">
+    <title>JobChap</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f7fa;
+            text-align: center;
+            padding-top: 80px;
+        }
+        h1 {
+            font-size: 48px;
+            color: #111;
+        }
+        p {
+            font-size: 20px;
+            color: #555;
+        }
+        button {
+            padding: 15px 30px;
+            font-size: 18px;
+            background: black;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        button:hover {
+            opacity: 0.8;
+        }
+    </style>
 </head>
 <body>
-  <header class="top">
-    <a href="/" class="brand">BaraConnect</a>
-    <nav>
-      <a href="/jobs">Jobs</a>
-      <a href="/post-job">Post a job</a>
-    </nav>
-  </header>
 
-  <main class="wrap">
-    <h1>Home</h1>
-    <p>Site stable ✅ (on fera le design après).</p>
+    <h1>JobChap 🚀</h1>
+    <p>Find quick jobs. Get paid fast.</p>
 
-    <div class="actions">
-      <a class="btn" href="/jobs">Browse jobs</a>
-      <a class="btn" href="/post-job">Post a job</a>
-    </div>
-  </main>
+    <button>Get Started</button>
+
 </body>
 </html>
- 
