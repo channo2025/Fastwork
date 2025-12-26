@@ -15,7 +15,7 @@
             <span>💵 {{ job.pay or "Competitive" }}</span>
             <span>🗓️ {{ job.date_needed or "Flexible" }}</span>
           </div>
-
+          <a class="btn btn-primary" href="/jobs/{{ job_id }}/apply">Apply now</a>
           <p class="p" style="white-space:pre-wrap">{{ job.description }}</p>
 
           <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap">

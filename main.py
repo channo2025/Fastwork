@@ -129,3 +129,44 @@ def thank_you(request: Request):
 @app.get("/health")
 def health():
     return {"status": "JOBCENTA is running 🚀"}
+
+from fastapi import FastAPI, Request, Form
+from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles
+
+# ... ton app, templates, mount static etc ...
+
+# ---------- APPLY (GET form) ----------
+@app.get("/jobs/{job_id}/apply", response_class=HTMLResponse)
+def apply_job_form(request: Request, job_id: int):
+    # (sans DB) on crée un faux job pour afficher sur la page
+    job = {
+        "id": job_id,
+        "title": f"Job #{job_id}",
+        "city": "",
+        "pay": "",
+    }
+    return templates.TemplateResponse(
+        "apply_job.html",
+        {"request": request, "job": job}
+    )
+
+# ---------- APPLY (POST submit) ----------
+@app.post("/jobs/{job_id}/apply")
+def apply_job_submit(
+    request: Request,
+    job_id: int,
+    full_name: str = Form(...),
+    email: str = Form(...),
+    phone: str = Form(""),
+    message: str = Form(""),
+):
+    # plus tard: ici tu sauvegardes en DB
+    # pour l’instant: redirect vers success
+    return RedirectResponse(url="/apply-success", status_code=303)
+
+# ---------- APPLY SUCCESS ----------
+@app.get("/apply-success", response_class=HTMLResponse)
+def apply_success(request: Request):
+    return templates.TemplateResponse("apply_success.html", {"request": request})
