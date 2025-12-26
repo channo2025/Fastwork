@@ -1,7 +1,46 @@
 {% extends "base.html" %}
-{% block content %}
-<h2 class="section-title">Contact</h2>
-<div class="card card-pad">
-  <p class="muted" style="font-weight:800;">Email: support@baraconnect.com (change it later)</p>
+{% block title %}Contact — JOBCENTA{% endblock %}
+
+{% block body %}
+<div class="content">
+  <div class="container">
+    <div class="grid">
+      <div class="card card-pad">
+        <h1>Contact</h1>
+        <p class="p">Need help or want to report an issue? Send us a message.</p>
+
+        <form class="form" action="/contact" method="post">
+          <div>
+            <label>Your name</label>
+            <input class="input" name="name" required placeholder="Full name" />
+          </div>
+
+          <div>
+            <label>Email</label>
+            <input class="input" name="email" type="email" required placeholder="you@email.com" />
+          </div>
+
+          <div>
+            <label>Message</label>
+            <textarea class="input" name="message" required placeholder="Write your message..."></textarea>
+          </div>
+
+          <button class="btn btn-primary" type="submit">Send message</button>
+        </form>
+      </div>
+
+      <div class="card card-pad">
+        <h2 style="margin:0 0 8px">Quick help</h2>
+        <ul>
+          <li>Read <a href="/terms" style="text-decoration:underline">Terms</a> and <a href="/privacy" style="text-decoration:underline">Privacy</a></li>
+          <li>For urgent safety issues, contact local authorities first.</li>
+        </ul>
+
+        <div class="notice" style="margin-top:14px">
+          JOBCENTA support may take time to respond depending on volume.
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}

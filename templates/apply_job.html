@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}Apply — JOBCENTA{% endblock %}
+
+{% block body %}
+<div class="content">
+  <div class="container">
+    <div class="grid">
+      <div class="card card-pad">
+        <h1>Apply for this job</h1>
+
+        {% if job %}
+          <div class="notice" style="margin-top:10px">
+            Applying to: <strong>{{ job.title }}</strong> — {{ job.city or "Local" }}
+          </div>
+        {% endif %}
+
+        <form class="form" action="" method="post" enctype="multipart/form-data">
+          <div>
+            <label>Your name</label>
+            <input class="input" name="name" required placeholder="Full name" />
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div>
+              <label>Email</label>
+              <input class="input" name="email" type="email" required placeholder="you@email.com" />
+            </div>
+            <div>
+              <label>Phone (optional)</label>
+              <input class="input" name="phone" placeholder="(555) 123-4567" />
+            </div>
+          </div>
+
+          <div>
+            <label>Message</label>
+            <textarea class="input" name="message" required placeholder="Tell them why you're a good fit, availability, etc."></textarea>
+          </div>
+
+          <div>
+            <label>Optional: Upload a file (resume / photo)</label>
+            <input class="input" name="file" type="file" />
+          </div>
+
+          <div class="notice">
+            Do not include sensitive information (SSN, passport, banking). By applying you agree to our
+            <a href="/terms" style="text-decoration:underline">Terms</a>.
+          </div>
+
+          <button class="btn btn-primary" type="submit">Submit application</button>
+        </form>
+      </div>
+
+      <div class="card card-pad">
+        <h2 style="margin:0 0 8px">Application tips</h2>
+        <ul>
+          <li>State availability clearly.</li>
+          <li>Ask clarifying questions about the task.</li>
+          <li>Confirm pay and timing before starting.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

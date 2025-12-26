@@ -1,12 +1,22 @@
 {% extends "base.html" %}
-{% block content %}
-<h2 class="section-title">Done</h2>
+{% block title %}Thank you — JOBCENTA{% endblock %}
 
-<div class="card card-pad">
-  <h1 style="margin:0 0 10px;">✅ {{ message }}</h1>
-  <div class="actions">
-    <a class="btn btn-primary" href="/jobs">Browse jobs</a>
-    <a class="btn btn-ghost" href="/post-a-job">Post another</a>
+{% block body %}
+<div class="content">
+  <div class="container">
+    <div class="card card-pad">
+      <span class="badge">💙 Thank you</span>
+      <h1 style="margin-top:14px">Thanks for using JOBCENTA</h1>
+      <p class="p">
+        We’re building a simple, modern way to connect local work with real people.
+        Your support helps us improve the platform.
+      </p>
+
+      <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap">
+        <a class="btn btn-primary" href="/">Go home</a>
+        <a class="btn btn-ghost" href="/jobs">Browse jobs</a>
+      </div>
+    </div>
   </div>
 </div>
 {% endblock %}

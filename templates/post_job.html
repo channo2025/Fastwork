@@ -1,36 +1,80 @@
 {% extends "base.html" %}
-{% block content %}
-<h2 class="section-title">Post a job</h2>
+{% block title %}Post a job — JOBCENTA{% endblock %}
 
-<div class="card card-pad">
-  <form action="/post-a-job" method="post" class="grid-3">
-    <div>
-      <label class="muted">Title</label>
-      <input name="title" placeholder="Moving help" required>
-    </div>
-    <div>
-      <label class="muted">Category</label>
-      <input name="category" placeholder="Moving" required>
-    </div>
-    <div>
-      <label class="muted">City</label>
-      <input name="city" placeholder="Portland, OR" required>
-    </div>
+{% block body %}
+<div class="content">
+  <div class="container">
+    <div class="grid">
+      <div class="card card-pad">
+        <h1>Post a job</h1>
+        <p class="p">Create a listing in under 2 minutes.</p>
 
-    <div>
-      <label class="muted">Pay</label>
-      <input name="pay" placeholder="$90 (2 hours)" required>
-    </div>
+        <form class="form" action="/post" method="post">
+          <div>
+            <label>Job title</label>
+            <input class="input" name="title" required placeholder="e.g., Need help moving a couch" />
+          </div>
 
-    <div style="grid-column: span 2;">
-      <label class="muted">Description</label>
-      <textarea name="description" placeholder="Describe the job…" required></textarea>
-    </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div>
+              <label>Category</label>
+              <input class="input" name="category" placeholder="e.g., Moving, Cleaning" />
+            </div>
+            <div>
+              <label>Pay</label>
+              <input class="input" name="pay" placeholder="e.g., $80 flat / $20/hr" />
+            </div>
+          </div>
 
-    <div class="actions" style="grid-column: 1 / -1;">
-      <button class="btn btn-primary" type="submit">Post job</button>
-      <a class="btn btn-ghost" href="/jobs">Browse jobs</a>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div>
+              <label>City / ZIP</label>
+              <input class="input" name="city" placeholder="e.g., Portland 97201" />
+            </div>
+            <div>
+              <label>Date needed</label>
+              <input class="input" name="date_needed" placeholder="e.g., Today / Tomorrow" />
+            </div>
+          </div>
+
+          <div>
+            <label>Description</label>
+            <textarea class="input" name="description" required placeholder="Describe the task, time, location, what tools are needed, etc."></textarea>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div>
+              <label>Contact email</label>
+              <input class="input" name="contact_email" type="email" required placeholder="you@email.com" />
+            </div>
+            <div>
+              <label>Contact phone (optional)</label>
+              <input class="input" name="contact_phone" placeholder="(555) 123-4567" />
+            </div>
+          </div>
+
+          <div class="notice">
+            By posting, you agree to our <a href="/terms" style="text-decoration:underline">Terms</a>.
+            Do not post illegal, discriminatory, or unsafe requests.
+          </div>
+
+          <button class="btn btn-primary" type="submit">Publish job</button>
+        </form>
+      </div>
+
+      <div class="card card-pad">
+        <h2 style="margin:0 0 8px">Posting tips</h2>
+        <ul>
+          <li>Be clear about time and pay.</li>
+          <li>Add what’s included (tools, transport, etc.).</li>
+          <li>Meet in a safe, public place if possible.</li>
+          <li>Never ask applicants for sensitive personal data.</li>
+        </ul>
+        <div class="notice" style="margin-top:14px">
+          JOBCENTA is a marketplace. You are responsible for your listing and compliance with local laws.
+        </div>
+      </div>
     </div>
-  </form>
+  </div>
 </div>
 {% endblock %}

@@ -1,10 +1,69 @@
 {% extends "base.html" %}
-{% block content %}
-<h2 class="section-title">Terms of Use</h2>
-<div class="card card-pad">
-  <p class="muted" style="font-weight:800;">
-    BaraConnect provides a platform to post and browse job listings. We do not guarantee employment, job quality, or payment.
-    Users are responsible for verifying job details, safety, and legality. BaraConnect is not liable for disputes between users.
-  </p>
+{% block title %}Terms — JOBCENTA{% endblock %}
+
+{% block body %}
+<div class="content">
+  <div class="container">
+    <div class="card card-pad">
+      <h1>Terms of Service</h1>
+      <p class="p">Last updated: {{ today or "2025-12-25" }}</p>
+
+      <h2>1) Marketplace only (no employer/agency)</h2>
+      <p class="p">
+        JOBCENTA is a marketplace platform that connects job posters and applicants.
+        JOBCENTA is not an employer, staffing agency, broker, or payment processor.
+        Users are solely responsible for their interactions, agreements, payments, and compliance with laws.
+      </p>
+
+      <h2>2) No guarantees</h2>
+      <p class="p">
+        We do not guarantee job availability, applicant quality, earnings, or outcomes.
+        Listings and user content are provided by third parties.
+      </p>
+
+      <h2>3) User responsibilities</h2>
+      <ul>
+        <li>You must provide accurate information.</li>
+        <li>You must comply with all applicable laws and regulations.</li>
+        <li>You must not post illegal, unsafe, discriminatory, or deceptive content.</li>
+        <li>You must not request sensitive information (SSN, banking, passports).</li>
+      </ul>
+
+      <h2>4) Safety & payments</h2>
+      <p class="p">
+        Users are responsible for safe meetups and verification. Never pay upfront.
+        JOBCENTA is not responsible for disputes, theft, injury, damages, or losses.
+      </p>
+
+      <h2>5) Content & moderation</h2>
+      <p class="p">
+        We may remove or limit content, suspend accounts, or restrict access at any time, with or without notice,
+        to protect users, enforce policies, or comply with law.
+      </p>
+
+      <h2>6) Limitation of liability</h2>
+      <p class="p">
+        To the maximum extent permitted by law, JOBCENTA and its operators are not liable for indirect,
+        incidental, consequential, special, or punitive damages, or any loss of profits, data, or goodwill,
+        arising from or related to your use of the platform.
+      </p>
+
+      <h2>7) Indemnity</h2>
+      <p class="p">
+        You agree to defend, indemnify, and hold harmless JOBCENTA and its operators from claims, damages,
+        liabilities, and expenses (including legal fees) arising from your use, content, violation of these Terms,
+        or disputes with other users.
+      </p>
+
+      <h2>8) Changes</h2>
+      <p class="p">
+        We may update these Terms at any time. Continued use means acceptance of the updated Terms.
+      </p>
+
+      <div class="notice" style="margin-top:16px">
+        Important: This is a strong protective template, but for maximum protection you should have a licensed attorney review it for your state/country.
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}

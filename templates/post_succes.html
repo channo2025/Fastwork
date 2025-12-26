@@ -1,17 +1,30 @@
-<!doctype html>
-<html>
-<head>
-  <meta charset="utf-8" />
-  <title>Job posted - BaraConnect</title>
-  <link rel="stylesheet" href="/static/styles.css">
-</head>
-<body>
-  <main class="wrap">
-    <h1>✅ Job posted!</h1>
-    <p>Your job is live.</p>
-    <a class="btn" href="/jobs">View jobs</a>
-    <a class="link" href="/post-job">Post another</a>
-    <a class="link" href="/">Go home</a>
-  </main>
-</body>
-</html>
+{% extends "base.html" %}
+{% block title %}Job posted — JOBCENTA{% endblock %}
+
+{% block body %}
+<div class="content">
+  <div class="container">
+    <div class="card card-pad">
+      <span class="badge">🚀 Job published</span>
+      <h1 style="margin-top:14px">Your job is live!</h1>
+      <p class="p">People can now view and apply to your listing.</p>
+
+      {% if job_id %}
+        <div style="margin-top:14px">
+          <a class="btn btn-primary" href="/jobs/{{ job_id }}">View job</a>
+          <a class="btn btn-ghost" href="/post">Post another job</a>
+        </div>
+      {% else %}
+        <div style="margin-top:14px">
+          <a class="btn btn-primary" href="/jobs">Browse jobs</a>
+          <a class="btn btn-ghost" href="/post">Post another job</a>
+        </div>
+      {% endif %}
+
+      <div class="notice" style="margin-top:16px">
+        Please keep communication safe and comply with local laws. JOBCENTA may remove listings that violate our Terms.
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

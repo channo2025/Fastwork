@@ -1,9 +1,28 @@
 {% extends "base.html" %}
-{% block content %}
-<h2 class="section-title">About</h2>
-<div class="card card-pad">
-  <p class="muted" style="font-weight:800;">
-    BaraConnect is a simple job hub: post local gigs, browse jobs, and apply fast.
-  </p>
+{% block title %}About — JOBCENTA{% endblock %}
+
+{% block body %}
+<div class="content">
+  <div class="container">
+    <div class="card card-pad">
+      <h1>About JOBCENTA</h1>
+      <p class="p">
+        JOBCENTA helps people find fast, local work and helps communities get tasks done quickly.
+        Our goal is simple: connect reliable workers with real jobs — fast.
+      </p>
+
+      <h2>What we offer</h2>
+      <ul>
+        <li>Quick job discovery by task and location</li>
+        <li>Simple posting and applying</li>
+        <li>Safety guidelines and reporting</li>
+      </ul>
+
+      <div style="margin-top:16px">
+        <a class="btn btn-primary" href="/jobs">Browse jobs</a>
+        <a class="btn btn-ghost" href="/contact">Contact</a>
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}

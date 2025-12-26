@@ -1,81 +1,107 @@
 {% extends "base.html" %}
-{% block title %}BaraConnect — Your online job hub{% endblock %}
+{% block title %}JOBCENTA — Work today. Get paid today.{% endblock %}
 
-{% block content %}
-<main class="hero">
-  <div class="hero__container">
-    <section class="hero__left">
-      <div class="pill"><span class="dot"></span> BaraConnect — Your online job hub</div>
+{% block body %}
+<section class="hero">
+  <div class="container">
+    <div class="grid">
+      <div class="card card-pad">
+        <span class="badge">
+          <span style="width:8px;height:8px;border-radius:999px;background:linear-gradient(90deg,var(--brand),var(--brand2));display:inline-block"></span>
+          JOBCENTA — Your online job hub
+        </span>
 
-      <h1>Find work today.<br/><span class="grad">Get paid today.</span></h1>
+        <h1 class="h1">
+          Work today.<br />
+          <span class="grad">Get paid today.</span>
+        </h1>
 
-      <p class="sub">
-        Fast, local jobs in minutes—cleaning, moving, yard work, deliveries and more.
-        No resume. No interviews. Just real work and real pay.
-      </p>
+        <p class="p">
+          Find fast, local jobs in minutes — cleaning, moving, yard work,
+          deliveries and more. No resume. No interview. Just real work.
+        </p>
 
-      <div class="search">
-        <input id="q" placeholder="Search jobs (e.g., moving, cleaning, yard work)" />
-        <input id="city" placeholder="City or ZIP" />
-        <button class="btn btn--primary" id="searchBtn">Search jobs</button>
-      </div>
+        <form class="searchbar" action="/jobs" method="get">
+          <input class="input" name="q" placeholder="Search jobs (e.g., moving, cleaning)" />
+          <input class="input" name="city" placeholder="City or ZIP" />
+          <button class="btn btn-primary" type="submit">Search jobs</button>
+        </form>
 
-      <div class="badges">
-        <div class="badge"><strong>Quick sign-up</strong><span>Start in minutes</span></div>
-        <div class="badge"><strong>Verified gigs</strong><span>Safer matching</span></div>
-        <div class="badge"><strong>Fast payouts</strong><span>Get paid fast</span></div>
-      </div>
-    </section>
-
-    <aside class="hero__right">
-      <div class="card">
-        <div class="card__top">
-          <div class="avatar"></div>
-          <div class="lines">
-            <div class="line l1"></div>
-            <div class="line l2"></div>
-          </div>
-          <div class="tag">Today</div>
-        </div>
-        <div class="card__body">
-          <h3>Moving help</h3>
-          <p>2 hours • $90 • Portland, OR</p>
-          <div class="chips">
-            <span class="chip">Same-day</span>
-            <span class="chip">No resume</span>
-            <span class="chip">Fast pay</span>
-          </div>
-          <div class="card__actions">
-            <a class="mini mini--primary" href="/jobs">Browse jobs</a>
-            <a class="mini mini--ghost" href="/post">Post a job</a>
-          </div>
+        <div style="margin-top:14px" class="chips">
+          <a class="chip" href="/tasks">Popular tasks</a>
+          <a class="chip" href="/post">Post a job</a>
+          <a class="chip" href="/jobs">Browse jobs</a>
         </div>
       </div>
 
-      <div class="stats">
-        <div class="stat"><span class="k">10k+</span><span class="l">Tasks posted</span></div>
-        <div class="stat"><span class="k">4.8★</span><span class="l">Average rating</span></div>
-        <div class="stat"><span class="k">24h</span><span class="l">Fast matches</span></div>
+      <div>
+        <div class="kpi">
+          <div class="box">
+            <div class="num">Fast</div>
+            <div class="lbl">Apply in 60 seconds</div>
+          </div>
+          <div class="box">
+            <div class="num">Local</div>
+            <div class="lbl">City / ZIP matching</div>
+          </div>
+          <div class="box">
+            <div class="num">Safe</div>
+            <div class="lbl">Rules & reporting</div>
+          </div>
+        </div>
+
+        <div class="card card-pad" style="margin-top:14px">
+          <div class="section-title">
+            <h2>Featured jobs</h2>
+            <a class="muted" href="/jobs">See all →</a>
+          </div>
+
+          <div class="list">
+            {% for j in jobs[:3] if jobs %}
+              <a class="job" href="/jobs/{{ j.id }}">
+                <div>
+                  <h3>{{ j.title }}</h3>
+                  <div class="meta">
+                    <span class="pill">{{ j.category or "Task" }}</span>
+                    <span>📍 {{ j.city or "Local" }}</span>
+                    <span>💵 {{ j.pay or "Competitive" }}</span>
+                  </div>
+                </div>
+                <div class="muted" style="font-weight:800">View →</div>
+              </a>
+            {% else %}
+              <div class="notice">
+                No jobs yet. Start by posting the first job 🚀
+                <div style="margin-top:10px">
+                  <a class="btn btn-primary" href="/post">Post a job</a>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+
       </div>
-    </aside>
-  </div>
-</main>
-
-<section class="section" id="jobs">
-  <div class="wrap">
-    <div class="row">
-      <h2>Latest jobs</h2>
-      <div class="small">Browse or search. Post a job in seconds.</div>
-    </div>
-
-    <div id="jobsList" class="jobs"></div>
-    <div id="emptyState" class="empty" style="display:none;">
-      No jobs yet. Be the first to <a href="/post">post a job</a>.
     </div>
   </div>
 </section>
-{% endblock %}
 
-{% block scripts %}
-<script src="/static/app.js"></script>
+<section class="section">
+  <div class="container">
+    <div class="card card-pad">
+      <div class="section-title">
+        <h2>Popular categories</h2>
+        <a class="muted" href="/tasks">Explore →</a>
+      </div>
+
+      <div class="chips">
+        <a class="chip" href="/jobs?q=cleaning">🧼 Cleaning</a>
+        <a class="chip" href="/jobs?q=moving">📦 Moving help</a>
+        <a class="chip" href="/jobs?q=yard">🌿 Yard work</a>
+        <a class="chip" href="/jobs?q=delivery">🚗 Delivery</a>
+        <a class="chip" href="/jobs?q=handyman">🧰 Handyman</a>
+        <a class="chip" href="/jobs?q=babysitting">🧒 Babysitting</a>
+      </div>
+    </div>
+  </div>
+</section>
 {% endblock %}
