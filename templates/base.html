@@ -2,58 +2,62 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <title>{% block title %}Win-Win Job — Digital Job Center{% endblock %}</title>
+  <meta name="description" content="{% block meta_desc %}Fair jobs. Fast pay. Digital & simple.{% endblock %}"/>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-  <!-- ✅ IMPORTANT -->
-  <link rel="stylesheet" href="/static/style.css" />
+  <!-- IMPORTANT: uses FastAPI static mount -->
+  <link rel="stylesheet" href="{{ request.url_for('static', path='style.css') }}">
 </head>
+
 <body>
+  <header class="topbar">
+    <div class="topbar__inner container">
+      <a class="brand" href="/">
+        <span class="brand__dot" aria-hidden="true"></span>
+        <div class="brand__stack">
+          <div class="brand__name">Win-Win Job</div>
+          <div class="brand__tag">Digital Job Center</div>
+        </div>
+      </a>
 
-<header class="topbar">
-  <div class="topbar__inner">
-    <a class="brand" href="/">
-      <span class="brand__dot"></span>
-      <span class="brand__name">Win-Win Job</span>
-      <span class="brand__tag">Digital Job Center</span>
-    </a>
+      <nav class="nav" aria-label="Primary">
+        <a class="nav__link" href="/tasks">Tasks</a>
+        <a class="nav__link" href="/categories">Categories</a>
+        <a class="nav__link" href="/jobs">Jobs</a>
+        <a class="nav__link" href="/post">Post a job</a>
+        <a class="nav__link" href="/about">About</a>
+        <a class="nav__link" href="/contact">Contact</a>
+      </nav>
 
-    <nav class="nav">
-      <a class="nav__link" href="/tasks">Tasks</a>
-      <a class="nav__link" href="/categories">Categories</a>
-      <a class="nav__link" href="/jobs">Jobs</a>
-      <a class="nav__link" href="/post">Post a job</a>
-      <a class="nav__link" href="/about">About</a>
-      <a class="nav__link" href="/contact">Contact</a>
-    </nav>
-
-    <div class="nav__right">
-      <a class="btn btn--ghost" href="/privacy">Privacy</a>
-      <a class="btn" href="/post">Post a job</a>
+      <div class="topbar__right">
+        <a class="btn btn--ghost" href="/privacy">Privacy</a>
+        <a class="btn btn--primary" href="/post">Post a job</a>
+      </div>
     </div>
-  </div>
-</header>
+  </header>
 
-<main>
-  {% block body %}{% endblock %}
-</main>
+  <main>
+    {% block body %}{% endblock %}
+  </main>
 
-<footer class="footer">
-  <div class="container footer__inner">
-    <div class="footer__left">
-      © 2026 Win-Win Job. All rights reserved.
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div class="footer__left">
+        <div class="footer__brand">© {{ year }} Win-Win Job</div>
+        <div class="footer__muted">Fair jobs. Fast pay. Digital & simple.</div>
+      </div>
+      <div class="footer__right">
+        <a href="/privacy">Privacy</a>
+        <a href="/terms">Terms</a>
+        <a href="/contact">Contact</a>
+      </div>
     </div>
-    <div class="footer__right">
-      <a href="/privacy">Privacy</a>
-      <a href="/terms">Terms</a>
-      <a href="/thank-you">Thank you</a>
-    </div>
-  </div>
-</footer>
-
+  </footer>
 </body>
 </html>

@@ -1,122 +1,122 @@
 {% extends "base.html" %}
-{% block title %}Win-Win Job — {{ brand_tagline }}{% endblock %}
+{% block title %}Win-Win Job — Fair jobs. Fast pay.{% endblock %}
 
 {% block body %}
 <section class="hero">
   <div class="container">
-    <div class="grid">
-      <div class="card card--pad">
+    <div class="hero__grid">
+      <!-- Left -->
+      <div class="card hero__card">
         <div class="badge">
           <span class="badge__dot"></span>
-          {{ brand_name }} — Digital job center
+          Win-Win Job — Digital job center
         </div>
 
         <h1 class="h1">
-          Fair jobs.<br />
-          <span class="grad">Fast pay. Digital & simple.</span>
+          Fair jobs.<br>
+          <span class="grad">Fast pay.</span>
         </h1>
 
-        <p class="p">
-          A digital job center connecting people who need work with people who need help — simply, fairly, and fast.
-          No resumes. No long interviews. Just real jobs and fair pay.
+        <p class="lead">
+          Find local jobs fast. Apply in minutes. Clear pay & simple rules.
         </p>
 
-        <form class="searchbar" action="/jobs" method="get">
-          <input class="input" name="q" placeholder="Search jobs (cleaning, moving, yard work…)" />
+        <form class="search" action="/jobs" method="get">
+          <input class="input" name="q" placeholder="Search jobs (cleaning, moving, delivery…)" />
           <input class="input" name="city" placeholder="City or ZIP" />
-          <button class="btn" type="submit">Search</button>
+          <button class="btn btn--primary" type="submit">Search</button>
         </form>
 
         <div class="hero__actions">
-          <a class="chip" href="/tasks">Popular tasks</a>
-          <a class="chip" href="/post">Post a job</a>
-          <a class="chip" href="/jobs">Browse jobs</a>
+          <a class="btn btn--primary" href="/jobs">Find work</a>
+          <a class="btn btn--ghost" href="/post">Post a job</a>
+        </div>
+
+        <div class="trustrow">
+          <div class="trustrow__item"><strong>Fast</strong><span>Apply in 60 seconds</span></div>
+          <div class="trustrow__item"><strong>Local</strong><span>City / ZIP matching</span></div>
+          <div class="trustrow__item"><strong>Fair</strong><span>Clear pay + rules</span></div>
         </div>
       </div>
 
-      <div class="side">
-        <div class="mini">
-          <div class="mini__card">
-            <div class="mini__title">Fast</div>
-            <div class="mini__text">Apply in 60 seconds</div>
-          </div>
-          <div class="mini__card">
-            <div class="mini__title">Local</div>
-            <div class="mini__text">City / ZIP matching</div>
-          </div>
-          <div class="mini__card">
-            <div class="mini__title">Fair</div>
-            <div class="mini__text">Clear pay + rules</div>
-          </div>
+      <!-- Right -->
+      <div class="card hero__side">
+        <div class="card__title">
+          Featured jobs
+          <a class="link" href="/jobs">See all →</a>
         </div>
 
-        <div class="card card--pad">
-          <div class="card__head">
-            <h3 class="h3">Featured jobs</h3>
-            <a class="link" href="/jobs">See all →</a>
+        {% if featured_jobs and featured_jobs|length > 0 %}
+          <div class="joblist">
+            {% for job in featured_jobs %}
+              <a class="jobitem" href="/jobs/{{ job.id }}">
+                <div class="jobitem__top">
+                  <div class="jobitem__title">{{ job.title }}</div>
+                  <div class="pill">${{ job.pay }}</div>
+                </div>
+                <div class="jobitem__meta">{{ job.city }} · {{ job.category }}</div>
+              </a>
+            {% endfor %}
           </div>
-
-          {% if jobs and jobs|length > 0 %}
-            <div class="list">
-              {% for job in jobs %}
-                <a class="job" href="/jobs/{{ job['id'] }}">
-                  <div class="job__top">
-                    <div class="job__title">{{ job['title'] }}</div>
-                    <div class="job__pay">{{ job['pay'] }}</div>
-                  </div>
-                  <div class="job__meta">{{ job['category'] }} • {{ job['city'] }}</div>
-                </a>
-              {% endfor %}
-            </div>
-          {% else %}
-            <p class="muted">Demo mode: add jobs from “Post a job” to see them here.</p>
-            <a class="btn" href="/post">Post a job</a>
-          {% endif %}
-        </div>
+        {% else %}
+          <p class="muted">
+            No jobs yet. Be the first to post one.
+          </p>
+          <a class="btn btn--primary" href="/post">Post a job</a>
+        {% endif %}
       </div>
     </div>
+  </div>
+</section>
 
-    <div class="card card--pad">
+<section class="section">
+  <div class="container">
+    <div class="section__head">
       <h2 class="h2">Popular categories</h2>
-      <div class="chips">
-        {% for c, icon in categories %}
-          <a class="chip" href="/jobs?q={{ c }}">{{ icon }} {{ c }}</a>
-        {% endfor %}
-      </div>
+      <p class="muted">Start with what people need most.</p>
     </div>
 
-    <div class="grid2">
-      <div class="card card--pad">
-        <h3 class="h3">For Workers</h3>
-        <ol class="steps">
-          <li><b>Find a job near you</b><br><span class="muted">Browse real local tasks in minutes.</span></li>
-          <li><b>Apply fast</b><br><span class="muted">No resume required. Just contact info.</span></li>
-          <li><b>Work & get paid</b><br><span class="muted">Clear pay and simple expectations.</span></li>
-        </ol>
-        <a class="btn btn--ghost" href="/jobs">Find work</a>
+    <div class="chips">
+      {% for name, emoji in categories %}
+        <a class="chip" href="/jobs?category={{ name }}">{{ emoji }} {{ name }}</a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="grid3">
+      <div class="card">
+        <div class="card__title">For Workers</div>
+        <ul class="list">
+          <li><strong>Find</strong> a job near you</li>
+          <li><strong>Apply</strong> fast — no resume</li>
+          <li><strong>Get paid</strong> with clear terms</li>
+        </ul>
+        <a class="link" href="/jobs">Find work →</a>
       </div>
 
-      <div class="card card--pad">
-        <h3 class="h3">For Employers</h3>
-        <ol class="steps">
-          <li><b>Post a job</b><br><span class="muted">Describe the task + pay + location.</span></li>
-          <li><b>Get fast help</b><br><span class="muted">Reach ready-to-work people nearby.</span></li>
-          <li><b>Pay fairly</b><br><span class="muted">Win-Win means fair work, fair pay.</span></li>
-        </ol>
-        <a class="btn" href="/post">Post a job</a>
+      <div class="card">
+        <div class="card__title">For Employers</div>
+        <ul class="list">
+          <li><strong>Post</strong> a job in 2 minutes</li>
+          <li><strong>Reach</strong> ready-to-work people</li>
+          <li><strong>Pay fairly</strong> — win-win rules</li>
+        </ul>
+        <a class="link" href="/post">Post a job →</a>
+      </div>
+
+      <div class="card">
+        <div class="card__title">Built for trust</div>
+        <ul class="list">
+          <li>Clear pay & job details</li>
+          <li>Simple rules & reporting</li>
+          <li>No unnecessary barriers</li>
+        </ul>
+        <p class="muted small">Safety tip: confirm pay + location before starting.</p>
       </div>
     </div>
-
-    <div class="card card--pad">
-      <h3 class="h3">Built for trust</h3>
-      <p class="p">Clear pay. Clear details. Simple rules. We’re building a safer jobcenter experience online.</p>
-      <ul class="check">
-        <li>✅ Clear pay and job details</li>
-        <li>✅ Simple rules & reporting</li>
-        <li>✅ No unnecessary barriers</li>
-      </ul>
-    </div>
-
   </div>
 </section>
 {% endblock %}
