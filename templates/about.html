@@ -1,28 +1,25 @@
 {% extends "base.html" %}
-{% block title %}About — JOBCENTA{% endblock %}
+{% block title %}About — Win-Win Job{% endblock %}
 
-{% block body %}
-<div class="content">
+{% block content %}
+<section class="section">
   <div class="container">
-    <div class="card card-pad">
-      <h1>About JOBCENTA</h1>
-      <p class="p">
-        JOBCENTA helps people find fast, local work and helps communities get tasks done quickly.
-        Our goal is simple: connect reliable workers with real jobs — fast.
+    <div class="sectionHead">
+      <h1 class="sectionTitle">About Win-Win Job</h1>
+      <p class="sectionDesc">A digital job center built for real people: simple, fair, and fast.</p>
+    </div>
+
+    <div class="panel">
+      <p class="sectionDesc" style="margin-top:0;">
+        Win-Win Job connects people who need work with people who need help. We focus on quick local tasks
+        (cleaning, moving, yard work, delivery, and more) without unnecessary barriers.
       </p>
-
-      <h2>What we offer</h2>
-      <ul>
-        <li>Quick job discovery by task and location</li>
-        <li>Simple posting and applying</li>
-        <li>Safety guidelines and reporting</li>
-      </ul>
-
-      <div style="margin-top:16px">
-        <a class="btn btn-primary" href="/jobs">Browse jobs</a>
-        <a class="btn btn-ghost" href="/contact">Contact</a>
+      <div class="categories" style="margin-top:12px;">
+        <span class="cat">Fair jobs</span>
+        <span class="cat">Fast pay</span>
+        <span class="cat">Digital & simple</span>
       </div>
     </div>
   </div>
-</div>
+</section>
 {% endblock %}

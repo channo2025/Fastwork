@@ -1,46 +1,52 @@
-<!doctype html>
-<html>
-<head>
-  <meta charset="utf-8" />
-  <title>Jobs - BaraConnect</title>
-  <link rel="stylesheet" href="/static/styles.css">
-</head>
-<body>
-  <header class="top">
-    <a href="/" class="brand">BaraConnect</a>
-    <nav>
-      <a href="/jobs">Jobs</a>
-      <a href="/post-job">Post a job</a>
-    </nav>
-  </header>
+{% extends "base.html" %}
+{% block title %}Jobs — Win-Win Job{% endblock %}
 
-  <main class="wrap">
-    <h1>Browse jobs</h1>
+{% block content %}
+<section class="section">
+  <div class="container">
+    <div class="sectionHead">
+      <h1 class="sectionTitle">Jobs</h1>
+      <p class="sectionDesc">Browse local jobs. Apply fast. Keep it fair.</p>
+    </div>
 
-    <form method="get" action="/jobs" class="form">
-      <input name="q" placeholder="Search (title/category/desc)" value="{{ q }}">
-      <input name="city" placeholder="City or ZIP" value="{{ city }}">
-      <button class="btn" type="submit">Search</button>
-    </form>
+    <div class="searchCard">
+      <form class="search" action="/jobs" method="get">
+        <input name="q" type="text" value="{{ q or '' }}" placeholder="Search jobs (cleaning, moving…)" />
+        <input name="loc" type="text" value="{{ loc or '' }}" placeholder="City or ZIP" />
+        <button class="btn btn--primary" type="submit">Search</button>
+      </form>
+    </div>
 
-    {% if jobs|length == 0 %}
-      <p>No jobs yet. Be the first to post one.</p>
-      <a class="btn" href="/post-job">Post a job</a>
-    {% else %}
-      <ul class="list">
-      {% for j in jobs %}
-        <li class="card">
-          <div><b>{{ j.title }}</b></div>
-          <div>{{ j.city }} • {{ j.category }} • {{ j.pay }}</div>
-          <div class="muted">{{ j.description }}</div>
-          <div class="row">
-            <a class="link" href="/job/{{ j.id }}">View details</a>
-            <a class="btn" href="/apply/{{ j.id }}">Apply</a>
+    <div style="height:14px"></div>
+
+    {% if jobs and jobs|length > 0 %}
+      <div class="twoCol" style="grid-template-columns: 1fr 1fr;">
+        {% for job in jobs %}
+          <div class="panel">
+            <h3 style="margin:0 0 6px; letter-spacing:-.02em;">{{ job.title }}</h3>
+            <p class="sectionDesc" style="margin-top:0;">{{ job.description or "No description." }}</p>
+            <div class="categories" style="margin-top:10px;">
+              {% if job.pay %}<span class="cat">💵 ${{ job.pay }}</span>{% endif %}
+              {% if job.location %}<span class="cat">📍 {{ job.location }}</span>{% endif %}
+              {% if job.when %}<span class="cat">⏱ {{ job.when }}</span>{% endif %}
+            </div>
+            <div style="height:10px"></div>
+            <a class="btn btn--soft" href="/jobs/{{ job.id }}">View details</a>
           </div>
-        </li>
-      {% endfor %}
-      </ul>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="featured">
+        <div class="featured__head">
+          <h2 class="sectionTitle">No jobs found</h2>
+          <a class="link" href="/post">Post one →</a>
+        </div>
+        <div class="featured__empty">
+          <p>Try a different keyword or location. Or post the first job to start the marketplace.</p>
+          <a class="btn btn--primary" href="/post">Post a job</a>
+        </div>
+      </div>
     {% endif %}
-  </main>
-</body>
-</html>
+  </div>
+</section>
+{% endblock %}

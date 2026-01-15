@@ -1,46 +1,39 @@
 {% extends "base.html" %}
-{% block title %}{{ job.title if job else "Job detail" }} — JOBCENTA{% endblock %}
+{% block title %}Job details — Win-Win Job{% endblock %}
 
-{% block body %}
-<div class="content">
+{% block content %}
+<section class="section">
   <div class="container">
-    <div class="grid">
-      <div class="card card-pad">
-        {% if job %}
-          <span class="pill">{{ job.category or "Task" }}</span>
-          <h1 style="margin:10px 0 8px">{{ job.title }}</h1>
+    <div class="sectionHead">
+      <h1 class="sectionTitle">{{ job.title }}</h1>
+      <p class="sectionDesc">Read carefully. Confirm pay + location before starting.</p>
+    </div>
 
-          <div class="meta" style="margin-bottom:12px">
-            <span>📍 {{ job.city or "Local" }}</span>
-            <span>💵 {{ job.pay or "Competitive" }}</span>
-            <span>🗓️ {{ job.date_needed or "Flexible" }}</span>
-          </div>
-          <a class="btn btn-primary" href="/jobs/{{ job_id }}/apply">Apply now</a>
-          <p class="p" style="white-space:pre-wrap">{{ job.description }}</p>
+    <div class="panel">
+      <p class="sectionDesc" style="margin-top:0;">{{ job.description or "No description." }}</p>
 
-          <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap">
-            <a class="btn btn-primary" href="/jobs/{{ job.id }}/apply">Apply for this job</a>
-            <a class="btn btn-ghost" href="/jobs">Back to jobs</a>
-          </div>
-        {% else %}
-          <h1>Job not found</h1>
-          <p class="p">This listing may have been removed.</p>
-          <a class="btn btn-primary" href="/jobs">Browse jobs</a>
-        {% endif %}
+      <div class="categories" style="margin-top:12px;">
+        {% if job.pay %}<span class="cat">💵 ${{ job.pay }}</span>{% endif %}
+        {% if job.location %}<span class="cat">📍 {{ job.location }}</span>{% endif %}
+        {% if job.when %}<span class="cat">⏱ {{ job.when }}</span>{% endif %}
       </div>
 
-      <div class="card card-pad">
-        <h2 style="margin:0 0 8px">Safety</h2>
-        <ul>
-          <li>Never send money upfront.</li>
-          <li>Use safe meeting locations.</li>
-          <li>Report suspicious listings.</li>
-        </ul>
-        <div class="notice" style="margin-top:14px">
-          Need help? Contact <a href="/contact" style="text-decoration:underline">Support</a>.
-        </div>
-      </div>
+      <div style="height:14px"></div>
+
+      <a class="btn btn--primary btn--lg" href="/jobs/{{ job.id }}/apply">Apply now</a>
+      <a class="btn btn--ghost btn--lg" href="/jobs">Back to jobs</a>
+    </div>
+
+    <div style="height:14px"></div>
+
+    <div class="trustCard">
+      <h3>Safety & fairness</h3>
+      <ul class="checks">
+        <li>✅ Confirm pay and expectations before you start.</li>
+        <li>✅ Meet in safe places when possible.</li>
+        <li>✅ If something feels wrong, don’t proceed.</li>
+      </ul>
     </div>
   </div>
-</div>
+</section>
 {% endblock %}

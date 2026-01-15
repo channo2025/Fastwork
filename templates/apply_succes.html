@@ -1,23 +1,27 @@
 {% extends "base.html" %}
-{% block title %}Application sent — JOBCENTA{% endblock %}
+{% block title %}Application sent — Win-Win Job{% endblock %}
 
-{% block body %}
-<div class="content">
+{% block content %}
+<section class="section">
   <div class="container">
-    <div class="card card-pad">
-      <span class="badge">✅ Application submitted</span>
-      <h1 style="margin-top:14px">You're all set!</h1>
-      <p class="p">Your application has been sent. The job poster will contact you if they want to move forward.</p>
-
-      <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap">
-        <a class="btn btn-primary" href="/jobs">Browse more jobs</a>
-        <a class="btn btn-ghost" href="/tasks">Explore tasks</a>
+    <div class="featured">
+      <div class="featured__head">
+        <h1 class="sectionTitle">✅ Application sent</h1>
+        <a class="link" href="/jobs">Browse more jobs →</a>
       </div>
 
-      <div class="notice" style="margin-top:16px">
-        Reminder: Never pay upfront. JOBCENTA does not request payments via email or SMS.
+      <div class="featured__empty">
+        <p>Your application has been submitted. The employer will contact you if they’re interested.</p>
+        <div class="categories">
+          <span class="cat">Be ready</span>
+          <span class="cat">Be safe</span>
+          <span class="cat">Be fair</span>
+        </div>
+        <div style="height:12px"></div>
+        <a class="btn btn--primary" href="/jobs">Find more work</a>
+        <a class="btn btn--soft" href="/">Back home</a>
       </div>
     </div>
   </div>
-</div>
+</section>
 {% endblock %}

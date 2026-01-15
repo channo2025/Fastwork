@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Categories — Win-Win Job{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="container">
+    <div class="sectionHead">
+      <h1 class="sectionTitle">Categories</h1>
+      <p class="sectionDesc">Search by category to find local work faster.</p>
+    </div>
+
+    <div class="categories">
+      <a class="cat" href="/jobs?q=cleaning">🧽 Cleaning</a>
+      <a class="cat" href="/jobs?q=moving">📦 Moving</a>
+      <a class="cat" href="/jobs?q=yard">🌿 Yard work</a>
+      <a class="cat" href="/jobs?q=delivery">🚚 Delivery</a>
+      <a class="cat" href="/jobs?q=handyman">🛠 Handyman</a>
+      <a class="cat" href="/jobs?q=babysitting">👶 Babysitting</a>
+      <a class="cat" href="/jobs?q=pet">🐾 Pet care</a>
+      <a class="cat" href="/jobs?q=office">🖥 Office help</a>
+      <a class="cat" href="/jobs?q=events">🎉 Events</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

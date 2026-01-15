@@ -1,69 +1,67 @@
 {% extends "base.html" %}
-{% block title %}Terms — JOBCENTA{% endblock %}
+{% block title %}Terms — Win-Win Job{% endblock %}
 
-{% block body %}
-<div class="content">
+{% block content %}
+<section class="section">
   <div class="container">
-    <div class="card card-pad">
-      <h1>Terms of Service</h1>
-      <p class="p">Last updated: {{ today or "2025-12-25" }}</p>
+    <div class="sectionHead">
+      <h1 class="sectionTitle">Terms of Service</h1>
+      <p class="sectionDesc">Important: these terms protect users and the platform.</p>
+    </div>
 
-      <h2>1) Marketplace only (no employer/agency)</h2>
-      <p class="p">
-        JOBCENTA is a marketplace platform that connects job posters and applicants.
-        JOBCENTA is not an employer, staffing agency, broker, or payment processor.
-        Users are solely responsible for their interactions, agreements, payments, and compliance with laws.
+    <div class="panel">
+      <h3 style="margin-top:0;">1) Platform role (very important)</h3>
+      <p class="sectionDesc">
+        Win-Win Job is a digital job center and marketplace tool. We do not employ workers, we do not hire,
+        and we are not an agent, broker, or party to any agreement between users.
+        Any work arrangement, payment, and conditions are strictly between the Employer and Worker.
       </p>
 
-      <h2>2) No guarantees</h2>
-      <p class="p">
-        We do not guarantee job availability, applicant quality, earnings, or outcomes.
-        Listings and user content are provided by third parties.
+      <h3>2) No guarantees</h3>
+      <p class="sectionDesc">
+        We do not guarantee that jobs will be filled, that workers will be hired, that payments will be made,
+        or that users will behave properly. Use the service at your own risk.
       </p>
 
-      <h2>3) User responsibilities</h2>
-      <ul>
-        <li>You must provide accurate information.</li>
-        <li>You must comply with all applicable laws and regulations.</li>
-        <li>You must not post illegal, unsafe, discriminatory, or deceptive content.</li>
-        <li>You must not request sensitive information (SSN, banking, passports).</li>
-      </ul>
-
-      <h2>4) Safety & payments</h2>
-      <p class="p">
-        Users are responsible for safe meetups and verification. Never pay upfront.
-        JOBCENTA is not responsible for disputes, theft, injury, damages, or losses.
+      <h3>3) Safety & responsibility</h3>
+      <p class="sectionDesc">
+        Users are responsible for their own safety and decisions. Always verify identity, pay, and location before
+        starting work. Meet in safe places when possible. If you feel unsafe, do not proceed.
+        For emergencies, contact local authorities.
       </p>
 
-      <h2>5) Content & moderation</h2>
-      <p class="p">
-        We may remove or limit content, suspend accounts, or restrict access at any time, with or without notice,
-        to protect users, enforce policies, or comply with law.
+      <h3>4) Prohibited content & behavior</h3>
+      <p class="sectionDesc">
+        No illegal jobs, discrimination, harassment, exploitation, unsafe requests, or deceptive postings.
+        We may remove content or suspend accounts at our discretion.
       </p>
 
-      <h2>6) Limitation of liability</h2>
-      <p class="p">
-        To the maximum extent permitted by law, JOBCENTA and its operators are not liable for indirect,
-        incidental, consequential, special, or punitive damages, or any loss of profits, data, or goodwill,
-        arising from or related to your use of the platform.
+      <h3>5) Payments</h3>
+      <p class="sectionDesc">
+        Payments are arranged directly between Employer and Worker. Win-Win Job is not responsible for payment disputes,
+        chargebacks, or wage issues. We may offer reporting tools, but we are not obligated to mediate disputes.
       </p>
 
-      <h2>7) Indemnity</h2>
-      <p class="p">
-        You agree to defend, indemnify, and hold harmless JOBCENTA and its operators from claims, damages,
-        liabilities, and expenses (including legal fees) arising from your use, content, violation of these Terms,
-        or disputes with other users.
+      <h3>6) Liability limitation</h3>
+      <p class="sectionDesc">
+        To the maximum extent permitted by law, Win-Win Job and its owners/operators are not liable for any indirect,
+        incidental, special, consequential, or punitive damages, or for any loss of profits, data, or goodwill arising from
+        your use of the service or any interaction between users.
       </p>
 
-      <h2>8) Changes</h2>
-      <p class="p">
-        We may update these Terms at any time. Continued use means acceptance of the updated Terms.
+      <h3>7) Indemnification</h3>
+      <p class="sectionDesc">
+        You agree to indemnify and hold harmless Win-Win Job from claims, damages, liabilities, and expenses arising from
+        your use of the service, your content, or your interactions with other users.
       </p>
 
-      <div class="notice" style="margin-top:16px">
-        Important: This is a strong protective template, but for maximum protection you should have a licensed attorney review it for your state/country.
-      </div>
+      <h3>8) Changes</h3>
+      <p class="sectionDesc">
+        We may update these Terms at any time. Continued use means you accept the updated Terms.
+      </p>
+
+      <p class="sectionDesc"><b>By using Win-Win Job, you agree to these Terms.</b></p>
     </div>
   </div>
-</div>
+</section>
 {% endblock %}

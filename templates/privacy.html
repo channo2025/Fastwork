@@ -1,52 +1,42 @@
 {% extends "base.html" %}
-{% block title %}Privacy — JOBCENTA{% endblock %}
+{% block title %}Privacy — Win-Win Job{% endblock %}
 
-{% block body %}
-<div class="content">
+{% block content %}
+<section class="section">
   <div class="container">
-    <div class="card card-pad">
-      <h1>Privacy Policy</h1>
-      <p class="p">Last updated: {{ today or "2025-12-25" }}</p>
+    <div class="sectionHead">
+      <h1 class="sectionTitle">Privacy Policy</h1>
+      <p class="sectionDesc">Simple and transparent privacy for a digital job center.</p>
+    </div>
 
-      <h2>1) What we collect</h2>
-      <ul>
-        <li>Account/contact info you provide (name, email, phone if shared)</li>
-        <li>Job posts and applications content</li>
-        <li>Basic usage data (pages visited, approximate location via IP, device info)</li>
-      </ul>
-
-      <h2>2) How we use data</h2>
-      <ul>
-        <li>To operate the marketplace (posting, applying, messaging)</li>
-        <li>To prevent fraud and enforce safety/Terms</li>
-        <li>To improve performance and user experience</li>
-      </ul>
-
-      <h2>3) Sharing</h2>
-      <p class="p">
-        We share your application details with the job poster. We do not sell personal data.
-        We may share information if required by law or to protect users/safety.
+    <div class="panel">
+      <h3 style="margin-top:0;">What we collect</h3>
+      <p class="sectionDesc">
+        In demo mode, we may collect basic information you submit such as job details (title, location, pay),
+        and application details (name, phone, message). We do not sell your personal information.
       </p>
 
-      <h2>4) Data safety</h2>
-      <p class="p">
-        We use reasonable security measures, but no online service can guarantee 100% security.
-        You use JOBCENTA at your own risk.
+      <h3>How we use it</h3>
+      <p class="sectionDesc">
+        We use submitted information to operate the platform: showing jobs, allowing applications,
+        improving safety and quality, and responding to support messages.
       </p>
 
-      <h2>5) Your choices</h2>
-      <ul>
-        <li>Do not share sensitive info (SSN, passport, banking)</li>
-        <li>Request deletion of messages/data where applicable (subject to legal needs)</li>
-      </ul>
+      <h3>Third parties</h3>
+      <p class="sectionDesc">
+        Hosting providers and analytics tools (if enabled) may process limited data to provide the service.
+      </p>
 
-      <h2>6) Contact</h2>
-      <p class="p">For privacy requests, contact us at the contact page.</p>
+      <h3>Security</h3>
+      <p class="sectionDesc">
+        No system is 100% secure. Use strong passwords where applicable and avoid sharing sensitive information.
+      </p>
 
-      <div class="notice" style="margin-top:16px">
-        This template is informational and may require review to match your jurisdiction and legal requirements.
-      </div>
+      <h3>Contact</h3>
+      <p class="sectionDesc">
+        For privacy questions, contact us via the Contact page.
+      </p>
     </div>
   </div>
-</div>
+</section>
 {% endblock %}

@@ -1,17 +1,27 @@
 {% extends "base.html" %}
-{% block title %}Popular tasks — BaraConnect{% endblock %}
+{% block title %}Tasks — Win-Win Job{% endblock %}
 {% block content %}
 <section class="section">
-  <div class="wrap">
-    <h2>Popular tasks</h2>
-    <div class="grid3">
-      <div class="box"><h3>Cleaning</h3><p>Home, office, deep clean.</p></div>
-      <div class="box"><h3>Moving help</h3><p>Loading, unloading, furniture.</p></div>
-      <div class="box"><h3>Yard work</h3><p>Leaves, mowing, trimming.</p></div>
-      <div class="box"><h3>Delivery</h3><p>Same-day errands & drop-offs.</p></div>
-      <div class="box"><h3>Handyman</h3><p>Small fixes & mounting.</p></div>
-      <div class="box"><h3>Shopping</h3><p>Groceries and pickups.</p></div>
+  <div class="container">
+    <div class="sectionHead">
+      <h1 class="sectionTitle">Popular tasks</h1>
+      <p class="sectionDesc">Quick tasks people post every day. Pick one and apply fast.</p>
     </div>
+
+    <div class="categories">
+      <a class="cat" href="/jobs?q=cleaning">🧽 Cleaning</a>
+      <a class="cat" href="/jobs?q=moving">📦 Moving help</a>
+      <a class="cat" href="/jobs?q=yard">🌿 Yard work</a>
+      <a class="cat" href="/jobs?q=delivery">🚚 Delivery</a>
+      <a class="cat" href="/jobs?q=handyman">🛠 Handyman</a>
+      <a class="cat" href="/jobs?q=babysitting">👶 Babysitting</a>
+      <a class="cat" href="/jobs?q=packing">📦 Packing</a>
+      <a class="cat" href="/jobs?q=carwash">🚗 Car wash</a>
+      <a class="cat" href="/jobs?q=restaurant">🍽 Restaurant help</a>
+    </div>
+
+    <div style="height:14px"></div>
+    <a class="btn btn--primary" href="/jobs">Browse all jobs</a>
   </div>
 </section>
 {% endblock %}
