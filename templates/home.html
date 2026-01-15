@@ -1,107 +1,122 @@
 {% extends "base.html" %}
-{% block title %}JOBCENTA — Work today. Get paid today.{% endblock %}
+{% block title %}Win-Win Job — {{ brand_tagline }}{% endblock %}
 
 {% block body %}
 <section class="hero">
   <div class="container">
     <div class="grid">
-      <div class="card card-pad">
-        <span class="badge">
-          <span style="width:8px;height:8px;border-radius:999px;background:linear-gradient(90deg,var(--brand),var(--brand2));display:inline-block"></span>
-          JOBCENTA — Your online job hub
-        </span>
+      <div class="card card--pad">
+        <div class="badge">
+          <span class="badge__dot"></span>
+          {{ brand_name }} — Digital job center
+        </div>
 
         <h1 class="h1">
-          Work today.<br />
-          <span class="grad">Get paid today.</span>
+          Fair jobs.<br />
+          <span class="grad">Fast pay. Digital & simple.</span>
         </h1>
 
         <p class="p">
-          Find fast, local jobs in minutes — cleaning, moving, yard work,
-          deliveries and more. No resume. No interview. Just real work.
+          A digital job center connecting people who need work with people who need help — simply, fairly, and fast.
+          No resumes. No long interviews. Just real jobs and fair pay.
         </p>
 
         <form class="searchbar" action="/jobs" method="get">
-          <input class="input" name="q" placeholder="Search jobs (e.g., moving, cleaning)" />
+          <input class="input" name="q" placeholder="Search jobs (cleaning, moving, yard work…)" />
           <input class="input" name="city" placeholder="City or ZIP" />
-          <button class="btn btn-primary" type="submit">Search jobs</button>
+          <button class="btn" type="submit">Search</button>
         </form>
 
-        <div style="margin-top:14px" class="chips">
+        <div class="hero__actions">
           <a class="chip" href="/tasks">Popular tasks</a>
           <a class="chip" href="/post">Post a job</a>
           <a class="chip" href="/jobs">Browse jobs</a>
         </div>
       </div>
 
-      <div>
-        <div class="kpi">
-          <div class="box">
-            <div class="num">Fast</div>
-            <div class="lbl">Apply in 60 seconds</div>
+      <div class="side">
+        <div class="mini">
+          <div class="mini__card">
+            <div class="mini__title">Fast</div>
+            <div class="mini__text">Apply in 60 seconds</div>
           </div>
-          <div class="box">
-            <div class="num">Local</div>
-            <div class="lbl">City / ZIP matching</div>
+          <div class="mini__card">
+            <div class="mini__title">Local</div>
+            <div class="mini__text">City / ZIP matching</div>
           </div>
-          <div class="box">
-            <div class="num">Safe</div>
-            <div class="lbl">Rules & reporting</div>
+          <div class="mini__card">
+            <div class="mini__title">Fair</div>
+            <div class="mini__text">Clear pay + rules</div>
           </div>
         </div>
 
-        <div class="card card-pad" style="margin-top:14px">
-          <div class="section-title">
-            <h2>Featured jobs</h2>
-            <a class="muted" href="/jobs">See all →</a>
+        <div class="card card--pad">
+          <div class="card__head">
+            <h3 class="h3">Featured jobs</h3>
+            <a class="link" href="/jobs">See all →</a>
           </div>
 
-          <div class="list">
-            {% for j in jobs[:3] if jobs %}
-              <a class="job" href="/jobs/{{ j.id }}">
-                <div>
-                  <h3>{{ j.title }}</h3>
-                  <div class="meta">
-                    <span class="pill">{{ j.category or "Task" }}</span>
-                    <span>📍 {{ j.city or "Local" }}</span>
-                    <span>💵 {{ j.pay or "Competitive" }}</span>
+          {% if jobs and jobs|length > 0 %}
+            <div class="list">
+              {% for job in jobs %}
+                <a class="job" href="/jobs/{{ job['id'] }}">
+                  <div class="job__top">
+                    <div class="job__title">{{ job['title'] }}</div>
+                    <div class="job__pay">{{ job['pay'] }}</div>
                   </div>
-                </div>
-                <div class="muted" style="font-weight:800">View →</div>
-              </a>
-            {% else %}
-              <div class="notice">
-                No jobs yet. Start by posting the first job 🚀
-                <div style="margin-top:10px">
-                  <a class="btn btn-primary" href="/post">Post a job</a>
-                </div>
-              </div>
-            {% endfor %}
-          </div>
+                  <div class="job__meta">{{ job['category'] }} • {{ job['city'] }}</div>
+                </a>
+              {% endfor %}
+            </div>
+          {% else %}
+            <p class="muted">Demo mode: add jobs from “Post a job” to see them here.</p>
+            <a class="btn" href="/post">Post a job</a>
+          {% endif %}
         </div>
-
       </div>
     </div>
-  </div>
-</section>
 
-<section class="section">
-  <div class="container">
-    <div class="card card-pad">
-      <div class="section-title">
-        <h2>Popular categories</h2>
-        <a class="muted" href="/tasks">Explore →</a>
-      </div>
-
+    <div class="card card--pad">
+      <h2 class="h2">Popular categories</h2>
       <div class="chips">
-        <a class="chip" href="/jobs?q=cleaning">🧼 Cleaning</a>
-        <a class="chip" href="/jobs?q=moving">📦 Moving help</a>
-        <a class="chip" href="/jobs?q=yard">🌿 Yard work</a>
-        <a class="chip" href="/jobs?q=delivery">🚗 Delivery</a>
-        <a class="chip" href="/jobs?q=handyman">🧰 Handyman</a>
-        <a class="chip" href="/jobs?q=babysitting">🧒 Babysitting</a>
+        {% for c, icon in categories %}
+          <a class="chip" href="/jobs?q={{ c }}">{{ icon }} {{ c }}</a>
+        {% endfor %}
       </div>
     </div>
+
+    <div class="grid2">
+      <div class="card card--pad">
+        <h3 class="h3">For Workers</h3>
+        <ol class="steps">
+          <li><b>Find a job near you</b><br><span class="muted">Browse real local tasks in minutes.</span></li>
+          <li><b>Apply fast</b><br><span class="muted">No resume required. Just contact info.</span></li>
+          <li><b>Work & get paid</b><br><span class="muted">Clear pay and simple expectations.</span></li>
+        </ol>
+        <a class="btn btn--ghost" href="/jobs">Find work</a>
+      </div>
+
+      <div class="card card--pad">
+        <h3 class="h3">For Employers</h3>
+        <ol class="steps">
+          <li><b>Post a job</b><br><span class="muted">Describe the task + pay + location.</span></li>
+          <li><b>Get fast help</b><br><span class="muted">Reach ready-to-work people nearby.</span></li>
+          <li><b>Pay fairly</b><br><span class="muted">Win-Win means fair work, fair pay.</span></li>
+        </ol>
+        <a class="btn" href="/post">Post a job</a>
+      </div>
+    </div>
+
+    <div class="card card--pad">
+      <h3 class="h3">Built for trust</h3>
+      <p class="p">Clear pay. Clear details. Simple rules. We’re building a safer jobcenter experience online.</p>
+      <ul class="check">
+        <li>✅ Clear pay and job details</li>
+        <li>✅ Simple rules & reporting</li>
+        <li>✅ No unnecessary barriers</li>
+      </ul>
+    </div>
+
   </div>
 </section>
 {% endblock %}

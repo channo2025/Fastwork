@@ -1,50 +1,56 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>{% block title %}Win-Win Job – Digital Job Center{% endblock %}</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>{% block title %}Win-Win Job — Digital Job Center{% endblock %}</title>
 
-  <!-- Google font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-  <!-- CSS -->
-<link rel="stylesheet" href="/static/style.css" />
+  <!-- ✅ IMPORTANT -->
+  <link rel="stylesheet" href="/static/style.css" />
 </head>
-
 <body>
 
 <header class="topbar">
-  <div class="container topbar_inner">
-    <a href="/" class="brand">
-      <span class="brand_dot"></span>
-      <span class="brand_name">Win-Win Job</span>
-      <span class="brand_tag">Digital Job Center</span>
+  <div class="topbar__inner">
+    <a class="brand" href="/">
+      <span class="brand__dot"></span>
+      <span class="brand__name">Win-Win Job</span>
+      <span class="brand__tag">Digital Job Center</span>
     </a>
 
     <nav class="nav">
-      <a href="/tasks">Tasks</a>
-      <a href="/categories">Categories</a>
-      <a href="/jobs">Jobs</a>
-      <a href="/post">Post a job</a>
-      <a href="/about">About</a>
-      <a href="/contact">Contact</a>
+      <a class="nav__link" href="/tasks">Tasks</a>
+      <a class="nav__link" href="/categories">Categories</a>
+      <a class="nav__link" href="/jobs">Jobs</a>
+      <a class="nav__link" href="/post">Post a job</a>
+      <a class="nav__link" href="/about">About</a>
+      <a class="nav__link" href="/contact">Contact</a>
     </nav>
+
+    <div class="nav__right">
+      <a class="btn btn--ghost" href="/privacy">Privacy</a>
+      <a class="btn" href="/post">Post a job</a>
+    </div>
   </div>
 </header>
 
-<main class="container">
-  {% block content %}{% endblock %}
+<main>
+  {% block body %}{% endblock %}
 </main>
 
 <footer class="footer">
-  <div class="container">
-    <p>© {{ year or "2026" }} Win-Win Job. All rights reserved.</p>
-    <div class="footer_links">
+  <div class="container footer__inner">
+    <div class="footer__left">
+      © 2026 Win-Win Job. All rights reserved.
+    </div>
+    <div class="footer__right">
       <a href="/privacy">Privacy</a>
       <a href="/terms">Terms</a>
+      <a href="/thank-you">Thank you</a>
     </div>
   </div>
 </footer>

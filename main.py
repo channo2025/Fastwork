@@ -2,18 +2,15 @@ from fastapi import FastAPI, Request, Form
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from typing import List, Dict, Optional
+from typing import List, Optional
+import sqlite3
 from datetime import datetime
-from fastapi.staticfiles import StaticFiles
 
 app = FastAPI(title="Win-Win Job")
 
-# Static + templates
+# Static + templates (UNE SEULE FOIS)
 app.mount("/static", StaticFiles(directory="static"), name="static")
-
-
-
-app.mount("/static", StaticFiles(directory="static"), name="static")
+templates = Jinja2Templates(directory="templates")
 
 BRAND_NAME = "Win-Win Job"
 BRAND_TAGLINE = "Fair jobs. Fast pay. Digital & simple."
@@ -23,226 +20,243 @@ CATEGORIES = [
     ("Moving help", "📦"),
     ("Yard work", "🌿"),
     ("Delivery", "🚚"),
-    ("Handyman", "🛠"),
-    ("Babysitting", "👶"),
-    ("Packing", "📦"),
-    ("Restaurant help", "🍽"),
-    ("Events", "🎉"),
+    ("Handyman", "🛠️"),
+    ("Babysitting", "🧸"),
 ]
 
-# -----------------------
-# DEMO DATA (in-memory)
-# -----------------------
-# Each job: id, title, description, pay, location, when, category, phone, created_at
-JOBS: List[Dict] = [
-    {
-        "id": 1,
-        "title": "Apartment cleaning (2 hours)",
-        "description": "Need help cleaning a small apartment. Bring gloves if possible.",
-        "pay": 80,
-        "location": "Houston 77084",
-        "when": "Today 5pm",
-        "category": "Cleaning",
-        "contact_phone": "(000) 000-0000",
-        "created_at": datetime.utcnow(),
-    },
-    {
-        "id": 2,
-        "title": "Moving help — loading boxes",
-        "description": "Help loading boxes into a truck. Light/medium boxes.",
-        "pay": 60,
-        "location": "Portland 97205",
-        "when": "Tomorrow 10am",
-        "category": "Moving help",
-        "contact_phone": "(000) 000-0000",
-        "created_at": datetime.utcnow(),
-    },
-]
+DB_PATH = "winwin.db"
 
-APPLICATIONS: List[Dict] = []  # stores applications in memory
 
-def base_ctx(request: Request) -> Dict:
-    return {
+def db():
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row
+    return conn
+
+
+def init_db():
+    conn = db()
+    cur = conn.cursor()
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS jobs (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            title TEXT NOT NULL,
+            category TEXT NOT NULL,
+            city TEXT NOT NULL,
+            pay TEXT NOT NULL,
+            description TEXT NOT NULL,
+            created_at TEXT NOT NULL
+        )
+    """)
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS applications (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            job_id INTEGER NOT NULL,
+            name TEXT NOT NULL,
+            phone TEXT NOT NULL,
+            message TEXT,
+            created_at TEXT NOT NULL,
+            FOREIGN KEY(job_id) REFERENCES jobs(id)
+        )
+    """)
+    conn.commit()
+    conn.close()
+
+
+init_db()
+
+
+@app.get("/health")
+def health():
+    return {"status": "Win-Win Job is running 🚀"}
+
+
+@app.get("/", response_class=HTMLResponse)
+def home(request: Request):
+    # featured jobs (latest 5)
+    conn = db()
+    jobs = conn.execute("SELECT * FROM jobs ORDER BY id DESC LIMIT 5").fetchall()
+    conn.close()
+    return templates.TemplateResponse("home.html", {
         "request": request,
         "brand_name": BRAND_NAME,
         "brand_tagline": BRAND_TAGLINE,
         "categories": CATEGORIES,
-    }
-
-def get_next_job_id() -> int:
-    return (max([j["id"] for j in JOBS]) + 1) if JOBS else 1
-
-def find_job(job_id: int) -> Optional[Dict]:
-    for j in JOBS:
-        if j["id"] == job_id:
-            return j
-    return None
-
-
-# -----------------------
-# PAGES
-# -----------------------
-@app.get("/", response_class=HTMLResponse)
-def home(request: Request):
-    featured = sorted(JOBS, key=lambda x: x["id"], reverse=True)[:6]
-    ctx = base_ctx(request)
-    ctx.update({"featured_jobs": featured})
-    return templates.TemplateResponse("index.html", ctx)
-
-
-@app.get("/tasks", response_class=HTMLResponse)
-def tasks(request: Request):
-    ctx = base_ctx(request)
-    return templates.TemplateResponse("tasks.html", ctx)
+        "jobs": jobs,
+    })
 
 
 @app.get("/categories", response_class=HTMLResponse)
 def categories_page(request: Request):
-    ctx = base_ctx(request)
-    return templates.TemplateResponse("categories.html", ctx)
+    return templates.TemplateResponse("categories.html", {
+        "request": request,
+        "brand_name": BRAND_NAME,
+        "categories": CATEGORIES,
+    })
+
+
+@app.get("/tasks", response_class=HTMLResponse)
+def tasks_page(request: Request):
+    # simple demo list
+    tasks = [
+        {"title": "Apartment cleaning", "category": "Cleaning", "pay": "$80", "city": "Portland"},
+        {"title": "Move a couch", "category": "Moving help", "pay": "$60", "city": "San Diego"},
+        {"title": "Yard trimming", "category": "Yard work", "pay": "$90", "city": "Houston"},
+    ]
+    return templates.TemplateResponse("tasks.html", {
+        "request": request,
+        "brand_name": BRAND_NAME,
+        "tasks": tasks,
+    })
 
 
 @app.get("/jobs", response_class=HTMLResponse)
-def jobs_page(request: Request, q: str = "", loc: str = ""):
-    q_l = (q or "").strip().lower()
-    loc_l = (loc or "").strip().lower()
+def jobs_list(request: Request, q: Optional[str] = None, city: Optional[str] = None):
+    conn = db()
+    sql = "SELECT * FROM jobs WHERE 1=1"
+    params = []
 
-    filtered = JOBS
-    if q_l:
-        filtered = [j for j in filtered if q_l in (j["title"] + " " + (j["description"] or "") + " " + j["category"]).lower()]
-    if loc_l:
-        filtered = [j for j in filtered if loc_l in (j["location"] or "").lower()]
+    if q:
+        sql += " AND (title LIKE ? OR description LIKE ?)"
+        params += [f"%{q}%", f"%{q}%"]
+    if city:
+        sql += " AND city LIKE ?"
+        params += [f"%{city}%"]
 
-    ctx = base_ctx(request)
-    ctx.update({"jobs": sorted(filtered, key=lambda x: x["id"], reverse=True), "q": q, "loc": loc})
-    return templates.TemplateResponse("jobs.html", ctx)
+    sql += " ORDER BY id DESC"
+    jobs = conn.execute(sql, params).fetchall()
+    conn.close()
+
+    return templates.TemplateResponse("jobs.html", {
+        "request": request,
+        "brand_name": BRAND_NAME,
+        "jobs": jobs,
+        "q": q or "",
+        "city": city or "",
+    })
 
 
 @app.get("/jobs/{job_id}", response_class=HTMLResponse)
 def job_detail(request: Request, job_id: int):
-    job = find_job(job_id)
+    conn = db()
+    job = conn.execute("SELECT * FROM jobs WHERE id=?", (job_id,)).fetchone()
+    conn.close()
+
     if not job:
-        return RedirectResponse(url="/jobs", status_code=303)
+        return templates.TemplateResponse("404.html", {"request": request}, status_code=404)
 
-    ctx = base_ctx(request)
-    ctx.update({"job": job})
-    return templates.TemplateResponse("job_detail.html", ctx)
+    return templates.TemplateResponse("job_detail.html", {
+        "request": request,
+        "brand_name": BRAND_NAME,
+        "job": job,
+    })
 
 
-# -----------------------
-# POST A JOB
-# -----------------------
 @app.get("/post", response_class=HTMLResponse)
 def post_job_form(request: Request):
-    ctx = base_ctx(request)
-    return templates.TemplateResponse("post_job.html", ctx)
+    return templates.TemplateResponse("post_job.html", {
+        "request": request,
+        "brand_name": BRAND_NAME,
+        "categories": CATEGORIES,
+    })
 
 
 @app.post("/post")
 def post_job_submit(
     title: str = Form(...),
-    description: str = Form(""),
-    pay: int = Form(...),
-    location: str = Form(...),
-    when: str = Form(""),
-    contact_phone: str = Form(...),
-    category: str = Form("General"),
+    category: str = Form(...),
+    city: str = Form(...),
+    pay: str = Form(...),
+    description: str = Form(...)
 ):
-    new_job = {
-        "id": get_next_job_id(),
-        "title": title.strip(),
-        "description": description.strip(),
-        "pay": int(pay),
-        "location": location.strip(),
-        "when": when.strip(),
-        "category": category.strip() if category.strip() else "General",
-        "contact_phone": contact_phone.strip(),
-        "created_at": datetime.utcnow(),
-    }
-    JOBS.append(new_job)
+    conn = db()
+    conn.execute("""
+        INSERT INTO jobs (title, category, city, pay, description, created_at)
+        VALUES (?, ?, ?, ?, ?, ?)
+    """, (title, category, city, pay, description, datetime.utcnow().isoformat()))
+    conn.commit()
+    conn.close()
     return RedirectResponse(url="/post-success", status_code=303)
 
 
 @app.get("/post-success", response_class=HTMLResponse)
 def post_success(request: Request):
-    ctx = base_ctx(request)
-    return templates.TemplateResponse("post_success.html", ctx)
+    return templates.TemplateResponse("post_success.html", {
+        "request": request,
+        "brand_name": BRAND_NAME,
+    })
 
 
-# -----------------------
-# APPLY
-# -----------------------
-@app.get("/jobs/{job_id}/apply", response_class=HTMLResponse)
+@app.get("/apply/{job_id}", response_class=HTMLResponse)
 def apply_form(request: Request, job_id: int):
-    job = find_job(job_id)
+    conn = db()
+    job = conn.execute("SELECT * FROM jobs WHERE id=?", (job_id,)).fetchone()
+    conn.close()
+
     if not job:
-        return RedirectResponse(url="/jobs", status_code=303)
+        return templates.TemplateResponse("apply_not_found.html", {"request": request}, status_code=404)
 
-    ctx = base_ctx(request)
-    ctx.update({"job": job})
-    return templates.TemplateResponse("apply.html", ctx)
+    return templates.TemplateResponse("apply.html", {
+        "request": request,
+        "brand_name": BRAND_NAME,
+        "job": job,
+    })
 
 
-@app.post("/jobs/{job_id}/apply")
+@app.post("/apply/{job_id}")
 def apply_submit(
     job_id: int,
     name: str = Form(...),
     phone: str = Form(...),
-    message: str = Form(""),
+    message: str = Form("")
 ):
-    job = find_job(job_id)
+    conn = db()
+    job = conn.execute("SELECT * FROM jobs WHERE id=?", (job_id,)).fetchone()
     if not job:
-        return RedirectResponse(url="/jobs", status_code=303)
+        conn.close()
+        return RedirectResponse(url="/apply-not-found", status_code=303)
 
-    APPLICATIONS.append({
-        "job_id": job_id,
-        "name": name.strip(),
-        "phone": phone.strip(),
-        "message": message.strip(),
-        "created_at": datetime.utcnow(),
-    })
-
+    conn.execute("""
+        INSERT INTO applications (job_id, name, phone, message, created_at)
+        VALUES (?, ?, ?, ?, ?)
+    """, (job_id, name, phone, message, datetime.utcnow().isoformat()))
+    conn.commit()
+    conn.close()
     return RedirectResponse(url="/apply-success", status_code=303)
 
 
 @app.get("/apply-success", response_class=HTMLResponse)
 def apply_success(request: Request):
-    ctx = base_ctx(request)
-    return templates.TemplateResponse("apply_success.html", ctx)
+    return templates.TemplateResponse("apply_success.html", {
+        "request": request,
+        "brand_name": BRAND_NAME,
+    })
 
 
-# -----------------------
-# STATIC PAGES
-# -----------------------
+@app.get("/apply-not-found", response_class=HTMLResponse)
+def apply_not_found(request: Request):
+    return templates.TemplateResponse("apply_not_found.html", {"request": request}, status_code=404)
+
+
 @app.get("/about", response_class=HTMLResponse)
 def about(request: Request):
-    ctx = base_ctx(request)
-    return templates.TemplateResponse("about.html", ctx)
+    return templates.TemplateResponse("about.html", {"request": request, "brand_name": BRAND_NAME})
+
 
 @app.get("/contact", response_class=HTMLResponse)
 def contact(request: Request):
-    ctx = base_ctx(request)
-    return templates.TemplateResponse("contact.html", ctx)
+    return templates.TemplateResponse("contact.html", {"request": request, "brand_name": BRAND_NAME})
+
 
 @app.get("/privacy", response_class=HTMLResponse)
 def privacy(request: Request):
-    ctx = base_ctx(request)
-    return templates.TemplateResponse("privacy.html", ctx)
+    return templates.TemplateResponse("privacy.html", {"request": request, "brand_name": BRAND_NAME})
+
 
 @app.get("/terms", response_class=HTMLResponse)
 def terms(request: Request):
-    ctx = base_ctx(request)
-    return templates.TemplateResponse("terms.html", ctx)
+    return templates.TemplateResponse("terms.html", {"request": request, "brand_name": BRAND_NAME})
+
 
 @app.get("/thank-you", response_class=HTMLResponse)
 def thank_you(request: Request):
-    ctx = base_ctx(request)
-    return templates.TemplateResponse("thank_you.html", ctx)
-
-
-# -----------------------
-# health check (optional)
-# -----------------------
-@app.get("/health")
-def health():
-    return {"ok": True}
+    return templates.TemplateResponse("thank_you.html", {"request": request, "brand_name": BRAND_NAME})
