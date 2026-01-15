@@ -4,14 +4,15 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from typing import List, Dict, Optional
 from datetime import datetime
+from fastapi.staticfiles import StaticFiles
 
 app = FastAPI(title="Win-Win Job")
 
 # Static + templates
 app.mount("/static", StaticFiles(directory="static"), name="static")
-templates = Jinja2Templates(directory="templates")
 
-from fastapi.staticfiles import StaticFiles
+
+
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 BRAND_NAME = "Win-Win Job"
