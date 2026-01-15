@@ -11,6 +11,9 @@ app = FastAPI(title="Win-Win Job")
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
+from fastapi.staticfiles import StaticFiles
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
 BRAND_NAME = "Win-Win Job"
 BRAND_TAGLINE = "Fair jobs. Fast pay. Digital & simple."
 
