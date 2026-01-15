@@ -2,19 +2,19 @@ from fastapi import FastAPI, Request, Form
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from datetime import datetime
 from typing import List, Dict, Optional
+from datetime import datetime
 
 app = FastAPI(title="Win-Win Job")
 
-# Static + templates
+# ✅ Static + templates (UNE SEULE FOIS)
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
+BRAND_NAME = "Win-Win Job"
+BRAND_TAGLINE = "Fair jobs. Fast pay. Digital & simple."
+BRAND_SUBTITLE = "Digital Job Center"
 
-# -----------------------
-# Demo data (no database)
-# -----------------------
 CATEGORIES = [
     ("Cleaning", "🧽"),
     ("Moving help", "📦"),
@@ -24,188 +24,202 @@ CATEGORIES = [
     ("Babysitting", "👶"),
 ]
 
-# simple in-memory list
-JOBS: List[Dict] = [
-    {
-        "id": 1,
-        "title": "Move a couch",
-        "category": "Moving help",
-        "city": "Portland, OR",
-        "pay": 60,
-        "description": "Need help moving a couch from apartment to truck. 45–60 minutes."
-    },
-    {
-        "id": 2,
-        "title": "Clean small studio",
-        "category": "Cleaning",
-        "city": "Vancouver, WA",
-        "pay": 90,
-        "description": "Deep clean a small studio (bathroom + kitchen). Supplies provided."
-    },
-]
+# --- Demo in-memory DB ---
+JOBS: List[Dict] = []
+APPLICATIONS: List[Dict] = []
 
-def ctx(request: Request, **kwargs):
-    base = {
+def _next_id(items: List[Dict]) -> int:
+    return (max([it["id"] for it in items]) + 1) if items else 1
+
+def _common_context(request: Request) -> Dict:
+    return {
         "request": request,
-        "year": datetime.now().year,
+        "brand_name": BRAND_NAME,
+        "brand_tagline": BRAND_TAGLINE,
+        "brand_subtitle": BRAND_SUBTITLE,
         "categories": CATEGORIES,
+        "year": datetime.utcnow().year,
     }
-    base.update(kwargs)
-    return base
 
-
-# -----------------------
-# Health
-# -----------------------
 @app.get("/health")
 def health():
     return {"status": "Win-Win Job is running 🚀"}
 
-
-# -----------------------
-# Pages
-# -----------------------
+# ---------------- Home ----------------
 @app.get("/", response_class=HTMLResponse)
 def home(request: Request):
-    featured = JOBS[:3]
-    return templates.TemplateResponse("home.html", ctx(request, featured_jobs=featured))
+    ctx = _common_context(request)
+    ctx.update({"featured_jobs": JOBS[:6]})
+    return templates.TemplateResponse("home.html", ctx)
 
-
-@app.get("/", response_class=HTMLResponse)
-def home(request: Request):
-    return templates.TemplateResponse(
-        "home.html",
-        {
-            "request": request,
-            "brand_name": BRAND_NAME,
-            "brand_tagline": BRAND_TAGLINE,
-            "categories": CATEGORIES,   # ✅ AJOUTE ÇA
-        },
-    )
-
-
+# ---------------- Tasks (alias to Categories) ----------------
 @app.get("/tasks", response_class=HTMLResponse)
-def tasks_page(request: Request):
-    return templates.TemplateResponse("tasks.html", ctx(request))
+def tasks(request: Request):
+    ctx = _common_context(request)
+    return templates.TemplateResponse("tasks.html", ctx)
 
+@app.get("/categories", response_class=HTMLResponse)
+def categories(request: Request):
+    ctx = _common_context(request)
+    return templates.TemplateResponse("categories.html", ctx)
 
-@app.get("/about", response_class=HTMLResponse)
-def about(request: Request):
-    return templates.TemplateResponse("about.html", ctx(request))
-
-
-@app.get("/contact", response_class=HTMLResponse)
-def contact(request: Request):
-    return templates.TemplateResponse("contact.html", ctx(request))
-
-
-@app.get("/privacy", response_class=HTMLResponse)
-def privacy(request: Request):
-    return templates.TemplateResponse("privacy.html", ctx(request))
-
-
-@app.get("/terms", response_class=HTMLResponse)
-def terms(request: Request):
-    return templates.TemplateResponse("terms.html", ctx(request))
-
-
-@app.get("/thank-you", response_class=HTMLResponse)
-def thank_you(request: Request):
-    return templates.TemplateResponse("thank_you.html", ctx(request))
-
-
-# -----------------------
-# Jobs
-# -----------------------
+# ---------------- Jobs list + detail ----------------
 @app.get("/jobs", response_class=HTMLResponse)
-def jobs_list(request: Request, q: Optional[str] = None, city: Optional[str] = None, category: Optional[str] = None):
-    results = JOBS
+def jobs(request: Request, q: Optional[str] = None, city: Optional[str] = None, category: Optional[str] = None):
+    ctx = _common_context(request)
+    filtered = JOBS
 
     if q:
-        qq = q.lower().strip()
-        results = [j for j in results if qq in j["title"].lower() or qq in j["description"].lower()]
+        q_lower = q.lower()
+        filtered = [j for j in filtered if q_lower in j["title"].lower() or q_lower in j["description"].lower()]
 
     if city:
-        cc = city.lower().strip()
-        results = [j for j in results if cc in j["city"].lower()]
+        city_lower = city.lower()
+        filtered = [j for j in filtered if city_lower in (j.get("city", "")).lower() or city_lower in (j.get("zip", "")).lower()]
 
     if category:
-        results = [j for j in results if j["category"] == category]
+        filtered = [j for j in filtered if j.get("category") == category]
 
-    return templates.TemplateResponse("jobs.html", ctx(request, jobs=results, q=q or "", city=city or "", category=category or ""))
-
+    ctx.update({"jobs": filtered, "q": q or "", "city": city or "", "category": category or ""})
+    return templates.TemplateResponse("jobs.html", ctx)
 
 @app.get("/jobs/{job_id}", response_class=HTMLResponse)
 def job_detail(request: Request, job_id: int):
     job = next((j for j in JOBS if j["id"] == job_id), None)
     if not job:
-        return templates.TemplateResponse("404.html", ctx(request), status_code=404)
-    return templates.TemplateResponse("job_detail.html", ctx(request, job=job))
+        ctx = _common_context(request)
+        ctx.update({"message": "Job not found."})
+        return templates.TemplateResponse("404.html", ctx, status_code=404)
 
+    ctx = _common_context(request)
+    ctx.update({"job": job})
+    return templates.TemplateResponse("job_detail.html", ctx)
 
-# -----------------------
-# Post a job
-# -----------------------
+# ---------------- Post a job (GET + POST) ----------------
 @app.get("/post", response_class=HTMLResponse)
 def post_job_form(request: Request):
-    return templates.TemplateResponse("post_job.html", ctx(request))
+    ctx = _common_context(request)
+    return templates.TemplateResponse("post_job.html", ctx)
 
-
-@app.post("/post")
+@app.post("/post", response_class=HTMLResponse)
 def post_job_submit(
+    request: Request,
     title: str = Form(...),
     category: str = Form(...),
-    city: str = Form(...),
-    pay: int = Form(...),
+    pay: str = Form(...),
+    city: str = Form(""),
+    zip: str = Form(""),
     description: str = Form(...),
+    contact_name: str = Form(...),
+    contact_phone: str = Form(""),
+    contact_email: str = Form(""),
 ):
-    new_id = (max([j["id"] for j in JOBS]) + 1) if JOBS else 1
-    JOBS.insert(0, {
-        "id": new_id,
-        "title": title,
-        "category": category,
-        "city": city,
-        "pay": pay,
-        "description": description,
-    })
+    job = {
+        "id": _next_id(JOBS),
+        "title": title.strip(),
+        "category": category.strip(),
+        "pay": pay.strip(),
+        "city": city.strip(),
+        "zip": zip.strip(),
+        "description": description.strip(),
+        "contact_name": contact_name.strip(),
+        "contact_phone": contact_phone.strip(),
+        "contact_email": contact_email.strip(),
+        "created_at": datetime.utcnow().isoformat(),
+    }
+    JOBS.insert(0, job)  # newest first
     return RedirectResponse(url="/post/success", status_code=303)
-
 
 @app.get("/post/success", response_class=HTMLResponse)
 def post_success(request: Request):
-    return templates.TemplateResponse("post_success.html", ctx(request))
+    ctx = _common_context(request)
+    return templates.TemplateResponse("post_success.html", ctx)
 
-
-# -----------------------
-# Apply
-# -----------------------
+# ---------------- Apply (GET + POST) ----------------
 @app.get("/apply/{job_id}", response_class=HTMLResponse)
 def apply_form(request: Request, job_id: int):
     job = next((j for j in JOBS if j["id"] == job_id), None)
     if not job:
-        return templates.TemplateResponse("apply_not_found.html", ctx(request), status_code=404)
-    return templates.TemplateResponse("apply.html", ctx(request, job=job))
+        ctx = _common_context(request)
+        return templates.TemplateResponse("apply_not_found.html", ctx, status_code=404)
 
+    ctx = _common_context(request)
+    ctx.update({"job": job})
+    return templates.TemplateResponse("apply.html", ctx)
 
 @app.post("/apply/{job_id}")
 def apply_submit(
+    request: Request,
     job_id: int,
-    name: str = Form(...),
+    full_name: str = Form(...),
     phone: str = Form(...),
+    email: str = Form(""),
     message: str = Form(""),
 ):
-    # demo only (no DB)
-    return RedirectResponse(url="/apply/success", status_code=303)
+    job = next((j for j in JOBS if j["id"] == job_id), None)
+    if not job:
+        return RedirectResponse(url="/apply/not-found", status_code=303)
 
+    APPLICATIONS.insert(0, {
+        "job_id": job_id,
+        "full_name": full_name.strip(),
+        "phone": phone.strip(),
+        "email": email.strip(),
+        "message": message.strip(),
+        "created_at": datetime.utcnow().isoformat(),
+    })
+
+    return RedirectResponse(url="/apply/success", status_code=303)
 
 @app.get("/apply/success", response_class=HTMLResponse)
 def apply_success(request: Request):
-    return templates.TemplateResponse("apply_success.html", ctx(request))
+    ctx = _common_context(request)
+    return templates.TemplateResponse("apply_success.html", ctx)
 
+@app.get("/apply/not-found", response_class=HTMLResponse)
+def apply_not_found(request: Request):
+    ctx = _common_context(request)
+    return templates.TemplateResponse("apply_not_found.html", ctx, status_code=404)
 
-# -----------------------
-# Custom 404
-# -----------------------
+# ---------------- Static pages ----------------
+@app.get("/about", response_class=HTMLResponse)
+def about(request: Request):
+    ctx = _common_context(request)
+    return templates.TemplateResponse("about.html", ctx)
+
+@app.get("/contact", response_class=HTMLResponse)
+def contact(request: Request):
+    ctx = _common_context(request)
+    return templates.TemplateResponse("contact.html", ctx)
+
+@app.post("/contact")
+def contact_submit(
+    request: Request,
+    name: str = Form(...),
+    email: str = Form(...),
+    message: str = Form(...),
+):
+    # demo: no email sending yet
+    return RedirectResponse(url="/thank-you", status_code=303)
+
+@app.get("/privacy", response_class=HTMLResponse)
+def privacy(request: Request):
+    ctx = _common_context(request)
+    return templates.TemplateResponse("privacy.html", ctx)
+
+@app.get("/terms", response_class=HTMLResponse)
+def terms(request: Request):
+    ctx = _common_context(request)
+    return templates.TemplateResponse("terms.html", ctx)
+
+@app.get("/thank-you", response_class=HTMLResponse)
+def thank_you(request: Request):
+    ctx = _common_context(request)
+    return templates.TemplateResponse("thank_you.html", ctx)
+
+# ---------------- 404 fallback ----------------
 @app.exception_handler(404)
-def not_found(request: Request, exc):
-    return templates.TemplateResponse("404.html", ctx(request), status_code=404)
+async def not_found(request: Request, exc):
+    ctx = _common_context(request)
+    ctx.update({"message": "Page not found."})
+    return templates.TemplateResponse("404.html", ctx, status_code=404)
