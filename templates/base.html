@@ -1,93 +1,79 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>{% block title %}Win-Win Job — Digital Job Center{% endblock %}</title>
-  <meta name="description" content="{% block meta_desc %}Win-Win Job is a digital job center: fair jobs, fast pay, simple & trusted.{% endblock %}">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/static/styles.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>{% block title %}Win-Win Job – Digital Job Center{% endblock %}</title>
+
+    <meta name="description" content="{% block meta_desc %}Win-Win Job is a digital job center connecting people who need work with people who need help – simply, fairly, and fast.{% endblock %}">
+
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- MAIN CSS (FastAPI safe) -->
+    <link rel="stylesheet" href="{{ url_for('static', path='styles.css') }}">
 </head>
 
 <body>
+
+<!-- ================= HEADER ================= -->
 <header class="topbar">
-  <div class="container topbar__inner">
-    <a class="brand" href="/">
-      <span class="brand__dot" aria-hidden="true"></span>
-      <span class="brand__name">Win-Win Job</span>
-      <span class="brand__tag">Digital Job Center</span>
-    </a>
+    <div class="container topbar_inner">
 
-    <nav class="nav" aria-label="Primary">
-      <a class="nav__link" href="/tasks">Tasks</a>
-      <a class="nav__link" href="/categories">Categories</a>
-      <a class="nav__link" href="/jobs">Jobs</a>
-      <a class="nav__link" href="/post">Post a job</a>
-      <a class="nav__link" href="/about">About</a>
-      <a class="nav__link" href="/contact">Contact</a>
-    </nav>
+        <a href="/" class="brand">
+            <span class="brand_dot" aria-hidden="true">●</span>
+            <span class="brand_name">Win-Win Job</span>
+            <span class="brand_tag">Digital Job Center</span>
+        </a>
 
-    <div class="topbar__cta">
-      <a class="btn btn--ghost" href="/jobs">Find work</a>
-      <a class="btn btn--primary" href="/post">Post a job</a>
+        <nav class="nav" aria-label="Primary">
+            <a class="nav_link" href="/tasks">Tasks</a>
+            <a class="nav_link" href="/categories">Categories</a>
+            <a class="nav_link" href="/jobs">Jobs</a>
+            <a class="nav_link" href="/post-job">Post a job</a>
+            <a class="nav_link" href="/about">About</a>
+            <a class="nav_link" href="/contact">Contact</a>
+        </nav>
+
+        <div class="nav_actions">
+            <a class="btn btn_secondary" href="/privacy">Privacy</a>
+            <a class="btn btn_primary" href="/post-job">Post a job</a>
+        </div>
+
     </div>
-
-    <button class="menuBtn" id="menuBtn" aria-label="Open menu" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
-  </div>
-
-  <div class="mobileMenu" id="mobileMenu" hidden>
-    <div class="container mobileMenu__inner">
-      <a class="mobileMenu__link" href="/tasks">Tasks</a>
-      <a class="mobileMenu__link" href="/categories">Categories</a>
-      <a class="mobileMenu__link" href="/jobs">Jobs</a>
-      <a class="mobileMenu__link" href="/post">Post a job</a>
-      <a class="mobileMenu__link" href="/about">About</a>
-      <a class="mobileMenu__link" href="/contact">Contact</a>
-      <div class="mobileMenu__cta">
-        <a class="btn btn--ghost" href="/jobs">Find work</a>
-        <a class="btn btn--primary" href="/post">Post a job</a>
-      </div>
-    </div>
-  </div>
 </header>
 
-<main class="page">
-  {% block content %}{% endblock %}
-
-  <footer class="footer">
-    <div class="container footer__inner">
-      <div class="footer__brand">
-        <span class="brand__dot" aria-hidden="true"></span>
-        <div>
-          <div class="footer__name">Win-Win Job</div>
-          <div class="footer__small">Fair jobs. Fast pay. Digital & simple.</div>
-        </div>
-      </div>
-
-      <div class="footer__links">
-        <a href="/terms">Terms</a>
-        <a href="/privacy">Privacy</a>
-        <a href="/thank-you">Thank you</a>
-      </div>
-
-      <div class="footer__copy">© <span id="year"></span> Win-Win Job</div>
-    </div>
-  </footer>
+<!-- ================= MAIN ================= -->
+<main class="main">
+    {% block content %}
+    {% endblock %}
 </main>
 
-<script>
-  document.getElementById("year").textContent = new Date().getFullYear();
-  const btn = document.getElementById("menuBtn");
-  const menu = document.getElementById("mobileMenu");
-  btn.addEventListener("click", () => {
-    const expanded = btn.getAttribute("aria-expanded") === "true";
-    btn.setAttribute("aria-expanded", String(!expanded));
-    menu.hidden = expanded;
-  });
-</script>
+<!-- ================= FOOTER ================= -->
+<footer class="footer">
+    <div class="container footer_inner">
+
+        <div class="footer_brand">
+            <strong>Win-Win Job</strong><br>
+            Digital Job Center
+        </div>
+
+        <div class="footer_links">
+            <a href="/terms">Terms</a>
+            <a href="/privacy">Privacy</a>
+            <a href="/contact">Contact</a>
+            <a href="/thank-you">Thank you</a>
+        </div>
+
+        <div class="footer_copy">
+            © {{ year | default(2026) }} Win-Win Job. All rights reserved.
+        </div>
+
+    </div>
+</footer>
+
 </body>
 </html>
