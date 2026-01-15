@@ -1,91 +1,95 @@
 :root {
   --primary: #2563eb;
-  --dark: #0f172a;
-  --gray: #64748b;
+  --primary-dark: #1e40af;
   --bg: #f8fafc;
+  --text: #0f172a;
+  --muted: #64748b;
   --card: #ffffff;
+  --border: #e5e7eb;
   --radius: 14px;
 }
 
 * {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-  margin: 0;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
   background: var(--bg);
-  color: var(--dark);
+  color: var(--text);
+  line-height: 1.6;
 }
 
 /* Layout */
 .container {
   max-width: 1100px;
   margin: auto;
-  padding: 24px;
+  padding: 32px 20px;
 }
 
-/* Topbar */
+/* Header */
 .topbar {
   background: white;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--border);
 }
 
 .topbar_inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  max-width: 1100px;
+  margin: auto;
+  padding: 16px 20px;
 }
 
-/* Brand */
 .brand {
   display: flex;
-  align-items: center;
-  gap: 10px;
+  flex-direction: column;
   text-decoration: none;
-  color: var(--dark);
-}
-
-.brand_dot {
-  width: 10px;
-  height: 10px;
-  background: var(--primary);
-  border-radius: 50%;
 }
 
 .brand_name {
   font-weight: 800;
-  font-size: 18px;
+  font-size: 20px;
+  color: var(--primary);
 }
 
 .brand_tag {
-  font-size: 13px;
-  color: var(--gray);
+  font-size: 12px;
+  color: var(--muted);
 }
 
 /* Nav */
-.nav a {
-  margin-left: 18px;
+.nav {
+  display: flex;
+  gap: 20px;
+}
+
+.nav_link {
   text-decoration: none;
-  color: var(--gray);
+  color: var(--muted);
   font-weight: 500;
 }
 
-.nav a:hover {
+.nav_link:hover {
   color: var(--primary);
 }
 
 /* Hero */
 .hero {
-  background: var(--card);
+  background: white;
   border-radius: var(--radius);
   padding: 48px;
-  margin-top: 32px;
+  margin-top: 40px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
 }
 
 .hero h1 {
   font-size: 42px;
-  margin-bottom: 12px;
+  line-height: 1.2;
+  margin-bottom: 16px;
 }
 
 .hero h1 span {
@@ -93,68 +97,69 @@ body {
 }
 
 .hero p {
-  color: var(--gray);
-  max-width: 600px;
+  color: var(--muted);
+  max-width: 700px;
+  margin-bottom: 32px;
 }
 
 /* Search */
-.search_box {
-  margin-top: 24px;
+.search_bar {
   display: flex;
   gap: 12px;
+  flex-wrap: wrap;
 }
 
-.search_box input {
-  flex: 1;
-  padding: 14px;
+.search_bar input {
+  padding: 14px 16px;
   border-radius: 10px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--border);
+  min-width: 220px;
 }
 
-.search_box button {
+.search_bar button {
   background: var(--primary);
   color: white;
   border: none;
-  padding: 14px 22px;
   border-radius: 10px;
-  font-weight: 600;
+  padding: 14px 22px;
   cursor: pointer;
+  font-weight: 600;
 }
 
-/* Cards */
-.card {
-  background: white;
-  border-radius: var(--radius);
-  padding: 24px;
-  margin-top: 24px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+.search_bar button:hover {
+  background: var(--primary-dark);
+}
+
+/* Sections */
+.section {
+  margin-top: 60px;
+}
+
+.section h2 {
+  font-size: 26px;
+  margin-bottom: 20px;
 }
 
 /* Categories */
 .categories {
   display: flex;
-  gap: 10px;
+  gap: 12px;
   flex-wrap: wrap;
 }
 
 .category {
-  background: #eef2ff;
-  color: var(--primary);
-  padding: 8px 14px;
+  background: white;
+  border: 1px solid var(--border);
+  padding: 10px 16px;
   border-radius: 999px;
-  font-weight: 500;
+  font-size: 14px;
 }
 
 /* Footer */
-.footer {
+footer {
   margin-top: 80px;
-  padding: 40px 0;
-  border-top: 1px solid #e5e7eb;
-  background: white;
-}
-
-.footer_links a {
-  margin-right: 16px;
-  color: var(--gray);
-  text-decoration: none;
+  padding: 32px 20px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 14px;
 }
