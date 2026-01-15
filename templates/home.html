@@ -1,122 +1,100 @@
 {% extends "base.html" %}
-{% block title %}Win-Win Job — Fair jobs. Fast pay.{% endblock %}
+
+{% block title %}
+Win-Win Job – Fair jobs. Fast pay.
+{% endblock %}
 
 {% block body %}
+
 <section class="hero">
   <div class="container">
-    <div class="hero__grid">
-      <!-- Left -->
-      <div class="card hero__card">
-        <div class="badge">
-          <span class="badge__dot"></span>
-          Win-Win Job — Digital job center
-        </div>
+    <div class="grid">
+
+      <!-- LEFT : HERO -->
+      <div class="card card-pad">
+
+        <span class="badge">
+          <span class="dot"></span>
+          {{ brand_name }} — Digital job center
+        </span>
 
         <h1 class="h1">
-          Fair jobs.<br>
+          Fair jobs.<br />
           <span class="grad">Fast pay.</span>
         </h1>
 
-        <p class="lead">
+        <p class="p">
           Find local jobs fast. Apply in minutes. Clear pay & simple rules.
         </p>
 
-        <form class="search" action="/jobs" method="get">
-          <input class="input" name="q" placeholder="Search jobs (cleaning, moving, delivery…)" />
-          <input class="input" name="city" placeholder="City or ZIP" />
-          <button class="btn btn--primary" type="submit">Search</button>
+        <form class="searchbar" action="/jobs" method="get">
+          <input
+            class="input"
+            name="q"
+            placeholder="Search jobs (cleaning, moving, delivery...)"
+          />
+          <input
+            class="input"
+            name="city"
+            placeholder="City or ZIP"
+          />
+          <button class="btn btn_primary" type="submit">
+            Search
+          </button>
         </form>
 
-        <div class="hero__actions">
-          <a class="btn btn--primary" href="/jobs">Find work</a>
-          <a class="btn btn--ghost" href="/post">Post a job</a>
+        <div class="hero_actions">
+          <a class="btn btn_primary" href="/jobs">Find work</a>
+          <a class="btn" href="/post">Post a job</a>
         </div>
 
-        <div class="trustrow">
-          <div class="trustrow__item"><strong>Fast</strong><span>Apply in 60 seconds</span></div>
-          <div class="trustrow__item"><strong>Local</strong><span>City / ZIP matching</span></div>
-          <div class="trustrow__item"><strong>Fair</strong><span>Clear pay + rules</span></div>
-        </div>
-      </div>
-
-      <!-- Right -->
-      <div class="card hero__side">
-        <div class="card__title">
-          Featured jobs
-          <a class="link" href="/jobs">See all →</a>
-        </div>
-
-        {% if featured_jobs and featured_jobs|length > 0 %}
-          <div class="joblist">
-            {% for job in featured_jobs %}
-              <a class="jobitem" href="/jobs/{{ job.id }}">
-                <div class="jobitem__top">
-                  <div class="jobitem__title">{{ job.title }}</div>
-                  <div class="pill">${{ job.pay }}</div>
-                </div>
-                <div class="jobitem__meta">{{ job.city }} · {{ job.category }}</div>
-              </a>
-            {% endfor %}
+        <div class="features">
+          <div class="feature">
+            <strong>Fast</strong>
+            <span>Apply in 60 seconds</span>
           </div>
-        {% else %}
-          <p class="muted">
-            No jobs yet. Be the first to post one.
-          </p>
-          <a class="btn btn--primary" href="/post">Post a job</a>
-        {% endif %}
+          <div class="feature">
+            <strong>Local</strong>
+            <span>City / ZIP matching</span>
+          </div>
+          <div class="feature">
+            <strong>Fair</strong>
+            <span>Clear pay + rules</span>
+          </div>
+        </div>
+
       </div>
+
+      <!-- RIGHT : POPULAR CATEGORIES (REPLACE FEATURED JOBS) -->
+      <div class="card card-pad">
+
+        <div class="card_head">
+          <h3 class="card_title">Popular categories</h3>
+          <a class="link" href="/categories">See all →</a>
+        </div>
+
+        <p class="muted">
+          Choose a category to browse jobs faster.
+        </p>
+
+        <div class="chips">
+          {% for name, icon in categories %}
+            <a class="chip" href="/jobs?cat={{ name | urlencode }}">
+              <span class="chip_icon">{{ icon }}</span>
+              <span class="chip_text">{{ name }}</span>
+            </a>
+          {% endfor %}
+        </div>
+
+        <div class="mini_actions">
+          <a class="btn btn_primary" href="/jobs">Browse jobs</a>
+          <a class="btn" href="/post">Post a job</a>
+        </div>
+
+      </div>
+
     </div>
   </div>
 </section>
 
-<section class="section">
-  <div class="container">
-    <div class="section__head">
-      <h2 class="h2">Popular categories</h2>
-      <p class="muted">Start with what people need most.</p>
-    </div>
-
-    <div class="chips">
-      {% for name, emoji in categories %}
-        <a class="chip" href="/jobs?category={{ name }}">{{ emoji }} {{ name }}</a>
-      {% endfor %}
-    </div>
-  </div>
-</section>
-
-<section class="section">
-  <div class="container">
-    <div class="grid3">
-      <div class="card">
-        <div class="card__title">For Workers</div>
-        <ul class="list">
-          <li><strong>Find</strong> a job near you</li>
-          <li><strong>Apply</strong> fast — no resume</li>
-          <li><strong>Get paid</strong> with clear terms</li>
-        </ul>
-        <a class="link" href="/jobs">Find work →</a>
-      </div>
-
-      <div class="card">
-        <div class="card__title">For Employers</div>
-        <ul class="list">
-          <li><strong>Post</strong> a job in 2 minutes</li>
-          <li><strong>Reach</strong> ready-to-work people</li>
-          <li><strong>Pay fairly</strong> — win-win rules</li>
-        </ul>
-        <a class="link" href="/post">Post a job →</a>
-      </div>
-
-      <div class="card">
-        <div class="card__title">Built for trust</div>
-        <ul class="list">
-          <li>Clear pay & job details</li>
-          <li>Simple rules & reporting</li>
-          <li>No unnecessary barriers</li>
-        </ul>
-        <p class="muted small">Safety tip: confirm pay + location before starting.</p>
-      </div>
-    </div>
-  </div>
-</section>
 {% endblock %}

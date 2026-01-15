@@ -71,9 +71,17 @@ def home(request: Request):
     return templates.TemplateResponse("home.html", ctx(request, featured_jobs=featured))
 
 
-@app.get("/categories", response_class=HTMLResponse)
-def categories_page(request: Request):
-    return templates.TemplateResponse("categories.html", ctx(request))
+@app.get("/", response_class=HTMLResponse)
+def home(request: Request):
+    return templates.TemplateResponse(
+        "home.html",
+        {
+            "request": request,
+            "brand_name": BRAND_NAME,
+            "brand_tagline": BRAND_TAGLINE,
+            "categories": CATEGORIES,   # ✅ AJOUTE ÇA
+        },
+    )
 
 
 @app.get("/tasks", response_class=HTMLResponse)
