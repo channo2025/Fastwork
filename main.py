@@ -390,3 +390,20 @@ def apply_success(request: Request, job_id: int):
             "job": job
         }
     )
+from fastapi.responses import RedirectResponse
+
+@app.get("/apply-success/{job_id}")
+def apply_success(request: Request, job_id: int):
+    job = get_job_by_id(job_id)
+
+    # sécurité : si job inexistant
+    if not job:
+        return RedirectResponse(url="/jobs", status_code=302)
+
+    return templates.TemplateResponse(
+        "apply_success.html",
+        {
+            "request": request,
+            "job": job
+        }
+    )
