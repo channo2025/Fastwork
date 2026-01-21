@@ -3,15 +3,11 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-
   <title>{% block title %}Win-Win Job{% endblock %}</title>
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-
   <link rel="stylesheet" href="/static/style.css" />
-  {% block head %}{% endblock %}
 </head>
 
 <body>
@@ -27,36 +23,30 @@
         <a class="nav__link" href="/tasks">Tasks</a>
         <a class="nav__link" href="/categories">Categories</a>
         <a class="nav__link" href="/jobs">Jobs</a>
+        <a class="nav__link" href="/post">Post a job</a>
+        <a class="nav__link" href="/about">About</a>
+        <a class="nav__link" href="/contact">Contact</a>
       </nav>
 
-      <div class="topbar__actions">
+      <div class="nav__actions">
         <a class="btn btn--ghost" href="/privacy">Privacy</a>
         <a class="btn btn--primary" href="/post">Post a job</a>
       </div>
     </div>
   </header>
 
-  <main class="page">
-    {% block content %}{% endblock %}
+  <main>
+    {% block body %}{% endblock %}
   </main>
 
   <footer class="footer">
-    <div class="footer__inner">
-      <p>© 2026 Win-Win Job. All rights reserved.</p>
+    <div class="container footer__inner">
+      <div class="muted">© 2026 Win-Win Job. All rights reserved.</div>
       <div class="footer__links">
         <a href="/privacy">Privacy</a>
         <a href="/terms">Terms</a>
       </div>
     </div>
   </footer>
-
-  <!-- iOS/Safari: avoid scroll restore -->
-  <script>
-    window.addEventListener("pageshow", function () {
-      window.scrollTo(0, 0);
-    });
-  </script>
-
-  {% block scripts %}{% endblock %}
 </body>
 </html>

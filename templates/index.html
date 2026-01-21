@@ -1,15 +1,13 @@
 {% extends "base.html" %}
-
-{% block title %}Win-Win Job – Fair jobs. Fast pay.{% endblock %}
+{% block title %}Win-Win Job — Fair jobs. Fast pay.{% endblock %}
 
 {% block content %}
 <section class="hero">
   <div class="container hero__grid">
     <div class="hero__left">
-
       <div class="pill">
         <span class="pill__dot" aria-hidden="true"></span>
-        <span>Win-Win Job – Digital job center</span>
+        <span>Win-Win Job — Digital job center</span>
       </div>
 
       <h1 class="hero__title">
@@ -19,69 +17,126 @@
       </h1>
 
       <p class="hero__desc">
-        A digital job center connecting people who need work with people who need help.
+        A digital job center connecting people who need work with people who need help — simply, fairly, and fast.
         No resumes. No long interviews. Just real jobs and fair pay.
       </p>
 
       <div class="hero__actions">
-        <a class="btn btn--primary btn--lg" href="/jobs">Find jobs</a>
+        <a class="btn btn--primary btn--lg" href="/jobs">Find work</a>
         <a class="btn btn--soft btn--lg" href="/post">Post a job</a>
       </div>
 
-      <div class="hero__trust">
-        <span>✔ Quick posting</span>
-        <span>✔ Local tasks</span>
-        <span>✔ Direct contact</span>
-      </div>
+      <div class="searchCard" role="region" aria-label="Quick search">
+        <form class="search" action="/jobs" method="get">
+          <input name="q" type="text" placeholder="Search jobs (cleaning, moving, delivery…)" />
+          <input name="loc" type="text" placeholder="City or ZIP" />
+          <button class="btn btn--primary" type="submit">Search</button>
+        </form>
 
-    </div>
-
-    <div class="hero__right">
-      <div class="card card--glass">
-        <div class="card__title">Popular tasks</div>
-        <ul class="mini-list">
-          <li>Cleaning & organizing</li>
-          <li>Moving help</li>
-          <li>Yard work</li>
-          <li>Shopping & errands</li>
-          <li>Handyman tasks</li>
-        </ul>
-
-        <div class="card__cta">
-          <a class="btn btn--ghost btn--sm" href="/tasks">Browse tasks</a>
-          <a class="btn btn--primary btn--sm" href="/jobs">Browse jobs</a>
+        <div class="quickLinks">
+          <a class="chip" href="/tasks">Popular tasks</a>
+          <a class="chip" href="/categories">Categories</a>
+          <a class="chip" href="/post">Post a job</a>
         </div>
       </div>
     </div>
 
+    <div class="hero__right">
+      <div class="stats">
+        <div class="stat">
+          <div class="stat__title">Fast</div>
+          <div class="stat__desc">Apply in <b>60 seconds</b></div>
+        </div>
+        <div class="stat">
+          <div class="stat__title">Local</div>
+          <div class="stat__desc">City / ZIP matching</div>
+        </div>
+        <div class="stat">
+          <div class="stat__title">Fair</div>
+          <div class="stat__desc">Clear pay + rules</div>
+        </div>
+      </div>
+
+      <div class="featured">
+        <div class="featured__head">
+          <h2 class="sectionTitle">Featured jobs</h2>
+          <a class="link" href="/jobs">See all →</a>
+        </div>
+
+        <div class="featured__empty">
+          <p><b>Demo mode:</b> add jobs from “Post a job” to see them here later.</p>
+          <a class="btn btn--primary" href="/post">Post a job</a>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
 <section class="section">
   <div class="container">
-    <h2 class="section__title">How it works</h2>
-    <div class="grid3">
-      <div class="feature">
-        <div class="feature__icon">1</div>
-        <div class="feature__text">
-          <div class="feature__title">Post or browse</div>
-          <div class="feature__desc">Post a job in minutes or browse local jobs.</div>
-        </div>
+    <h2 class="sectionTitle">Popular categories</h2>
+    <div class="categories">
+      <a class="cat" href="/jobs?q=cleaning">🧽 Cleaning</a>
+      <a class="cat" href="/jobs?q=moving">📦 Moving help</a>
+      <a class="cat" href="/jobs?q=yard">🌿 Yard work</a>
+      <a class="cat" href="/jobs?q=delivery">🚚 Delivery</a>
+      <a class="cat" href="/jobs?q=handyman">🛠 Handyman</a>
+      <a class="cat" href="/jobs?q=babysitting">👶 Babysitting</a>
+    </div>
+  </div>
+</section>
+
+<section class="section section--soft">
+  <div class="container">
+    <div class="sectionHead">
+      <h2 class="sectionTitle">How it works</h2>
+      <p class="sectionDesc">Two sides. One simple system. Everyone wins.</p>
+    </div>
+
+    <div class="twoCol">
+      <div class="panel">
+        <h3 class="panel__title">For Workers</h3>
+        <ol class="steps">
+          <li><b>Find a job near you</b><br><span>Browse real local tasks in minutes.</span></li>
+          <li><b>Apply fast</b><br><span>No resume required. Just contact info.</span></li>
+          <li><b>Work & get paid</b><br><span>Clear pay and simple expectations.</span></li>
+        </ol>
+        <a class="btn btn--primary" href="/jobs">Find work</a>
       </div>
 
-      <div class="feature">
-        <div class="feature__icon">2</div>
-        <div class="feature__text">
-          <div class="feature__title">Connect fast</div>
-          <div class="feature__desc">Message directly. No long process.</div>
-        </div>
+      <div class="panel">
+        <h3 class="panel__title">For Employers</h3>
+        <ol class="steps">
+          <li><b>Post a job</b><br><span>Describe the task + pay + location.</span></li>
+          <li><b>Get fast help</b><br><span>Reach ready-to-work people nearby.</span></li>
+          <li><b>Pay fairly</b><br><span>Win-Win means fair work, fair pay.</span></li>
+        </ol>
+        <a class="btn btn--soft" href="/post">Post a job</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="trust">
+  <div class="container">
+    <div class="trust">
+      <div class="trust__left">
+        <h2 class="sectionTitle">Built for trust</h2>
+        <p class="sectionDesc">
+          Clear pay. Clear details. Simple rules. We’re building a safer jobcenter experience online.
+        </p>
+        <ul class="checks">
+          <li>✅ Clear pay and job details</li>
+          <li>✅ Simple rules & reporting</li>
+          <li>✅ No unnecessary barriers</li>
+        </ul>
       </div>
 
-      <div class="feature">
-        <div class="feature__icon">3</div>
-        <div class="feature__text">
-          <div class="feature__title">Work & get paid</div>
-          <div class="feature__desc">Complete the job and get paid fairly.</div>
+      <div class="trust__right">
+        <div class="trustCard">
+          <h3>Quick safety tips</h3>
+          <p>Confirm pay + location before starting. Meet in safe places when possible.</p>
+          <p class="muted">Later: verified employers, reporting, and ratings.</p>
         </div>
       </div>
     </div>
