@@ -343,67 +343,27 @@ def not_found(request: Request, exc):
 # Open:
 #   http://127.0.0.1:8000
 
-from fastapi import FastAPI, Request, Form
-from fastapi.responses import HTMLResponse, RedirectResponse
-from fastapi.templating import Jinja2Templates
+@app.post("/apply/{job_id}")
+async def submit_application(
+    request: Request,
+    job_id: int,
+    full_name: str = Form(...),
+    phone: str = Form(...),
+    email: str = Form(None),
+    message: str = Form(None),
+):
+    return RedirectResponse(
+        url=f"/apply-success/{job_id}",
+        status_code=303
+    )
 
-# ... ton code existant ...
 
 @app.get("/apply-success/{job_id}", response_class=HTMLResponse)
-def apply_success(request: Request, job_id: int):
-    # Sécurisé: si le job n'existe pas en DB, on affiche quand même une page success
-    job = None
-    try:
-        job = get_job_by_id(job_id)  # si tu as ce helper
-    except Exception:
-        job = None
-
-    if not job:
-        job = {
-            "id": job_id,
-            "title": "This job",
-            "city": "",
-            "category": "",
-            "pay": ""
-        }
-
-    return templates.TemplateResponse(
-        "apply_success.html",
-        {"request": request, "job": job}
-    )
-
-    @app.get("/apply-success/{job_id}", response_class=HTMLResponse)
-def apply_success(request: Request, job_id: int):
-    job = get_job_by_id(job_id)
-
-    # Sécurité : si le job n’existe pas
-    if not job:
-        return templates.TemplateResponse(
-            "apply_not_found.html",
-            {"request": request}
-        )
-
+async def apply_success(request: Request, job_id: int):
     return templates.TemplateResponse(
         "apply_success.html",
         {
             "request": request,
-            "job": job
-        }
-    )
-from fastapi.responses import RedirectResponse
-
-@app.get("/apply-success/{job_id}")
-def apply_success(request: Request, job_id: int):
-    job = get_job_by_id(job_id)
-
-    # sécurité : si job inexistant
-    if not job:
-        return RedirectResponse(url="/jobs", status_code=302)
-
-    return templates.TemplateResponse(
-        "apply_success.html",
-        {
-            "request": request,
-            "job": job
+            "job_id": job_id,
         }
     )
