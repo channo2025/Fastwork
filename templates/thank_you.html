@@ -1,20 +1,13 @@
 {% extends "base.html" %}
-{% block title %}Thank you — Win-Win Job{% endblock %}
-
-{% block content %}
-<section class="section">
-  <div class="container">
-    <div class="featured">
-      <div class="featured__head">
-        <h1 class="sectionTitle">✅ Thank you</h1>
-        <a class="link" href="/">Back home →</a>
-      </div>
-
-      <div class="featured__empty">
-        <p>We received your message. We’ll review it as soon as possible.</p>
-        <a class="btn btn--primary" href="/jobs">Browse jobs</a>
-        <a class="btn btn--soft" href="/post">Post a job</a>
-      </div>
+{% block title %}Thank you – Win-Win Job{% endblock %}
+{% block body %}
+<section class="container">
+  <div class="card card--pad" style="max-width:760px;">
+    <h1 class="h2">✅ Job posted!</h1>
+    <p class="muted">Your listing is live. You can view it in Jobs.</p>
+    <div class="cta">
+      <a class="btn btn--primary" href="/jobs">View jobs</a>
+      <a class="btn btn--ghost" href="/post">Post another</a>
     </div>
   </div>
 </section>

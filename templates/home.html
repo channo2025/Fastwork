@@ -1,100 +1,66 @@
 {% extends "base.html" %}
-
-{% block title %}
-Win-Win Job – Fair jobs. Fast pay.
-{% endblock %}
+{% block title %}Win-Win Job – Fair jobs. Fast pay.{% endblock %}
 
 {% block body %}
-
-<section class="hero">
-  <div class="container">
-    <div class="grid">
-
-      <!-- LEFT : HERO -->
-      <div class="card card-pad">
-
-        <span class="badge">
-          <span class="dot"></span>
-          {{ brand_name }} — Digital job center
-        </span>
-
-        <h1 class="h1">
-          Fair jobs.<br />
-          <span class="grad">Fast pay.</span>
-        </h1>
-
-        <p class="p">
-          Find local jobs fast. Apply in minutes. Clear pay & simple rules.
-        </p>
-
-        <form class="searchbar" action="/jobs" method="get">
-          <input
-            class="input"
-            name="q"
-            placeholder="Search jobs (cleaning, moving, delivery...)"
-          />
-          <input
-            class="input"
-            name="city"
-            placeholder="City or ZIP"
-          />
-          <button class="btn btn_primary" type="submit">
-            Search
-          </button>
-        </form>
-
-        <div class="hero_actions">
-          <a class="btn btn_primary" href="/jobs">Find work</a>
-          <a class="btn" href="/post">Post a job</a>
-        </div>
-
-        <div class="features">
-          <div class="feature">
-            <strong>Fast</strong>
-            <span>Apply in 60 seconds</span>
-          </div>
-          <div class="feature">
-            <strong>Local</strong>
-            <span>City / ZIP matching</span>
-          </div>
-          <div class="feature">
-            <strong>Fair</strong>
-            <span>Clear pay + rules</span>
-          </div>
-        </div>
-
+<section class="container hero">
+  <div class="grid">
+    <!-- Left big hero -->
+    <div class="card card--pad">
+      <div class="badge">
+        <span class="dot"></span>
+        Win-Win Job — Digital job center
       </div>
 
-      <!-- RIGHT : POPULAR CATEGORIES (REPLACE FEATURED JOBS) -->
-      <div class="card card-pad">
+      <h1 class="h1">
+        Fair jobs.<br/>
+        <span class="grad">Fast pay.</span>
+      </h1>
 
-        <div class="card_head">
-          <h3 class="card_title">Popular categories</h3>
-          <a class="link" href="/categories">See all →</a>
-        </div>
+      <p class="p">
+        Find local jobs fast. Apply in minutes. Clear pay & simple rules.
+      </p>
 
-        <p class="muted">
-          Choose a category to browse jobs faster.
-        </p>
+      <form class="searchbar" action="/jobs" method="get">
+        <input class="input" name="q" placeholder="Search jobs (cleaning, moving, delivery…)" />
+        <input class="input" name="city" placeholder="City or ZIP" />
+        <button class="btn btn--primary" type="submit">Search</button>
+      </form>
 
-        <div class="chips">
-          {% for name, icon in categories %}
-            <a class="chip" href="/jobs?cat={{ name | urlencode }}">
-              <span class="chip_icon">{{ icon }}</span>
-              <span class="chip_text">{{ name }}</span>
-            </a>
-          {% endfor %}
-        </div>
-
-        <div class="mini_actions">
-          <a class="btn btn_primary" href="/jobs">Browse jobs</a>
-          <a class="btn" href="/post">Post a job</a>
-        </div>
-
+      <div class="cta">
+        <a class="btn btn--primary" href="/jobs">Find work</a>
+        <a class="btn btn--ghost" href="/post">Post a job</a>
       </div>
 
+      <div class="mini">
+        <div class="mini__item"><b>Fast</b><span>Apply in 60 seconds</span></div>
+        <div class="mini__item"><b>Local</b><span>City / ZIP matching</span></div>
+        <div class="mini__item"><b>Fair</b><span>Clear pay + rules</span></div>
+      </div>
     </div>
+
+    <!-- Right card -->
+    <aside class="card card--pad">
+      <div class="card__head">
+        <div>
+          <h3 class="h3">Popular categories</h3>
+          <p class="muted">Choose a category to browse jobs faster.</p>
+        </div>
+        <a class="link" href="/categories">See all →</a>
+      </div>
+
+      <div class="chips chips--wrap">
+        {% for name, icon in categories %}
+          <a class="chip" href="/jobs?category={{ name }}">{{ icon }} {{ name }}</a>
+        {% endfor %}
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="cta">
+        <a class="btn btn--primary" href="/jobs">Browse jobs</a>
+        <a class="btn btn--ghost" href="/post">Post a job</a>
+      </div>
+    </aside>
   </div>
 </section>
-
 {% endblock %}

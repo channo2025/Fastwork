@@ -1,64 +1,37 @@
 {% extends "base.html" %}
-{% block title %}Post a job — Win-Win Job{% endblock %}
+{% block title %}Post a job – Win-Win Job{% endblock %}
 
-{% block content %}
-<section class="section section--soft">
-  <div class="container">
-    <div class="sectionHead">
-      <h1 class="sectionTitle">Post a job (2 minutes)</h1>
-      <p class="sectionDesc">Describe the task clearly. Set fair pay. Get fast help.</p>
-    </div>
+{% block body %}
+<section class="container">
+  <div class="card card--pad" style="max-width:760px;">
+    <h1 class="h2">Post a job</h1>
+    <p class="muted">Describe the task, pay, and location.</p>
 
-    <div class="postGrid">
-      <form class="formCard" action="/post" method="post">
-        <div class="field">
-          <label for="title">Job title</label>
-          <input id="title" name="title" placeholder="e.g., Cleaning apartment (2 hours)" required />
-        </div>
+    <form action="/post" method="post" class="form" style="margin-top:14px;">
+      <label class="label">Title</label>
+      <input class="input" name="title" placeholder="Move a couch" required>
 
-        <div class="field">
-          <label for="description">Description</label>
-          <textarea id="description" name="description" rows="4" placeholder="What help do you need? When? Any tools needed?"></textarea>
-        </div>
+      <label class="label">Category</label>
+      <select class="input" name="category" required>
+        {% for name, icon in categories %}
+          <option value="{{ name }}">{{ icon }} {{ name }}</option>
+        {% endfor %}
+      </select>
 
-        <div class="fieldRow">
-          <div class="field">
-            <label for="pay">Pay ($)</label>
-            <input id="pay" name="pay" type="number" min="0" placeholder="e.g., 80" required />
-          </div>
-          <div class="field">
-            <label for="location">City / ZIP</label>
-            <input id="location" name="location" placeholder="e.g., Houston 77084" required />
-          </div>
-        </div>
+      <label class="label">City</label>
+      <input class="input" name="city" placeholder="Portland, OR" required>
 
-        <div class="fieldRow">
-          <div class="field">
-            <label for="when">When</label>
-            <input id="when" name="when" placeholder="e.g., Today 5pm" />
-          </div>
-          <div class="field">
-            <label for="contact_phone">Contact phone</label>
-            <input id="contact_phone" name="contact_phone" placeholder="e.g., (503) 000-0000" required />
-          </div>
-        </div>
+      <label class="label">Pay (USD)</label>
+      <input class="input" type="number" name="pay" placeholder="60" min="1" required>
 
-        <button class="btn btn--primary btn--lg" type="submit">Publish job</button>
-        <p class="formNote">By posting, you agree to fair pay and respectful behavior.</p>
-      </form>
+      <label class="label">Description</label>
+      <textarea class="input" name="description" rows="5" placeholder="Details, time, requirements…" required></textarea>
 
-      <div class="sideCard">
-        <h3>Make it “Win-Win”</h3>
-        <ul class="bullets">
-          <li><b>Be specific:</b> task, time, location, tools.</li>
-          <li><b>Be fair:</b> clear pay for clear work.</li>
-          <li><b>Be safe:</b> avoid unsafe requests or locations.</li>
-        </ul>
-        <div class="miniCta">
-          <a class="btn btn--soft" href="/terms">Read posting rules</a>
-        </div>
+      <div class="cta">
+        <button class="btn btn--primary" type="submit">Publish</button>
+        <a class="btn btn--ghost" href="/jobs">Cancel</a>
       </div>
-    </div>
+    </form>
   </div>
 </section>
 {% endblock %}

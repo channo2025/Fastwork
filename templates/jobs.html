@@ -1,52 +1,46 @@
 {% extends "base.html" %}
-{% block title %}Jobs — Win-Win Job{% endblock %}
+{% block title %}Jobs – Win-Win Job{% endblock %}
 
-{% block content %}
-<section class="section">
-  <div class="container">
-    <div class="sectionHead">
-      <h1 class="sectionTitle">Jobs</h1>
-      <p class="sectionDesc">Browse local jobs. Apply fast. Keep it fair.</p>
-    </div>
+{% block body %}
+<section class="container">
+  <div class="card card--pad">
+    <h1 class="h2">Jobs</h1>
+    <p class="muted">Search and filter available jobs.</p>
 
-    <div class="searchCard">
-      <form class="search" action="/jobs" method="get">
-        <input name="q" type="text" value="{{ q or '' }}" placeholder="Search jobs (cleaning, moving…)" />
-        <input name="loc" type="text" value="{{ loc or '' }}" placeholder="City or ZIP" />
-        <button class="btn btn--primary" type="submit">Search</button>
-      </form>
-    </div>
-
-    <div style="height:14px"></div>
-
-    {% if jobs and jobs|length > 0 %}
-      <div class="twoCol" style="grid-template-columns: 1fr 1fr;">
-        {% for job in jobs %}
-          <div class="panel">
-            <h3 style="margin:0 0 6px; letter-spacing:-.02em;">{{ job.title }}</h3>
-            <p class="sectionDesc" style="margin-top:0;">{{ job.description or "No description." }}</p>
-            <div class="categories" style="margin-top:10px;">
-              {% if job.pay %}<span class="cat">💵 ${{ job.pay }}</span>{% endif %}
-              {% if job.location %}<span class="cat">📍 {{ job.location }}</span>{% endif %}
-              {% if job.when %}<span class="cat">⏱ {{ job.when }}</span>{% endif %}
-            </div>
-            <div style="height:10px"></div>
-            <a class="btn btn--soft" href="/jobs/{{ job.id }}">View details</a>
-          </div>
+    <form class="searchbar" action="/jobs" method="get" style="margin-top:14px;">
+      <input class="input" name="q" value="{{ q }}" placeholder="Keyword (moving, cleaning…)" />
+      <input class="input" name="city" value="{{ city }}" placeholder="City or ZIP" />
+      <select class="input" name="category">
+        <option value="">All categories</option>
+        {% for name, icon in categories %}
+          <option value="{{ name }}" {% if category==name %}selected{% endif %}>{{ icon }} {{ name }}</option>
         {% endfor %}
-      </div>
-    {% else %}
-      <div class="featured">
-        <div class="featured__head">
-          <h2 class="sectionTitle">No jobs found</h2>
-          <a class="link" href="/post">Post one →</a>
-        </div>
-        <div class="featured__empty">
-          <p>Try a different keyword or location. Or post the first job to start the marketplace.</p>
-          <a class="btn btn--primary" href="/post">Post a job</a>
-        </div>
-      </div>
-    {% endif %}
+      </select>
+      <button class="btn btn--primary" type="submit">Search</button>
+    </form>
   </div>
+
+  <div style="height:16px;"></div>
+
+  {% if jobs|length == 0 %}
+    <div class="card card--pad">
+      <p class="muted">No jobs found. Try a different search, or <a class="link" href="/post">post a job</a>.</p>
+    </div>
+  {% else %}
+    <div class="list">
+      {% for j in jobs %}
+        <div class="card card--pad job">
+          <div class="job__top">
+            <div>
+              <div class="job__title">{{ j.title }}</div>
+              <div class="muted">{{ j.city }} • {{ j.category }}</div>
+            </div>
+            <div class="pill">${{ j.pay }}</div>
+          </div>
+          <div class="job__desc">{{ j.description }}</div>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
 </section>
 {% endblock %}

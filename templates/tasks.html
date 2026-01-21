@@ -1,27 +1,14 @@
 {% extends "base.html" %}
-{% block title %}Tasks — Win-Win Job{% endblock %}
-{% block content %}
-<section class="section">
-  <div class="container">
-    <div class="sectionHead">
-      <h1 class="sectionTitle">Popular tasks</h1>
-      <p class="sectionDesc">Quick tasks people post every day. Pick one and apply fast.</p>
-    </div>
+{% block title %}Tasks – Win-Win Job{% endblock %}
+{% block body %}
+<section class="container">
+  <h1 class="h2">Tasks</h1>
+  <p class="muted">Browse tasks by category.</p>
 
-    <div class="categories">
-      <a class="cat" href="/jobs?q=cleaning">🧽 Cleaning</a>
-      <a class="cat" href="/jobs?q=moving">📦 Moving help</a>
-      <a class="cat" href="/jobs?q=yard">🌿 Yard work</a>
-      <a class="cat" href="/jobs?q=delivery">🚚 Delivery</a>
-      <a class="cat" href="/jobs?q=handyman">🛠 Handyman</a>
-      <a class="cat" href="/jobs?q=babysitting">👶 Babysitting</a>
-      <a class="cat" href="/jobs?q=packing">📦 Packing</a>
-      <a class="cat" href="/jobs?q=carwash">🚗 Car wash</a>
-      <a class="cat" href="/jobs?q=restaurant">🍽 Restaurant help</a>
-    </div>
-
-    <div style="height:14px"></div>
-    <a class="btn btn--primary" href="/jobs">Browse all jobs</a>
+  <div class="chips chips--wrap" style="margin-top:14px;">
+    {% for name, icon in categories %}
+      <a class="chip" href="/jobs?category={{ name }}">{{ icon }} {{ name }}</a>
+    {% endfor %}
   </div>
 </section>
 {% endblock %}
