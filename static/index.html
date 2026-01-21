@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>BaraConnect — Your online job hub</title>
+  <meta name="description" content="Find fast, local work and get paid—moving, cleaning, yard work, deliveries, and more. No resume. No interviews." />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <header class="nav">
+    <div class="nav__inner">
+      <div class="brand">
+        <div class="brand__icon" aria-hidden="true"></div>
+        <div class="brand__text">
+          <div class="brand__name"><span class="b1">Bara</span><span class="b2">Connect</span></div>
+          <div class="brand__tag">Your online job hub</div>
+        </div>
+      </div>
+
+      <nav class="nav__links">
+        <a href="#how">How it works</a>
+        <a href="#jobs">Jobs</a>
+        <a href="#post">Post a job</a>
+      </nav>
+
+      <div class="nav__cta">
+        <button class="btn btn--ghost" id="refreshBtn">Refresh</button>
+        <a class="btn btn--primary" href="#post">Get Started</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="hero">
+    <div class="hero__container">
+      <section class="hero__left">
+        <div class="pill"><span class="dot"></span> BaraConnect — Your online job hub</div>
+
+        <h1>
+          Find work today.<br/>
+          <span class="grad">Get paid today.</span>
+        </h1>
+
+        <p class="sub">
+          Fast, local jobs in minutes—cleaning, moving, yard work, deliveries and more.
+          No resume. No interviews. Just real work and real pay.
+        </p>
+
+        <div class="search">
+          <input id="q" placeholder="Search jobs (e.g., moving, cleaning, yard work)" />
+          <input id="city" placeholder="City or ZIP" />
+          <button class="btn btn--primary" id="searchBtn">Search jobs</button>
+        </div>
+
+        <div class="badges">
+          <div class="badge"><strong>Quick sign-up</strong><span>Start in minutes</span></div>
+          <div class="badge"><strong>Verified gigs</strong><span>Safer matching</span></div>
+          <div class="badge"><strong>Fast payouts</strong><span>Get paid fast</span></div>
+        </div>
+      </section>
+
+      <aside class="hero__right" aria-label="Demo job card">
+        <div class="card">
+          <div class="card__top">
+            <div class="avatar"></div>
+            <div class="lines">
+              <div class="line l1"></div>
+              <div class="line l2"></div>
+            </div>
+            <div class="tag">Today</div>
+          </div>
+          <div class="card__body">
+            <h3>Moving help</h3>
+            <p>2 hours • $90 • Portland, OR</p>
+            <div class="chips">
+              <span class="chip">Same-day</span>
+              <span class="chip">No resume</span>
+              <span class="chip">Fast pay</span>
+            </div>
+            <div class="card__actions">
+              <button class="mini mini--primary" type="button">Apply</button>
+              <button class="mini mini--ghost" type="button">Details</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="stats">
+          <div class="stat"><span class="k">10k+</span><span class="l">Tasks posted</span></div>
+          <div class="stat"><span class="k">4.8★</span><span class="l">Average rating</span></div>
+          <div class="stat"><span class="k">24h</span><span class="l">Fast matches</span></div>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <section class="section" id="how">
+    <div class="wrap">
+      <h2>How it works</h2>
+      <div class="grid3">
+        <div class="box">
+          <h3>1) Post or search</h3>
+          <p>Post a gig in seconds—or browse local jobs near you.</p>
+        </div>
+        <div class="box">
+          <h3>2) Connect fast</h3>
+          <p>Message and apply instantly—no resume needed for most gigs.</p>
+        </div>
+        <div class="box">
+          <h3>3) Get paid</h3>
+          <p>Same-day / fast payouts (cash, hourly, or fixed pay depending on the job).</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="jobs">
+    <div class="wrap">
+      <div class="row">
+        <h2>Latest jobs</h2>
+        <div class="small">Tip: Search “moving”, “cleaning”, “yard”, “delivery”…</div>
+      </div>
+
+      <div id="jobsList" class="jobs"></div>
+      <div id="emptyState" class="empty" style="display:none;">
+        No jobs yet. Be the first to <a href="#post">post a job</a>.
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="post">
+    <div class="wrap">
+      <h2>Post a job (fast money gigs)</h2>
+      <p class="small">Keep it clear: title, pay, city, and what you need done.</p>
+
+      <form id="postForm" class="form">
+        <div class="frow">
+          <input name="title" placeholder="Job title (e.g., Help me move a couch)" required />
+          <input name="city" placeholder="City or ZIP (e.g., Portland, OR)" required />
+        </div>
+
+        <div class="frow">
+          <input name="category" placeholder="Category (Cleaning, Moving, Yard, Delivery...)" required />
+          <input name="pay_amount" type="number" step="0.01" placeholder="Pay amount (e.g., 90)" required />
+        </div>
+
+        <div class="frow">
+          <input name="pay_type" placeholder="Pay type (cash, same-day, hourly)" required />
+          <input name="duration_hours" type="number" step="0.5" placeholder="Duration hours (optional)" />
+        </div>
+
+        <textarea name="description" placeholder="Describe the job (optional)"></textarea>
+        <input name="contact" placeholder="Contact (phone/email - optional)" />
+
+        <button class="btn btn--primary" type="submit">Post job</button>
+        <span id="postMsg" class="small"></span>
+      </form>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="wrap">
+      <div class="footrow">
+        <div>
+          <strong>BaraConnect</strong>
+          <div class="small">Your online job hub</div>
+        </div>
+        <div class="small">© <span id="year"></span> BaraConnect. All rights reserved.</div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

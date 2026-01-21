@@ -12,6 +12,12 @@ from fastapi.templating import Jinja2Templates
 
 app = FastAPI(title="Win-Win Job")
 
+templates = Jinja2Templates(directory="templates")
+
+@app.get("/", response_class=HTMLResponse)
+def home(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
+
 # ----------------------------
 # Static + Templates
 # ----------------------------

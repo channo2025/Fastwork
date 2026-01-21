@@ -189,3 +189,12 @@ main.page {
   flex: 1;
   display: block;
 }
+
+html, body { height: 100%; }
+body { margin: 0; min-height: 100vh; display: flex; flex-direction: column; }
+main.page { flex: 1; display: block; }
+
+.container { width: 100%; max-width: 1100px; margin: 0 auto; padding: 24px 16px; }
+
+/* Safety: never hide hero by mistake */
+.hero { display: block; }

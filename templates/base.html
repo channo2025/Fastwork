@@ -15,8 +15,6 @@
 </head>
 
 <body>
-
-  <!-- HEADER -->
   <header class="topbar">
     <div class="topbar__inner">
       <a class="brand" href="/">
@@ -38,12 +36,10 @@
     </div>
   </header>
 
-  <!-- MAIN CONTENT (IMPORTANT FOR MOBILE) -->
   <main class="page">
     {% block content %}{% endblock %}
   </main>
 
-  <!-- FOOTER -->
   <footer class="footer">
     <div class="footer__inner">
       <p>© 2026 Win-Win Job. All rights reserved.</p>
@@ -54,7 +50,7 @@
     </div>
   </footer>
 
-  <!-- iOS Safari fix: forces top on page restore -->
+  <!-- iOS/Safari: avoid scroll restore -->
   <script>
     window.addEventListener("pageshow", function () {
       window.scrollTo(0, 0);
