@@ -1,10 +1,6 @@
 # main.py
-# Win-Win Job — Digital Job Center (FastAPI + Jinja2)
-# ✅ Demo mode (in-memory jobs + applications)
-# ✅ Pages: home, jobs list, job detail, apply form, apply success, terms, privacy, about, contact, tasks, categories
-# ✅ Static files: /static (style.css)
+from __future__ import annotations
 
-import os
 from datetime import datetime
 from typing import Dict, List, Optional
 
@@ -14,29 +10,28 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 
-# -------------------------
-# App
-# -------------------------
 app = FastAPI(title="Win-Win Job")
 
-# Static + templates
+# ----------------------------
+# Static + Templates
+# ----------------------------
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
-# Branding
+# ----------------------------
+# Brand / Globals (available in ALL templates)
+# ----------------------------
 BRAND_NAME = "Win-Win Job"
 BRAND_TAGLINE = "Fair jobs. Fast pay. Digital & simple."
 
-# Make globals available in all templates (optional but handy)
 templates.env.globals["BRAND_NAME"] = BRAND_NAME
 templates.env.globals["BRAND_TAGLINE"] = BRAND_TAGLINE
 templates.env.globals["YEAR"] = datetime.now().year
 
-
-# -------------------------
-# Demo data
-# -------------------------
-CATEGORIES: List[tuple] = [
+# ----------------------------
+# Demo Data (replace later with DB)
+# ----------------------------
+CATEGORIES = [
     ("Cleaning", "🧽"),
     ("Moving help", "📦"),
     ("Yard work", "🌿"),
@@ -44,17 +39,18 @@ CATEGORIES: List[tuple] = [
     ("Handyman", "🛠️"),
     ("Babysitting", "👶"),
 ]
+templates.env.globals["CATEGORIES"] = CATEGORIES
 
-# In-memory demo jobs
-DEMO_JOBS: List[Dict] = [
+# Demo jobs (in-memory)
+JOBS: List[Dict] = [
     {
         "id": 1,
         "title": "Move a couch",
         "city": "Portland, OR",
         "category": "Moving help",
         "pay": 60,
-        "description": "Help move a couch from apartment to truck. 30–45 minutes. Two people job.",
-        "created_at": "2026-01-01",
+        "description": "Help move a couch from apartment to truck. 30–45 minutes.",
+        "created_at": datetime.now(),
     },
     {
         "id": 2,
@@ -62,83 +58,76 @@ DEMO_JOBS: List[Dict] = [
         "city": "Vancouver, WA",
         "category": "Cleaning",
         "pay": 90,
-        "description": "Deep clean a small studio (bathroom + kitchen). Cleaning supplies provided.",
-        "created_at": "2026-01-02",
-    },
-    {
-        "id": 3,
-        "title": "Yard work: rake leaves",
-        "city": "Beaverton, OR",
-        "category": "Yard work",
-        "pay": 55,
-        "description": "Rake leaves + bag them. 1–2 hours depending on speed.",
-        "created_at": "2026-01-03",
+        "description": "Light cleaning (bathroom + kitchen). Supplies provided.",
+        "created_at": datetime.now(),
     },
 ]
 
-# In-memory demo applications (later you'll store in PostgreSQL)
-DEMO_APPLICATIONS: List[Dict] = []
-
-
-# -------------------------
-# Helpers
-# -------------------------
-def normalize(s: str) -> str:
-    return (s or "").strip().lower()
+# Demo applications (in-memory)
+APPLICATIONS: List[Dict] = []
 
 
 def get_job_by_id(job_id: int) -> Optional[Dict]:
-    for j in DEMO_JOBS:
-        if int(j["id"]) == int(job_id):
+    for j in JOBS:
+        if j["id"] == job_id:
             return j
     return None
 
 
-def filter_jobs(q: str = "", city: str = "", category: str = "") -> List[Dict]:
-    qn = normalize(q)
-    cn = normalize(city)
-    catn = normalize(category)
-
-    out: List[Dict] = []
-    for j in DEMO_JOBS:
-        if qn and qn not in normalize(j["title"]) and qn not in normalize(j["description"]):
-            continue
-        if cn and cn not in normalize(j["city"]):
-            continue
-        if catn and catn != normalize(j["category"]):
-            continue
-        out.append(j)
-
-    # newest first (simple)
-    out.sort(key=lambda x: x.get("id", 0), reverse=True)
-    return out
-
-
 def next_job_id() -> int:
-    if not DEMO_JOBS:
-        return 1
-    return max(int(j["id"]) for j in DEMO_JOBS) + 1
+    return (max([j["id"] for j in JOBS]) + 1) if JOBS else 1
 
 
-# -------------------------
-# Basic pages
-# -------------------------
+# ----------------------------
+# Error pages
+# ----------------------------
+@app.exception_handler(404)
+async def custom_404(request: Request, exc: Exception):
+    return templates.TemplateResponse(
+        "404.html",
+        {"request": request},
+        status_code=404,
+    )
+
+
+# ----------------------------
+# Pages
+# ----------------------------
 @app.get("/", response_class=HTMLResponse)
-def home(request: Request):
-    # show a small subset of "featured" jobs (optional)
-    featured = DEMO_JOBS[:2]
+async def home(request: Request):
+    # You want Popular categories on home (instead of Featured jobs)
     return templates.TemplateResponse(
         "home.html",
         {
             "request": request,
             "categories": CATEGORIES,
-            "featured": featured,
         },
     )
 
 
+@app.get("/about", response_class=HTMLResponse)
+async def about(request: Request):
+    return templates.TemplateResponse("about.html", {"request": request})
+
+
+@app.get("/contact", response_class=HTMLResponse)
+async def contact(request: Request):
+    return templates.TemplateResponse("contact.html", {"request": request})
+
+
+@app.get("/terms", response_class=HTMLResponse)
+async def terms(request: Request):
+    return templates.TemplateResponse("terms.html", {"request": request})
+
+
+@app.get("/privacy", response_class=HTMLResponse)
+async def privacy(request: Request):
+    return templates.TemplateResponse("privacy.html", {"request": request})
+
+
 @app.get("/tasks", response_class=HTMLResponse)
-def tasks_page(request: Request):
+async def tasks(request: Request):
+    # optional page if you have it
     return templates.TemplateResponse(
         "tasks.html",
         {"request": request, "categories": CATEGORIES},
@@ -146,26 +135,51 @@ def tasks_page(request: Request):
 
 
 @app.get("/categories", response_class=HTMLResponse)
-def categories_page(request: Request):
+async def categories_page(request: Request):
     return templates.TemplateResponse(
         "categories.html",
         {"request": request, "categories": CATEGORIES},
     )
 
 
+# ----------------------------
+# Jobs list + search/filter
+# ----------------------------
 @app.get("/jobs", response_class=HTMLResponse)
-def jobs_list(
+async def jobs_page(
     request: Request,
     q: str = "",
     city: str = "",
     category: str = "",
 ):
-    jobs = filter_jobs(q=q, city=city, category=category)
+    q2 = (q or "").strip().lower()
+    city2 = (city or "").strip().lower()
+    category2 = (category or "").strip()
+
+    filtered = JOBS[:]
+
+    if q2:
+        filtered = [
+            j for j in filtered
+            if q2 in (j["title"] or "").lower()
+            or q2 in (j["description"] or "").lower()
+            or q2 in (j["category"] or "").lower()
+        ]
+
+    if city2:
+        filtered = [j for j in filtered if city2 in (j["city"] or "").lower()]
+
+    if category2:
+        filtered = [j for j in filtered if (j["category"] or "") == category2]
+
+    # sort newest first (if created_at exists)
+    filtered.sort(key=lambda x: x.get("created_at") or datetime.min, reverse=True)
+
     return templates.TemplateResponse(
         "jobs.html",
         {
             "request": request,
-            "jobs": jobs,
+            "jobs": filtered,
             "q": q,
             "city": city,
             "category": category,
@@ -174,96 +188,100 @@ def jobs_list(
     )
 
 
+# ----------------------------
+# Job detail
+# ----------------------------
 @app.get("/jobs/{job_id}", response_class=HTMLResponse)
-def job_detail(request: Request, job_id: int):
+async def job_detail(request: Request, job_id: int):
     job = get_job_by_id(job_id)
     if not job:
-        return templates.TemplateResponse("404.html", {"request": request}, status_code=404)
+        raise HTTPException(status_code=404, detail="Job not found")
 
     return templates.TemplateResponse(
         "job_detail.html",
-        {
-            "request": request,
-            "job": job,
-        },
+        {"request": request, "job": job},
     )
 
 
-# -------------------------
-# Apply flow
-# -------------------------
+# ----------------------------
+# Apply: form
+# ----------------------------
 @app.get("/apply/{job_id}", response_class=HTMLResponse)
-def apply_form(request: Request, job_id: int):
+async def apply_form(request: Request, job_id: int):
     job = get_job_by_id(job_id)
     if not job:
-        return templates.TemplateResponse("404.html", {"request": request}, status_code=404)
+        # if you have apply_not_found.html use it, else 404
+        return templates.TemplateResponse(
+            "apply_not_found.html",
+            {"request": request, "job_id": job_id},
+            status_code=404,
+        )
 
     return templates.TemplateResponse(
         "apply.html",
-        {
-            "request": request,
-            "job": job,
-        },
+        {"request": request, "job": job},
     )
 
 
-@app.post("/apply/{job_id}", response_class=HTMLResponse)
-def apply_submit(
+# ----------------------------
+# Apply: submit (POST)
+# IMPORTANT: 303 redirect so browser goes to GET page after POST
+# ----------------------------
+@app.post("/apply/{job_id}")
+async def submit_application(
     request: Request,
     job_id: int,
     full_name: str = Form(...),
     phone: str = Form(...),
-    email: str = Form(""),
-    message: str = Form(""),
+    email: Optional[str] = Form(None),
+    message: Optional[str] = Form(None),
 ):
     job = get_job_by_id(job_id)
     if not job:
-        return templates.TemplateResponse("404.html", {"request": request}, status_code=404)
+        return RedirectResponse(url=f"/apply/{job_id}", status_code=303)
 
-    # DEMO save
-    DEMO_APPLICATIONS.append(
+    APPLICATIONS.append(
         {
-            "job_id": int(job_id),
+            "job_id": job_id,
             "full_name": full_name.strip(),
             "phone": phone.strip(),
-            "email": (email or "").strip(),
-            "message": (message or "").strip(),
-            "created_at": datetime.utcnow().isoformat(),
+            "email": (email or "").strip() or None,
+            "message": (message or "").strip() or None,
+            "created_at": datetime.now(),
         }
     )
 
-    # Redirect to success page
     return RedirectResponse(url=f"/apply-success/{job_id}", status_code=303)
 
 
+# ----------------------------
+# Apply: success page (GET)
+# ----------------------------
 @app.get("/apply-success/{job_id}", response_class=HTMLResponse)
-def apply_success(request: Request, job_id: int):
+async def apply_success(request: Request, job_id: int):
     job = get_job_by_id(job_id)
-    if not job:
-        return templates.TemplateResponse("404.html", {"request": request}, status_code=404)
-
     return templates.TemplateResponse(
         "apply_success.html",
-        {
-            "request": request,
-            "job": job,
-        },
+        {"request": request, "job": job, "job_id": job_id},
     )
 
 
-# -------------------------
-# Post a job (demo)
-# -------------------------
+# ----------------------------
+# Post a job: form
+# ----------------------------
 @app.get("/post", response_class=HTMLResponse)
-def post_job_form(request: Request):
+async def post_job_form(request: Request):
     return templates.TemplateResponse(
         "post_job.html",
         {"request": request, "categories": CATEGORIES},
     )
 
 
-@app.post("/post", response_class=HTMLResponse)
-def post_job_submit(
+# ----------------------------
+# Post a job: submit (POST)
+# ----------------------------
+@app.post("/post")
+async def post_job_submit(
     request: Request,
     title: str = Form(...),
     city: str = Form(...),
@@ -271,99 +289,41 @@ def post_job_submit(
     pay: int = Form(...),
     description: str = Form(...),
 ):
-    # Basic validation
-    if pay < 0:
-        raise HTTPException(status_code=400, detail="Pay must be positive.")
+    title = title.strip()
+    city = city.strip()
+    category = category.strip()
+    description = description.strip()
 
-    cat_names = [c[0] for c in CATEGORIES]
-    if category not in cat_names:
-        # allow custom but keep it consistent
-        category = category.strip()
+    if not title or not city or not category or not description:
+        return RedirectResponse(url="/post", status_code=303)
 
-    new_job = {
-        "id": next_job_id(),
-        "title": title.strip(),
-        "city": city.strip(),
-        "category": category.strip(),
-        "pay": int(pay),
-        "description": description.strip(),
-        "created_at": datetime.utcnow().date().isoformat(),
-    }
-    DEMO_JOBS.insert(0, new_job)
+    if category not in [c[0] for c in CATEGORIES]:
+        return RedirectResponse(url="/post", status_code=303)
 
-    return RedirectResponse(url=f"/jobs/{new_job['id']}", status_code=303)
-
-
-# -------------------------
-# Legal + info
-# -------------------------
-@app.get("/terms", response_class=HTMLResponse)
-def terms(request: Request):
-    return templates.TemplateResponse("terms.html", {"request": request})
-
-
-@app.get("/privacy", response_class=HTMLResponse)
-def privacy(request: Request):
-    return templates.TemplateResponse("privacy.html", {"request": request})
-
-
-@app.get("/about", response_class=HTMLResponse)
-def about(request: Request):
-    return templates.TemplateResponse("about.html", {"request": request})
-
-
-@app.get("/contact", response_class=HTMLResponse)
-def contact(request: Request):
-    return templates.TemplateResponse("contact.html", {"request": request})
-
-
-# Optional thank you page (if you have it)
-@app.get("/thank-you", response_class=HTMLResponse)
-def thank_you(request: Request):
-    return templates.TemplateResponse("thank_you.html", {"request": request})
-
-
-# -------------------------
-# 404
-# -------------------------
-@app.exception_handler(404)
-def not_found(request: Request, exc):
-    return templates.TemplateResponse("404.html", {"request": request}, status_code=404)
-
-
-# -------------------------
-# Local test helper
-# -------------------------
-# Run locally:
-#   python -m venv .venv
-#   source .venv/bin/activate
-#   pip install -r requirements.txt
-#   uvicorn main:app --reload
-#
-# Open:
-#   http://127.0.0.1:8000
-
-@app.post("/apply/{job_id}")
-async def submit_application(
-    request: Request,
-    job_id: int,
-    full_name: str = Form(...),
-    phone: str = Form(...),
-    email: str = Form(None),
-    message: str = Form(None),
-):
-    return RedirectResponse(
-        url=f"/apply-success/{job_id}",
-        status_code=303
-    )
-
-
-@app.get("/apply-success/{job_id}", response_class=HTMLResponse)
-async def apply_success(request: Request, job_id: int):
-    return templates.TemplateResponse(
-        "apply_success.html",
+    JOBS.insert(
+        0,
         {
-            "request": request,
-            "job_id": job_id,
-        }
+            "id": next_job_id(),
+            "title": title,
+            "city": city,
+            "category": category,
+            "pay": int(pay),
+            "description": description,
+            "created_at": datetime.now(),
+        },
     )
+
+    return RedirectResponse(url="/post-success", status_code=303)
+
+
+@app.get("/post-success", response_class=HTMLResponse)
+async def post_success(request: Request):
+    return templates.TemplateResponse("post_success.html", {"request": request})
+
+
+# ----------------------------
+# Health check (optional)
+# ----------------------------
+@app.get("/health")
+async def health():
+    return {"ok": True}
