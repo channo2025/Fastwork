@@ -342,3 +342,32 @@ def not_found(request: Request, exc):
 #
 # Open:
 #   http://127.0.0.1:8000
+
+from fastapi import FastAPI, Request, Form
+from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.templating import Jinja2Templates
+
+# ... ton code existant ...
+
+@app.get("/apply-success/{job_id}", response_class=HTMLResponse)
+def apply_success(request: Request, job_id: int):
+    # Sécurisé: si le job n'existe pas en DB, on affiche quand même une page success
+    job = None
+    try:
+        job = get_job_by_id(job_id)  # si tu as ce helper
+    except Exception:
+        job = None
+
+    if not job:
+        job = {
+            "id": job_id,
+            "title": "This job",
+            "city": "",
+            "category": "",
+            "pay": ""
+        }
+
+    return templates.TemplateResponse(
+        "apply_success.html",
+        {"request": request, "job": job}
+    )
