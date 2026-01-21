@@ -257,15 +257,6 @@ def apply_form(request: Request, job_id: int):
         },
     )
 
-from fastapi import FastAPI, Request, Form
-from fastapi.responses import HTMLResponse, RedirectResponse
-from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
-
-app = FastAPI(title="Win-Win Job")
-
-app.mount("/static", StaticFiles(directory="static"), name="static")
-templates = Jinja2Templates(directory="templates")
 
 BRAND_NAME = "Win-Win Job"
 BRAND_TAGLINE = "Fair jobs. Fast pay. Digital & simple."
