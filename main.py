@@ -371,3 +371,22 @@ def apply_success(request: Request, job_id: int):
         "apply_success.html",
         {"request": request, "job": job}
     )
+
+    @app.get("/apply-success/{job_id}", response_class=HTMLResponse)
+def apply_success(request: Request, job_id: int):
+    job = get_job_by_id(job_id)
+
+    # Sécurité : si le job n’existe pas
+    if not job:
+        return templates.TemplateResponse(
+            "apply_not_found.html",
+            {"request": request}
+        )
+
+    return templates.TemplateResponse(
+        "apply_success.html",
+        {
+            "request": request,
+            "job": job
+        }
+    )
