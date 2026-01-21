@@ -257,26 +257,90 @@ def apply_form(request: Request, job_id: int):
         },
     )
 
+from fastapi import FastAPI, Request, Form
+from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
+
+app = FastAPI(title="Win-Win Job")
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
+templates = Jinja2Templates(directory="templates")
+
+BRAND_NAME = "Win-Win Job"
+BRAND_TAGLINE = "Fair jobs. Fast pay. Digital & simple."
+
+# ✅ Optionnel mais PRO: rendre BRAND_NAME dispo partout sans le repasser
+templates.env.globals["BRAND_NAME"] = BRAND_NAME
+templates.env.globals["BRAND_TAGLINE"] = BRAND_TAGLINE
+
+
+# ----------------------------
+# Helpers DB (adapte à ton code)
+# ----------------------------
+def get_job_by_id(job_id: int):
+    """
+    IMPORTANT: remplace le contenu par TA fonction DB.
+    Doit retourner un dict ou None.
+    Exemple: {"id":1,"title":"Move a couch","city":"Portland, OR","category":"Moving help","pay":60,"description":"..."}
+    """
+    # TODO: utilise ta DB
+    return None
+
+
+def save_application(job_id: int, full_name: str, phone: str, email: str, message: str):
+    """
+    IMPORTANT: remplace le contenu par TA fonction DB qui enregistre l'application.
+    """
+    # TODO: insert DB
+    return True
+
+
+# ----------------------------
+# APPLY (GET) -> montre le formulaire
+# ----------------------------
+@app.get("/apply/{job_id}", response_class=HTMLResponse)
+def apply_page(request: Request, job_id: int):
+    job = get_job_by_id(job_id)
+    if not job:
+        return templates.TemplateResponse("apply_not_found.html", {"request": request, "job_id": job_id})
+
+    return templates.TemplateResponse("apply.html", {
+        "request": request,
+        "job": job
+    })
+
+
+# ----------------------------
+# APPLY (POST) -> submit -> redirect success
+# ----------------------------
 @app.post("/apply/{job_id}")
 def apply_submit(
+    request: Request,
     job_id: int,
     full_name: str = Form(...),
     phone: str = Form(...),
     email: str = Form(""),
-    message: str = Form(""),
+    message: str = Form("")
 ):
-    # Demo mode: we don't store applications yet (later: DB table + email notifications)
+    job = get_job_by_id(job_id)
+    if not job:
+        return RedirectResponse(url=f"/apply/{job_id}", status_code=303)
+
+    save_application(job_id, full_name, phone, email, message)
+
+    # ✅ SUPER IMPORTANT: 303 pour redirect après POST
     return RedirectResponse(url=f"/apply-success/{job_id}", status_code=303)
 
+
+# ----------------------------
+# APPLY SUCCESS (GET)
+# ----------------------------
 @app.get("/apply-success/{job_id}", response_class=HTMLResponse)
 def apply_success(request: Request, job_id: int):
-    job = get_job(job_id)
-    # Even if job deleted, show a generic success page
-    return templates.TemplateResponse(
-        "apply_success.html",
-        {
-            "request": request,
-            "brand_name": BRAND_NAME,
-            "job": job,
-        },
-    )
+    job = get_job_by_id(job_id)
+
+    return templates.TemplateResponse("apply_success.html", {
+        "request": request,   # ✅ OBLIGATOIRE sinon Internal Server Error
+        "job": job            # optionnel (notre template gère si job=None)
+    })
