@@ -1,39 +1,47 @@
 {% extends "base.html" %}
-{% block title %}Job details — Win-Win Job{% endblock %}
+{% block title %}Job details – Win-Win Job{% endblock %}
 
-{% block content %}
-<section class="section">
-  <div class="container">
-    <div class="sectionHead">
-      <h1 class="sectionTitle">{{ job.title }}</h1>
-      <p class="sectionDesc">Read carefully. Confirm pay + location before starting.</p>
+{% block body %}
+<section class="container">
+  <div class="card card--pad" style="max-width:900px;">
+    <div class="badge">
+      <span class="dot"></span>
+      Job details
     </div>
 
-    <div class="panel">
-      <p class="sectionDesc" style="margin-top:0;">{{ job.description or "No description." }}</p>
+    <h1 class="h2" style="margin-top:14px;">{{ job.title }}</h1>
+    <p class="muted">{{ job.city }} • {{ job.category }}</p>
 
-      <div class="categories" style="margin-top:12px;">
-        {% if job.pay %}<span class="cat">💵 ${{ job.pay }}</span>{% endif %}
-        {% if job.location %}<span class="cat">📍 {{ job.location }}</span>{% endif %}
-        {% if job.when %}<span class="cat">⏱ {{ job.when }}</span>{% endif %}
+    <div class="mini" style="margin-top:14px;">
+      <div class="mini__item">
+        <b>Pay</b>
+        <span>${{ job.pay }}</span>
       </div>
-
-      <div style="height:14px"></div>
-
-      <a class="btn btn--primary btn--lg" href="/jobs/{{ job.id }}/apply">Apply now</a>
-      <a class="btn btn--ghost btn--lg" href="/jobs">Back to jobs</a>
+      <div class="mini__item">
+        <b>Location</b>
+        <span>{{ job.city }}</span>
+      </div>
+      <div class="mini__item">
+        <b>Category</b>
+        <span>{{ job.category }}</span>
+      </div>
     </div>
 
-    <div style="height:14px"></div>
+    <div class="divider"></div>
 
-    <div class="trustCard">
-      <h3>Safety & fairness</h3>
-      <ul class="checks">
-        <li>✅ Confirm pay and expectations before you start.</li>
-        <li>✅ Meet in safe places when possible.</li>
-        <li>✅ If something feels wrong, don’t proceed.</li>
-      </ul>
+    <h3 class="h3">Description</h3>
+    <p class="p" style="max-width:820px;">{{ job.description }}</p>
+
+    <div class="divider"></div>
+
+    <div class="cta">
+      <a class="btn btn--primary" href="/apply/{{ job.id }}">Apply</a>
+      <a class="btn btn--ghost" href="/jobs">Back to jobs</a>
     </div>
+
+    <p class="muted" style="margin-top:12px;font-size:13px;">
+      Safety tip: confirm pay + location before starting. Meet in safe places when possible.
+    </p>
   </div>
 </section>
 {% endblock %}

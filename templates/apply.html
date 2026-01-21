@@ -1,50 +1,44 @@
 {% extends "base.html" %}
-{% block title %}Apply — Win-Win Job{% endblock %}
+{% block title %}Apply – Win-Win Job{% endblock %}
 
-{% block content %}
-<section class="section section--soft">
-  <div class="container">
-    <div class="sectionHead">
-      <h1 class="sectionTitle">Apply</h1>
-      <p class="sectionDesc">No resume. Just your contact details. Apply in seconds.</p>
+{% block body %}
+<section class="container">
+  <div class="card card--pad" style="max-width:760px;">
+    <div class="badge">
+      <span class="dot"></span>
+      Apply in 60 seconds
     </div>
 
-    <div class="postGrid">
-      <form class="formCard" action="/jobs/{{ job.id }}/apply" method="post">
-        <div class="field">
-          <label>Job</label>
-          <input value="{{ job.title }}" disabled />
-        </div>
+    <h1 class="h2" style="margin-top:14px;">Apply for: {{ job.title }}</h1>
+    <p class="muted">{{ job.city }} • {{ job.category }} • <b>${{ job.pay }}</b></p>
 
-        <div class="fieldRow">
-          <div class="field">
-            <label for="name">Your name</label>
-            <input id="name" name="name" placeholder="e.g., Alex" required />
-          </div>
-          <div class="field">
-            <label for="phone">Phone</label>
-            <input id="phone" name="phone" placeholder="e.g., (503) 000-0000" required />
-          </div>
-        </div>
+    <div class="divider"></div>
 
-        <div class="field">
-          <label for="message">Message (optional)</label>
-          <textarea id="message" name="message" rows="4" placeholder="Anything the employer should know?"></textarea>
-        </div>
+    <form action="/apply/{{ job.id }}" method="post" class="form">
+      <label class="label">Full name</label>
+      <input class="input" name="full_name" placeholder="Your name" required>
 
-        <button class="btn btn--primary btn--lg" type="submit">Submit application</button>
-        <p class="formNote">By applying, you agree to be respectful and follow basic safety rules.</p>
-      </form>
+      <label class="label">Phone</label>
+      <input class="input" name="phone" placeholder="(555) 555-5555" required>
 
-      <div class="sideCard">
-        <h3>Before you apply</h3>
-        <ul class="bullets">
-          <li><b>Confirm pay</b> and job details.</li>
-          <li><b>Ask questions</b> if unclear.</li>
-          <li><b>Stay safe</b> and trust your instincts.</li>
-        </ul>
+      <label class="label">Email (optional)</label>
+      <input class="input" type="email" name="email" placeholder="you@email.com">
+
+      <label class="label">Message (optional)</label>
+      <textarea class="input" name="message" rows="5" placeholder="Availability, experience, questions…"></textarea>
+
+      <div class="divider"></div>
+
+      <p class="muted" style="font-size:13px;">
+        By applying, you agree to our <a class="link" href="/terms">Terms</a> and <a class="link" href="/privacy">Privacy</a>.
+        Never share sensitive information (SSN, bank details). Keep communication professional.
+      </p>
+
+      <div class="cta" style="margin-top:14px;">
+        <button class="btn btn--primary" type="submit">Submit application</button>
+        <a class="btn btn--ghost" href="/jobs/{{ job.id }}">Back</a>
       </div>
-    </div>
+    </form>
   </div>
 </section>
 {% endblock %}

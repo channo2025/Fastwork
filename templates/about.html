@@ -1,24 +1,41 @@
 {% extends "base.html" %}
-{% block title %}About — Win-Win Job{% endblock %}
+{% block title %}About – Win-Win Job{% endblock %}
 
-{% block content %}
-<section class="section">
-  <div class="container">
-    <div class="sectionHead">
-      <h1 class="sectionTitle">About Win-Win Job</h1>
-      <p class="sectionDesc">A digital job center built for real people: simple, fair, and fast.</p>
-    </div>
+{% block body %}
+<section class="container">
+  <div class="card card--pad" style="max-width:900px;">
+    <h1 class="h2">About Win-Win Job</h1>
+    <p class="muted" style="margin-top:6px;">
+      A digital job center built for fast, fair, local work.
+    </p>
 
-    <div class="panel">
-      <p class="sectionDesc" style="margin-top:0;">
-        Win-Win Job connects people who need work with people who need help. We focus on quick local tasks
-        (cleaning, moving, yard work, delivery, and more) without unnecessary barriers.
-      </p>
-      <div class="categories" style="margin-top:12px;">
-        <span class="cat">Fair jobs</span>
-        <span class="cat">Fast pay</span>
-        <span class="cat">Digital & simple</span>
-      </div>
+    <div class="divider"></div>
+
+    <h3 class="h3">What it is</h3>
+    <p class="p">
+      Win-Win Job connects people who need help with people who want to work — quickly and simply.
+      No long interviews. Clear pay. Local matching.
+    </p>
+
+    <h3 class="h3" style="margin-top:14px;">For workers</h3>
+    <ul style="margin-top:10px;padding-left:18px;">
+      <li class="muted">Browse real local tasks in minutes</li>
+      <li class="muted">Apply fast with basic contact info</li>
+      <li class="muted">Know the pay and expectations upfront</li>
+    </ul>
+
+    <h3 class="h3" style="margin-top:14px;">For employers</h3>
+    <ul style="margin-top:10px;padding-left:18px;">
+      <li class="muted">Post a job with pay + location</li>
+      <li class="muted">Reach ready-to-work people nearby</li>
+      <li class="muted">Build trust with clear details</li>
+    </ul>
+
+    <div class="divider"></div>
+
+    <div class="cta">
+      <a class="btn btn--primary" href="/jobs">Browse jobs</a>
+      <a class="btn btn--ghost" href="/post">Post a job</a>
     </div>
   </div>
 </section>

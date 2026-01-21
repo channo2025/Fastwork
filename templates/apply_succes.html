@@ -1,26 +1,29 @@
 {% extends "base.html" %}
-{% block title %}Application sent — Win-Win Job{% endblock %}
+{% block title %}Application sent – Win-Win Job{% endblock %}
 
-{% block content %}
-<section class="section">
-  <div class="container">
-    <div class="featured">
-      <div class="featured__head">
-        <h1 class="sectionTitle">✅ Application sent</h1>
-        <a class="link" href="/jobs">Browse more jobs →</a>
-      </div>
+{% block body %}
+<section class="container">
+  <div class="card card--pad" style="max-width:760px;">
+    <h1 class="h2">✅ Application sent!</h1>
 
-      <div class="featured__empty">
-        <p>Your application has been submitted. The employer will contact you if they’re interested.</p>
-        <div class="categories">
-          <span class="cat">Be ready</span>
-          <span class="cat">Be safe</span>
-          <span class="cat">Be fair</span>
-        </div>
-        <div style="height:12px"></div>
-        <a class="btn btn--primary" href="/jobs">Find more work</a>
-        <a class="btn btn--soft" href="/">Back home</a>
-      </div>
+    {% if job %}
+      <p class="muted">You applied for: <b>{{ job.title }}</b> ({{ job.city }})</p>
+    {% else %}
+      <p class="muted">Your application was submitted.</p>
+    {% endif %}
+
+    <div class="divider"></div>
+
+    <h3 class="h3">What happens next</h3>
+    <ul style="margin-top:10px;padding-left:18px;">
+      <li class="muted">The employer reviews applications and may contact you.</li>
+      <li class="muted">Confirm pay + location before meeting.</li>
+      <li class="muted">Meet in safe places when possible.</li>
+    </ul>
+
+    <div class="cta" style="margin-top:14px;">
+      <a class="btn btn--primary" href="/jobs">Browse more jobs</a>
+      <a class="btn btn--ghost" href="/categories">Categories</a>
     </div>
   </div>
 </section>

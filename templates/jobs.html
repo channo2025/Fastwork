@@ -1,46 +1,96 @@
 {% extends "base.html" %}
-{% block title %}Jobs – Win-Win Job{% endblock %}
+
+{% block title %}Jobs — Win-Win Job{% endblock %}
 
 {% block body %}
 <section class="container">
+
+  <!-- Header -->
   <div class="card card--pad">
     <h1 class="h2">Jobs</h1>
-    <p class="muted">Search and filter available jobs.</p>
+    <p class="muted">
+      Search and filter available local jobs. Apply in minutes.
+    </p>
 
-    <form class="searchbar" action="/jobs" method="get" style="margin-top:14px;">
-      <input class="input" name="q" value="{{ q }}" placeholder="Keyword (moving, cleaning…)" />
-      <input class="input" name="city" value="{{ city }}" placeholder="City or ZIP" />
+    <!-- Search / Filter -->
+    <form class="searchbar" action="/jobs" method="get">
+      <input
+        class="input"
+        type="text"
+        name="q"
+        placeholder="Search jobs (cleaning, moving, delivery...)"
+        value="{{ q or '' }}"
+      />
+
+      <input
+        class="input"
+        type="text"
+        name="city"
+        placeholder="City or ZIP"
+        value="{{ city or '' }}"
+      />
+
       <select class="input" name="category">
         <option value="">All categories</option>
         {% for name, icon in categories %}
-          <option value="{{ name }}" {% if category==name %}selected{% endif %}>{{ icon }} {{ name }}</option>
+          <option value="{{ name }}" {% if category == name %}selected{% endif %}>
+            {{ icon }} {{ name }}
+          </option>
         {% endfor %}
       </select>
-      <button class="btn btn--primary" type="submit">Search</button>
+
+      <button class="btn btn--primary" type="submit">
+        Search
+      </button>
     </form>
   </div>
 
   <div style="height:16px;"></div>
 
+  <!-- Jobs list -->
   {% if jobs|length == 0 %}
     <div class="card card--pad">
-      <p class="muted">No jobs found. Try a different search, or <a class="link" href="/post">post a job</a>.</p>
+      <p class="muted">
+        No jobs found. Try adjusting your search or filters.
+      </p>
     </div>
   {% else %}
-    <div class="list">
-      {% for j in jobs %}
-        <div class="card card--pad job">
-          <div class="job__top">
-            <div>
-              <div class="job__title">{{ j.title }}</div>
-              <div class="muted">{{ j.city }} • {{ j.category }}</div>
+    {% for j in jobs %}
+      <div class="card card--pad job">
+
+        <div class="job__top">
+          <div>
+            <div class="job__title">{{ j.title }}</div>
+            <div class="muted">
+              {{ j.city }} · {{ j.category }}
             </div>
-            <div class="pill">${{ j.pay }}</div>
           </div>
-          <div class="job__desc">{{ j.description }}</div>
+
+          <div class="pill">
+            ${{ j.pay }}
+          </div>
         </div>
-      {% endfor %}
-    </div>
+
+        <div class="job__desc">
+          {{ j.description }}
+        </div>
+
+        <div class="cta" style="margin-top:12px;">
+          <a class="btn btn--ghost" href="/jobs/{{ j.id }}">
+            View details
+          </a>
+          <a class="btn btn--primary" href="/apply/{{ j.id }}">
+            Apply
+          </a>
+        </div>
+
+      </div>
+
+      {% if not loop.last %}
+        <div class="divider" style="margin:16px 0;"></div>
+      {% endif %}
+    {% endfor %}
   {% endif %}
+
 </section>
 {% endblock %}

@@ -1,67 +1,70 @@
 {% extends "base.html" %}
-{% block title %}Terms — Win-Win Job{% endblock %}
+{% block title %}Terms – Win-Win Job{% endblock %}
 
-{% block content %}
-<section class="section">
-  <div class="container">
-    <div class="sectionHead">
-      <h1 class="sectionTitle">Terms of Service</h1>
-      <p class="sectionDesc">Important: these terms protect users and the platform.</p>
-    </div>
+{% block body %}
+<section class="container">
+  <div class="card card--pad" style="max-width:900px;">
+    <h1 class="h2">Terms of Service</h1>
+    <p class="muted" style="margin-top:6px;">Last updated: 2026</p>
 
-    <div class="panel">
-      <h3 style="margin-top:0;">1) Platform role (very important)</h3>
-      <p class="sectionDesc">
-        Win-Win Job is a digital job center and marketplace tool. We do not employ workers, we do not hire,
-        and we are not an agent, broker, or party to any agreement between users.
-        Any work arrangement, payment, and conditions are strictly between the Employer and Worker.
-      </p>
+    <div class="divider"></div>
 
-      <h3>2) No guarantees</h3>
-      <p class="sectionDesc">
-        We do not guarantee that jobs will be filled, that workers will be hired, that payments will be made,
-        or that users will behave properly. Use the service at your own risk.
-      </p>
+    <h3 class="h3">1) Platform role (IMPORTANT)</h3>
+    <p class="p">
+      Win-Win Job is a digital job center / marketplace connector. We provide a platform for employers to post opportunities
+      and for workers to discover and apply. We are not the employer, not the worker, and not an employment agency.
+      We do not guarantee jobs, payments, outcomes, or the behavior of users.
+    </p>
 
-      <h3>3) Safety & responsibility</h3>
-      <p class="sectionDesc">
-        Users are responsible for their own safety and decisions. Always verify identity, pay, and location before
-        starting work. Meet in safe places when possible. If you feel unsafe, do not proceed.
-        For emergencies, contact local authorities.
-      </p>
+    <h3 class="h3" style="margin-top:14px;">2) No warranties</h3>
+    <p class="p">
+      The platform is provided “as is” and “as available.” We make no warranties regarding accuracy, reliability,
+      availability, or suitability of any job listing, user, or content.
+    </p>
 
-      <h3>4) Prohibited content & behavior</h3>
-      <p class="sectionDesc">
-        No illegal jobs, discrimination, harassment, exploitation, unsafe requests, or deceptive postings.
-        We may remove content or suspend accounts at our discretion.
-      </p>
+    <h3 class="h3" style="margin-top:14px;">3) User responsibilities</h3>
+    <ul style="margin-top:10px;padding-left:18px;">
+      <li class="muted">Employers must post truthful information (pay, location, requirements).</li>
+      <li class="muted">Workers must apply honestly and communicate respectfully.</li>
+      <li class="muted">Users must comply with all local, state, and federal laws.</li>
+      <li class="muted">Do not post illegal, discriminatory, misleading, or harmful content.</li>
+    </ul>
 
-      <h3>5) Payments</h3>
-      <p class="sectionDesc">
-        Payments are arranged directly between Employer and Worker. Win-Win Job is not responsible for payment disputes,
-        chargebacks, or wage issues. We may offer reporting tools, but we are not obligated to mediate disputes.
-      </p>
+    <h3 class="h3" style="margin-top:14px;">4) Payments & disputes</h3>
+    <p class="p">
+      Payment is arranged directly between employer and worker. Win-Win Job does not process payments (unless explicitly stated in the future).
+      Any dispute (non-payment, quality issues, cancellations, damages) is between users. We may assist by removing listings or accounts,
+      but we are not liable for losses.
+    </p>
 
-      <h3>6) Liability limitation</h3>
-      <p class="sectionDesc">
-        To the maximum extent permitted by law, Win-Win Job and its owners/operators are not liable for any indirect,
-        incidental, special, consequential, or punitive damages, or for any loss of profits, data, or goodwill arising from
-        your use of the service or any interaction between users.
-      </p>
+    <h3 class="h3" style="margin-top:14px;">5) Safety disclaimer</h3>
+    <p class="p">
+      You are responsible for your safety. Meet in public places when possible. Confirm pay and location before work begins.
+      Never share sensitive information (SSN, bank details). If you feel unsafe, do not proceed.
+    </p>
 
-      <h3>7) Indemnification</h3>
-      <p class="sectionDesc">
-        You agree to indemnify and hold harmless Win-Win Job from claims, damages, liabilities, and expenses arising from
-        your use of the service, your content, or your interactions with other users.
-      </p>
+    <h3 class="h3" style="margin-top:14px;">6) Limitation of liability</h3>
+    <p class="p">
+      To the maximum extent permitted by law, Win-Win Job and its owners/operators shall not be liable for any indirect, incidental,
+      consequential, special, or punitive damages, or any loss of profits, data, or reputation, arising from use of the platform,
+      job listings, or interactions between users.
+    </p>
 
-      <h3>8) Changes</h3>
-      <p class="sectionDesc">
-        We may update these Terms at any time. Continued use means you accept the updated Terms.
-      </p>
+    <h3 class="h3" style="margin-top:14px;">7) Content & moderation</h3>
+    <p class="p">
+      We may remove content or suspend accounts at any time if we believe it violates these Terms, creates risk, or harms the community.
+      We are not obligated to monitor all content.
+    </p>
 
-      <p class="sectionDesc"><b>By using Win-Win Job, you agree to these Terms.</b></p>
-    </div>
+    <h3 class="h3" style="margin-top:14px;">8) Changes</h3>
+    <p class="p">
+      We may update these Terms. Continued use after changes means you accept the updated Terms.
+    </p>
+
+    <h3 class="h3" style="margin-top:14px;">9) Contact</h3>
+    <p class="p">
+      Questions? Use the <a class="link" href="/contact">Contact</a> page.
+    </p>
   </div>
 </section>
 {% endblock %}

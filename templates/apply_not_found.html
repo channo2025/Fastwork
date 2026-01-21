@@ -1,11 +1,15 @@
 {% extends "base.html" %}
-{% block content %}
-<section class="page">
-  <h1>Job not found</h1>
-  <p>This job may no longer be available.</p>
+{% block title %}Not found – Win-Win Job{% endblock %}
 
-  <a href="/tasks" class="btn primary">
-    Back to jobs
-  </a>
+{% block body %}
+<section class="container">
+  <div class="card card--pad" style="max-width:760px;">
+    <h1 class="h2">Job not found</h1>
+    <p class="muted">This job might have been removed or the link is incorrect.</p>
+    <div class="cta" style="margin-top:14px;">
+      <a class="btn btn--primary" href="/jobs">Back to jobs</a>
+      <a class="btn btn--ghost" href="/">Home</a>
+    </div>
+  </div>
 </section>
 {% endblock %}

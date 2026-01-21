@@ -216,3 +216,67 @@ def custom_404(request: Request, exc):
         {"request": request, "brand_name": BRAND_NAME},
         status_code=404,
     )
+
+# ---------- Job details ----------
+@app.get("/jobs/{job_id}", response_class=HTMLResponse)
+def job_details(request: Request, job_id: int):
+    job = get_job(job_id)
+    if not job:
+        return templates.TemplateResponse(
+            "404.html",
+            {"request": request, "brand_name": BRAND_NAME},
+            status_code=404
+        )
+
+    return templates.TemplateResponse(
+        "job_detail.html",
+        {
+            "request": request,
+            "brand_name": BRAND_NAME,
+            "job": job,
+        },
+    )
+
+# ---------- Apply ----------
+@app.get("/apply/{job_id}", response_class=HTMLResponse)
+def apply_form(request: Request, job_id: int):
+    job = get_job(job_id)
+    if not job:
+        return templates.TemplateResponse(
+            "apply_not_found.html",
+            {"request": request, "brand_name": BRAND_NAME},
+            status_code=404
+        )
+
+    return templates.TemplateResponse(
+        "apply.html",
+        {
+            "request": request,
+            "brand_name": BRAND_NAME,
+            "job": job,
+        },
+    )
+
+@app.post("/apply/{job_id}")
+def apply_submit(
+    job_id: int,
+    full_name: str = Form(...),
+    phone: str = Form(...),
+    email: str = Form(""),
+    message: str = Form(""),
+):
+    # Demo mode: we don't store applications yet (later: DB table + email notifications)
+    return RedirectResponse(url=f"/apply-success/{job_id}", status_code=303)
+
+@app.get("/apply-success/{job_id}", response_class=HTMLResponse)
+def apply_success(request: Request, job_id: int):
+    job = get_job(job_id)
+    # Even if job deleted, show a generic success page
+    return templates.TemplateResponse(
+        "apply_success.html",
+        {
+            "request": request,
+            "brand_name": BRAND_NAME,
+            "job": job,
+        },
+    )

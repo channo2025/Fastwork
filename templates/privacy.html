@@ -1,42 +1,52 @@
 {% extends "base.html" %}
-{% block title %}Privacy — Win-Win Job{% endblock %}
+{% block title %}Privacy – Win-Win Job{% endblock %}
 
-{% block content %}
-<section class="section">
-  <div class="container">
-    <div class="sectionHead">
-      <h1 class="sectionTitle">Privacy Policy</h1>
-      <p class="sectionDesc">Simple and transparent privacy for a digital job center.</p>
-    </div>
+{% block body %}
+<section class="container">
+  <div class="card card--pad" style="max-width:900px;">
+    <h1 class="h2">Privacy Policy</h1>
+    <p class="muted" style="margin-top:6px;">Last updated: 2026</p>
 
-    <div class="panel">
-      <h3 style="margin-top:0;">What we collect</h3>
-      <p class="sectionDesc">
-        In demo mode, we may collect basic information you submit such as job details (title, location, pay),
-        and application details (name, phone, message). We do not sell your personal information.
-      </p>
+    <div class="divider"></div>
 
-      <h3>How we use it</h3>
-      <p class="sectionDesc">
-        We use submitted information to operate the platform: showing jobs, allowing applications,
-        improving safety and quality, and responding to support messages.
-      </p>
+    <h3 class="h3">1) What we collect</h3>
+    <p class="p">
+      Win-Win Job is a digital job center. We may collect basic information you submit on the site, such as:
+      your name, phone number, email (optional), job postings content (title, city, pay, description), and messages you write.
+    </p>
 
-      <h3>Third parties</h3>
-      <p class="sectionDesc">
-        Hosting providers and analytics tools (if enabled) may process limited data to provide the service.
-      </p>
+    <h3 class="h3" style="margin-top:14px;">2) What we do NOT want</h3>
+    <p class="p">
+      Do not submit sensitive personal data (SSN, bank info, passwords, immigration documents). If you share it, you do so at your own risk.
+    </p>
 
-      <h3>Security</h3>
-      <p class="sectionDesc">
-        No system is 100% secure. Use strong passwords where applicable and avoid sharing sensitive information.
-      </p>
+    <h3 class="h3" style="margin-top:14px;">3) How we use info</h3>
+    <ul style="margin-top:10px;padding-left:18px;">
+      <li class="muted">To publish job listings and help users browse jobs.</li>
+      <li class="muted">To allow workers to apply and employers to review applicants (demo mode now; features may evolve).</li>
+      <li class="muted">To improve site performance, security, and user experience.</li>
+    </ul>
 
-      <h3>Contact</h3>
-      <p class="sectionDesc">
-        For privacy questions, contact us via the Contact page.
-      </p>
-    </div>
+    <h3 class="h3" style="margin-top:14px;">4) Cookies / analytics</h3>
+    <p class="p">
+      We may use basic cookies for functionality and security. If we add analytics later, we will update this policy.
+    </p>
+
+    <h3 class="h3" style="margin-top:14px;">5) Sharing</h3>
+    <p class="p">
+      We do not sell your personal data. We may share limited information only if required by law, to prevent fraud/abuse,
+      or to protect users and the platform.
+    </p>
+
+    <h3 class="h3" style="margin-top:14px;">6) Safety</h3>
+    <p class="p">
+      Win-Win Job is a marketplace connector. Always verify pay and meeting location. Meet in public places. Use caution.
+    </p>
+
+    <h3 class="h3" style="margin-top:14px;">7) Contact</h3>
+    <p class="p">
+      Questions? Use the <a class="link" href="/contact">Contact</a> page.
+    </p>
   </div>
 </section>
 {% endblock %}
