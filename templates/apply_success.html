@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Application sent{% endblock %}
+
+{% block body %}
+<section class="container">
+  <div class="card card--pad" style="max-width:600px;margin:auto;">
+    <h1 class="h2">✅ Application sent</h1>
+    <p class="muted">
+      Your application was successfully submitted.
+      The employer will contact you if selected.
+    </p>
+
+    <div class="cta" style="margin-top:16px;">
+      <a href="/jobs" class="btn btn--primary">Browse more jobs</a>
+      <a href="/" class="btn btn--ghost">Back home</a>
+    </div>
+  </div>
+</section>
+{% endblock %}
