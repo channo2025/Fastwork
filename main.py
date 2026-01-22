@@ -333,3 +333,26 @@ async def post_success(request: Request):
 @app.get("/health")
 async def health():
     return {"ok": True}
+
+from fastapi import Request, Form
+from fastapi.responses import HTMLResponse
+
+@app.get("/", response_class=HTMLResponse)
+def home(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
+
+@app.get("/contact", response_class=HTMLResponse)
+def contact_get(request: Request):
+    return templates.TemplateResponse("contact.html", {"request": request, "sent": False})
+
+@app.post("/contact", response_class=HTMLResponse)
+def contact_post(
+    request: Request,
+    name: str = Form(...),
+    email: str = Form(...),
+    subject: str = Form(...),
+    message: str = Form(...),
+):
+    # For now: just show a success message.
+    # Later we can email this to you or store it in a DB.
+    return templates.TemplateResponse("contact.html", {"request": request, "sent": True})

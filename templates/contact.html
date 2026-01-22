@@ -1,49 +1,51 @@
 {% extends "base.html" %}
-{% block title %}Contact — Win-Win Job{% endblock %}
+
+{% block title %}Contact us — Win-Win Job{% endblock %}
 
 {% block content %}
-<section class="section section--soft">
+<section class="section">
   <div class="container">
-    <div class="sectionHead">
-      <h1 class="sectionTitle">Contact</h1>
-      <p class="sectionDesc">Questions, feedback, or reporting an issue.</p>
-    </div>
+    <h1 class="page__title">Contact us</h1>
+    <p class="page__desc">
+      Have a question or need help? Send us a message and we’ll get back to you.
+    </p>
 
-    <div class="postGrid">
-      <form class="formCard" action="/thank-you" method="get">
-        <div class="field">
-          <label for="subject">Subject</label>
-          <input id="subject" name="subject" placeholder="e.g., Report a job / Need help" required />
-        </div>
-
-        <div class="fieldRow">
-          <div class="field">
-            <label for="name">Name</label>
-            <input id="name" name="name" placeholder="Your name" />
+    <div class="card">
+      <form method="post" action="/contact">
+        <div class="form__grid">
+          <div class="form__field">
+            <label class="label" for="name">Name</label>
+            <input class="input" id="name" name="name" type="text" placeholder="Your name" required />
           </div>
-          <div class="field">
-            <label for="email">Email (optional)</label>
-            <input id="email" name="email" type="email" placeholder="you@example.com" />
+
+          <div class="form__field">
+            <label class="label" for="email">Email</label>
+            <input class="input" id="email" name="email" type="email" placeholder="you@example.com" required />
           </div>
         </div>
 
-        <div class="field">
-          <label for="message">Message</label>
-          <textarea id="message" name="message" rows="5" placeholder="Write your message..." required></textarea>
+        <div class="form__field">
+          <label class="label" for="subject">Subject</label>
+          <input class="input" id="subject" name="subject" type="text" placeholder="What is this about?" required />
         </div>
 
-        <button class="btn btn--primary btn--lg" type="submit">Send</button>
-        <p class="formNote">For emergencies, contact local authorities. Win-Win Job is not an emergency service.</p>
+        <div class="form__field">
+          <label class="label" for="message">Message</label>
+          <textarea class="textarea" id="message" name="message" rows="6" placeholder="Write your message..." required></textarea>
+        </div>
+
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button class="btn btn--primary btn--lg" type="submit">Send message</button>
+          <a class="btn btn--ghost btn--lg" href="/">Back home</a>
+        </div>
       </form>
-
-      <div class="sideCard">
-        <h3>Safety reporting</h3>
-        <ul class="bullets">
-          <li>If a job looks unsafe or suspicious, don’t proceed.</li>
-          <li>Report it here so we can review it.</li>
-        </ul>
-      </div>
     </div>
+
+    {% if sent %}
+      <div class="card" style="margin-top:14px;">
+        ✅ Message sent. Thank you — we’ll reply soon.
+      </div>
+    {% endif %}
   </div>
 </section>
 {% endblock %}
