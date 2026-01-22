@@ -88,11 +88,7 @@ async def jobs(request: Request):
 def post_job(request: Request):
     return templates.TemplateResponse(
         "post_job.html",
-        {
-            "request": request,
-            "form": None,
-            "error": None
-        }
+        {"request": request, "form": None, "error": None}
     )
 
 @app.post("/post", response_class=HTMLResponse)
