@@ -1,92 +1,47 @@
 {% extends "base.html" %}
 
-{% block title %}Win-Win Job — Fair jobs. Fast pay.{% endblock %}
+{% block title %}Win-Win Job – Fair jobs. Fast pay.{% endblock %}
 
 {% block content %}
-<section class="hero">
-  <div class="container hero__grid">
-    <div class="hero__left">
-
-      <div class="pill">
-        <span class="pill__dot" aria-hidden="true"></span>
-        <span>Win-Win Job — Digital job center</span>
+<section class="container hero">
+  <div class="grid">
+    <!-- Left big hero -->
+    <div class="card card--pad">
+      <div class="badge">
+        <span class="dot"></span>
+        Win-Win Job – Digital job center
       </div>
 
-      <h1 class="hero__title">
-        Fair jobs.<br />
-        <span class="accent">Fast pay.</span>
-        <span class="subaccent">Digital & simple.</span>
+      <h1 class="h1">
+        Fair jobs.<br/>
+        <span class="grad">Fast pay.</span>
       </h1>
 
-      <p class="hero__desc">
-        A digital job center connecting people who need work with people who need help.
-        No resumes. No long interviews. Just real jobs and fair pay.
+      <p class="p">
+        Find local jobs fast. Apply in minutes. Clear pay & simple rules.
       </p>
 
-      <div class="hero__actions">
+      <div class="actions">
         <a class="btn btn--primary btn--lg" href="/jobs">Find jobs</a>
-        <a class="btn btn--soft btn--lg" href="/post">Post a job</a>
-      </div>
-
-      <div class="hero__trust">
-        <span>✔ Quick posting</span>
-        <span>✔ Local tasks</span>
-        <span>✔ Direct contact</span>
+        <a class="btn btn--ghost btn--lg" href="/post">Post a job</a>
       </div>
     </div>
 
-    <div class="hero__right">
-      <div class="card card--glass">
-        <div class="card__title">Popular tasks</div>
-        <ul class="mini-list">
-          <li>Cleaning & organizing</li>
-          <li>Moving help</li>
-          <li>Yard work</li>
-          <li>Shopping & errands</li>
-          <li>Handyman tasks</li>
-        </ul>
+    <!-- Right card -->
+    <div class="card card--pad">
+      <h3 class="h3">Popular tasks</h3>
+      <ul class="list">
+        <li>Cleaning & organizing</li>
+        <li>Moving help</li>
+        <li>Yard work</li>
+        <li>Shopping & errands</li>
+        <li>Handyman tasks</li>
+      </ul>
 
-        <div class="card__cta">
-          <a class="btn btn--ghost btn--sm" href="/tasks">Browse tasks</a>
-          <a class="btn btn--primary btn--sm" href="/jobs">Browse jobs</a>
-        </div>
+      <div class="actions">
+        <a class="btn btn--ghost" href="/tasks">Browse tasks</a>
+        <a class="btn btn--primary" href="/jobs">Browse jobs</a>
       </div>
-    </div>
-  </div>
-</section>
-
-<section class="section">
-  <div class="container">
-    <h2 class="section__title">How it works</h2>
-
-    <div class="grid3">
-      <div class="feature">
-        <div class="feature__icon">1</div>
-        <div class="feature__text">
-          <div class="feature__title">Post or browse</div>
-          <div class="feature__desc">Post a job in minutes or browse local jobs.</div>
-        </div>
-      </div>
-
-      <div class="feature">
-        <div class="feature__icon">2</div>
-        <div class="feature__text">
-          <div class="feature__title">Connect fast</div>
-          <div class="feature__desc">Message directly. No long process.</div>
-        </div>
-      </div>
-
-      <div class="feature">
-        <div class="feature__icon">3</div>
-        <div class="feature__text">
-          <div class="feature__title">Work & get paid</div>
-          <div class="feature__desc">Complete the job and get paid fairly.</div>
-        </div>
-      </div>
-    </div>
-
-    <div style="margin-top:18px;">
-      <a class="btn btn--ghost" href="/contact">Contact us</a>
     </div>
   </div>
 </section>
