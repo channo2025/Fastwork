@@ -1,76 +1,39 @@
 {% extends "base.html" %}
 {% block body %}
 
-<div class="container" style="max-width: 720px; margin: 0 auto; padding: 24px;">
-  <div class="card" style="background: #fff; border: 1px solid rgba(0,0,0,0.08); border-radius: 14px; padding: 22px;">
-    <h1 style="margin: 0 0 6px 0; font-size: 34px; line-height: 1.15;">Post a job</h1>
-    <p style="margin: 0 0 18px 0; opacity: 0.75;">Describe the task, pay, and location.</p>
+<section class="section">
+  <div class="container" style="max-width:720px;margin:0 auto;padding:24px;">
 
-    {% if error %}
-      <div style="background:#fff3f3;border:1px solid #ffd0d0;color:#b00020;padding:12px 14px;border-radius:10px;margin-bottom:14px;">
-        {{ error }}
-      </div>
-    {% endif %}
+    <h1>Post a job</h1>
+    <p>Describe the task, pay, and location.</p>
 
     <form method="post" action="/post">
-      <!-- Title -->
-      <div style="margin-bottom: 14px;">
-        <label for="title" style="display:block;font-weight:600;margin-bottom:8px;">Title</label>
-        <input id="title" name="title" type="text" placeholder="Move a couch" required
-               value="{{ form.title if form else '' }}"
-               style="width:100%; padding:14px; border-radius:12px; border:1px solid rgba(0,0,0,0.14); outline:none;">
-      </div>
 
-      <!-- Category (FIXED) -->
-      <div style="margin-bottom: 14px;">
-        <label for="category" style="display:block;font-weight:600;margin-bottom:8px;">Category</label>
-        <select id="category" name="category" required
-                style="width:100%; padding:14px; border-radius:12px; border:1px solid rgba(0,0,0,0.14); outline:none; background:#fff;">
-          <option value="">Select a category</option>
-          <option value="Moving" {% if form and form.category == 'Moving' %}selected{% endif %}>Moving</option>
-          <option value="Cleaning" {% if form and form.category == 'Cleaning' %}selected{% endif %}>Cleaning</option>
-          <option value="Yard work" {% if form and form.category == 'Yard work' %}selected{% endif %}>Yard work</option>
-          <option value="Delivery" {% if form and form.category == 'Delivery' %}selected{% endif %}>Delivery</option>
-          <option value="Handyman" {% if form and form.category == 'Handyman' %}selected{% endif %}>Handyman</option>
-          <option value="Shopping" {% if form and form.category == 'Shopping' %}selected{% endif %}>Shopping</option>
-          <option value="Other" {% if form and form.category == 'Other' %}selected{% endif %}>Other</option>
-        </select>
-      </div>
+      <label>Title</label>
+      <input name="title" required>
 
-      <!-- City -->
-      <div style="margin-bottom: 14px;">
-        <label for="city" style="display:block;font-weight:600;margin-bottom:8px;">City</label>
-        <input id="city" name="city" type="text" placeholder="Portland, OR" required
-               value="{{ form.city if form else '' }}"
-               style="width:100%; padding:14px; border-radius:12px; border:1px solid rgba(0,0,0,0.14); outline:none;">
-      </div>
+      <label>Category</label>
+      <select name="category" required>
+        <option value="">Select</option>
+        <option value="Moving">Moving</option>
+        <option value="Cleaning">Cleaning</option>
+        <option value="Delivery">Delivery</option>
+        <option value="Other">Other</option>
+      </select>
 
-      <!-- Pay -->
-      <div style="margin-bottom: 14px;">
-        <label for="pay" style="display:block;font-weight:600;margin-bottom:8px;">Pay (USD)</label>
-        <input id="pay" name="pay" type="number" min="0" step="1" placeholder="60" required
-               value="{{ form.pay if form else '' }}"
-               style="width:100%; padding:14px; border-radius:12px; border:1px solid rgba(0,0,0,0.14); outline:none;">
-      </div>
+      <label>City</label>
+      <input name="location" required>
 
-      <!-- Description -->
-      <div style="margin-bottom: 18px;">
-        <label for="description" style="display:block;font-weight:600;margin-bottom:8px;">Description</label>
-        <textarea id="description" name="description" rows="5" placeholder="Details, time, requirements..." required
-                  style="width:100%; padding:14px; border-radius:12px; border:1px solid rgba(0,0,0,0.14); outline:none; resize:vertical;">{{ form.description if form else '' }}</textarea>
-      </div>
+      <label>Pay</label>
+      <input name="pay" type="number" required>
 
-      <div style="display:flex; gap:10px; align-items:center;">
-        <button type="submit" class="btn btn--primary" style="border:none; cursor:pointer; padding:12px 18px; border-radius:12px; font-weight:700;">
-          Publish
-        </button>
+      <label>Description</label>
+      <textarea name="description" required></textarea>
 
-        <a href="/" class="btn btn--ghost" style="display:inline-block; padding:12px 18px; border-radius:12px; border:1px solid rgba(0,0,0,0.14); text-decoration:none;">
-          Cancel
-        </a>
-      </div>
+      <button type="submit">Publish</button>
+
     </form>
   </div>
-</div>
+</section>
 
 {% endblock %}
