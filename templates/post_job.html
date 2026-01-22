@@ -1,37 +1,114 @@
 {% extends "base.html" %}
-{% block title %}Post a job – Win-Win Job{% endblock %}
+{% block content %}
 
-{% block body %}
-<section class="container">
-  <div class="card card--pad" style="max-width:760px;">
-    <h1 class="h2">Post a job</h1>
-    <p class="muted">Describe the task, pay, and location.</p>
+<div class="container" style="max-width: 720px; margin: 0 auto; padding: 24px;">
+  <div class="card" style="background: #fff; border: 1px solid rgba(0,0,0,0.08); border-radius: 14px; padding: 22px;">
+    <h1 style="margin: 0 0 6px 0; font-size: 34px; line-height: 1.15;">Post a job</h1>
+    <p style="margin: 0 0 18px 0; opacity: 0.75;">Describe the task, pay, and location.</p>
 
-    <form action="/post" method="post" class="form" style="margin-top:14px;">
-      <label class="label">Title</label>
-      <input class="input" name="title" placeholder="Move a couch" required>
+    {% if error %}
+      <div style="background:#fff3f3;border:1px solid #ffd0d0;color:#b00020;padding:12px 14px;border-radius:10px;margin-bottom:14px;">
+        {{ error }}
+      </div>
+    {% endif %}
 
-      <label class="label">Category</label>
-      <select class="input" name="category" required>
-        {% for name, icon in categories %}
-          <option value="{{ name }}">{{ icon }} {{ name }}</option>
-        {% endfor %}
-      </select>
+    <form method="post" action="/post-job">
+      <!-- Title -->
+      <div style="margin-bottom: 14px;">
+        <label for="title" style="display:block;font-weight:600;margin-bottom:8px;">Title</label>
+        <input
+          id="title"
+          name="title"
+          type="text"
+          placeholder="Move a couch"
+          required
+          value="{{ form.title if form else '' }}"
+          style="width:100%; padding:14px 14px; border-radius:12px; border:1px solid rgba(0,0,0,0.14); outline:none;"
+        />
+      </div>
 
-      <label class="label">City</label>
-      <input class="input" name="city" placeholder="Portland, OR" required>
+      <!-- Category (FIXED) -->
+      <div style="margin-bottom: 14px;">
+        <label for="category" style="display:block;font-weight:600;margin-bottom:8px;">Category</label>
+        <select
+          id="category"
+          name="category"
+          required
+          style="width:100%; padding:14px 14px; border-radius:12px; border:1px solid rgba(0,0,0,0.14); outline:none; background:#fff;"
+        >
+          <option value="">Select a category</option>
+          <option value="Moving" {% if form and form.category == 'Moving' %}selected{% endif %}>Moving</option>
+          <option value="Cleaning" {% if form and form.category == 'Cleaning' %}selected{% endif %}>Cleaning</option>
+          <option value="Yard work" {% if form and form.category == 'Yard work' %}selected{% endif %}>Yard work</option>
+          <option value="Delivery" {% if form and form.category == 'Delivery' %}selected{% endif %}>Delivery</option>
+          <option value="Handyman" {% if form and form.category == 'Handyman' %}selected{% endif %}>Handyman</option>
+          <option value="Shopping" {% if form and form.category == 'Shopping' %}selected{% endif %}>Shopping</option>
+          <option value="Other" {% if form and form.category == 'Other' %}selected{% endif %}>Other</option>
+        </select>
+      </div>
 
-      <label class="label">Pay (USD)</label>
-      <input class="input" type="number" name="pay" placeholder="60" min="1" required>
+      <!-- City -->
+      <div style="margin-bottom: 14px;">
+        <label for="city" style="display:block;font-weight:600;margin-bottom:8px;">City</label>
+        <input
+          id="city"
+          name="city"
+          type="text"
+          placeholder="Portland, OR"
+          required
+          value="{{ form.city if form else '' }}"
+          style="width:100%; padding:14px 14px; border-radius:12px; border:1px solid rgba(0,0,0,0.14); outline:none;"
+        />
+      </div>
 
-      <label class="label">Description</label>
-      <textarea class="input" name="description" rows="5" placeholder="Details, time, requirements…" required></textarea>
+      <!-- Pay -->
+      <div style="margin-bottom: 14px;">
+        <label for="pay" style="display:block;font-weight:600;margin-bottom:8px;">Pay (USD)</label>
+        <input
+          id="pay"
+          name="pay"
+          type="number"
+          min="0"
+          step="1"
+          placeholder="60"
+          required
+          value="{{ form.pay if form else '' }}"
+          style="width:100%; padding:14px 14px; border-radius:12px; border:1px solid rgba(0,0,0,0.14); outline:none;"
+        />
+      </div>
 
-      <div class="cta">
-        <button class="btn btn--primary" type="submit">Publish</button>
-        <a class="btn btn--ghost" href="/jobs">Cancel</a>
+      <!-- Description -->
+      <div style="margin-bottom: 18px;">
+        <label for="description" style="display:block;font-weight:600;margin-bottom:8px;">Description</label>
+        <textarea
+          id="description"
+          name="description"
+          rows="5"
+          placeholder="Details, time, requirements..."
+          required
+          style="width:100%; padding:14px 14px; border-radius:12px; border:1px solid rgba(0,0,0,0.14); outline:none; resize:vertical;"
+        >{{ form.description if form else '' }}</textarea>
+      </div>
+
+      <!-- Buttons -->
+      <div style="display:flex; gap:10px; align-items:center;">
+        <button
+          type="submit"
+          style="border:none; cursor:pointer; padding:12px 18px; border-radius:12px; font-weight:700;"
+          class="btn-primary"
+        >
+          Publish
+        </button>
+
+        <a
+          href="/"
+          style="display:inline-block; padding:12px 18px; border-radius:12px; border:1px solid rgba(0,0,0,0.14); text-decoration:none;"
+        >
+          Cancel
+        </a>
       </div>
     </form>
   </div>
-</section>
+</div>
+
 {% endblock %}
