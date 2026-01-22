@@ -84,9 +84,15 @@ async def jobs(request: Request):
 # POST A JOB (KEEP)
 # If you already have DB logic, paste it back in these handlers.
 # -----------------------------
-@app.get("/post", response_class=HTMLResponse)
-async def post_job_form(request: Request):
-    return templates.TemplateResponse("post_job.html", {"request": request})
+@app.get("/post")
+def post_job(request: Request):
+    return templates.TemplateResponse(
+        "post_job.html",
+        {
+            "request": request,
+            "form": None   # ✅ FIX CRITIQUE
+        }
+    )
 
 
 @app.post("/post", response_class=HTMLResponse)
