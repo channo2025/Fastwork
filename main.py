@@ -90,12 +90,12 @@ def post_job(request: Request):
         "post_job.html",
         {"request": request, "form": None, "error": None}
     )
-
 @app.post("/post", response_class=HTMLResponse)
 async def post_job_submit(
     request: Request,
     title: str = Form(...),
-    location: str = Form(...),
+    category: str = Form(...),
+    city: str = Form(...),      # PAS location
     pay: str = Form(...),
     description: str = Form(...),
 ):
