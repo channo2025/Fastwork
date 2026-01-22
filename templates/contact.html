@@ -1,38 +1,68 @@
 {% extends "base.html" %}
 
-{% block title %}Contact us — Win-Win Job{% endblock %}
+{% block title %}Contact — Win-Win Job{% endblock %}
 
 {% block body %}
 <section class="container">
   <div class="card card--pad">
+    <div class="badge">
+      <span class="dot"></span>
+      Contact Win-Win Job
+    </div>
+
     <h1 class="h2">Contact us</h1>
-    <p class="p">Send us a message and we’ll get back to you.</p>
+    <p class="p">
+      Have a question, feedback, or a partnership idea? Send us a message — we reply fast.
+    </p>
 
-    <form method="post" action="/contact">
-      <div class="form__field">
-        <label>Name</label>
-        <input class="input" name="name" required />
+    {% if sent %}
+      <div class="notice notice--success">
+        ✅ Message sent! Thank you — we’ll get back to you soon.
+      </div>
+    {% endif %}
+
+    <form method="post" action="/contact" class="form">
+      <div class="form__row">
+        <div class="form__field">
+          <label class="label" for="name">Name</label>
+          <input class="input" id="name" name="name" placeholder="Your name" required />
+        </div>
+
+        <div class="form__field">
+          <label class="label" for="email">Email</label>
+          <input class="input" id="email" name="email" type="email" placeholder="you@email.com" required />
+        </div>
       </div>
 
       <div class="form__field">
-        <label>Email</label>
-        <input class="input" type="email" name="email" required />
-      </div>
-
-      <div class="form__field">
-        <label>Message</label>
-        <textarea class="textarea" name="message" rows="5" required></textarea>
+        <label class="label" for="message">Message</label>
+        <textarea class="textarea" id="message" name="message" rows="6"
+          placeholder="Tell us what you need…" required></textarea>
       </div>
 
       <div class="actions">
-        <button class="btn btn--primary btn--lg" type="submit">Send</button>
+        <button class="btn btn--primary btn--lg" type="submit">Send message</button>
         <a class="btn btn--ghost btn--lg" href="/">Back home</a>
       </div>
-    </form>
 
-    {% if sent %}
-      <p class="notice">✅ Message sent successfully.</p>
-    {% endif %}
+      <p class="tiny">
+        Tip: Do not share sensitive personal information.
+      </p>
+    </form>
+  </div>
+
+  <div class="grid grid--2 mt">
+    <div class="card card--pad">
+      <h3 class="h3">For employers</h3>
+      <p class="p">Need help posting a job or improving your listing? We can help.</p>
+      <a class="btn btn--soft" href="/post">Post a job</a>
+    </div>
+
+    <div class="card card--pad">
+      <h3 class="h3">For workers</h3>
+      <p class="p">Questions about applying or using the platform? Send us a message.</p>
+      <a class="btn btn--soft" href="/jobs">Browse jobs</a>
+    </div>
   </div>
 </section>
 {% endblock %}
