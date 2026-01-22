@@ -90,10 +90,10 @@ def post_job(request: Request):
         "post_job.html",
         {
             "request": request,
-            "form": None   # ✅ FIX CRITIQUE
+            "form": None,
+            "error": None
         }
     )
-
 
 @app.post("/post", response_class=HTMLResponse)
 async def post_job_submit(
