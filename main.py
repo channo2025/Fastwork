@@ -334,8 +334,6 @@ async def post_success(request: Request):
 async def health():
     return {"ok": True}
 
-from fastapi import Request, Form
-from fastapi.responses import HTMLResponse
 
 @app.get("/", response_class=HTMLResponse)
 def home(request: Request):
