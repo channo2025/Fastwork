@@ -91,13 +91,30 @@ async def post_a_job_page(request: Request):
 # ---------------------------
 @app.get("/post", response_class=HTMLResponse)
 async def post_page(request: Request):
-    return templates.TemplateResponse("post.html", {"request": request})
+    return templates.TemplateResponse(
+        "post.html",
+        {"request": request}
+    )
+
+@app.post("/post")
+async def post_submit(
+    request: Request,
     title: str = Form(...),
     company: str = Form(...),
     city: str = Form(...),
     category: str = Form(...),
     description: str = Form(...),
 ):
+    # 👉 ici tu peux garder ton code DB existant
+    # job_id = create_job_in_db(...)
+
+    job_id = "new"  # temporaire si pas encore de DB
+
+    return RedirectResponse(
+        url=f"/post-success/{job_id}",
+        status_code=303
+    )
+
     # ✅ ICI: garde ton code existant de création en DB si tu en as un
     # Exemple pseudo:
     # job_id = create_job_in_db(title, company, city, category, description)
