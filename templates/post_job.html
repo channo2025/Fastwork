@@ -1,6 +1,7 @@
 {% extends "base.html" %}
-{% block body %}
+{% block title %}Post a job - Win-Win Job{% endblock %}
 
+{% block body %}
 <section class="section">
   <div class="container" style="max-width:720px;margin:0 auto;padding:24px;">
 
@@ -8,7 +9,6 @@
     <p>Describe the task, pay, and location.</p>
 
     <form method="post" action="/post">
-
       <label>Title</label>
       <input name="title" required>
 
@@ -22,18 +22,18 @@
       </select>
 
       <label>City</label>
-      <input name="location" required>
+      <!-- ✅ FIX: backend attends "city" -->
+      <input name="city" required>
 
-      <label>Pay</label>
+      <label>Pay (USD)</label>
       <input name="pay" type="number" required>
 
       <label>Description</label>
       <textarea name="description" required></textarea>
 
       <button type="submit">Publish</button>
-
     </form>
+
   </div>
 </section>
-
 {% endblock %}
