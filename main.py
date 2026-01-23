@@ -79,34 +79,48 @@ async def categories(request: Request):
 async def jobs(request: Request):
     return templates.TemplateResponse("jobs.html", {"request": request})
 
+# ---------------------------
+# POST A JOB (FORM PAGE)
+# ---------------------------
+@app.get("/post-a-job", response_class=HTMLResponse)
+async def post_a_job_page(request: Request):
+    return templates.TemplateResponse("post_a-job.html", {"request": request})
 
-# -----------------------------
-# POST A JOB (KEEP)
-# If you already have DB logic, paste it back in these handlers.
-# -----------------------------
-@app.get("/post")
-def post_job(request: Request):
-    return templates.TemplateResponse(
-        "post_job.html",
-        {"request": request, "form": None, "error": None}
-    )
-@app.post("/post", response_class=HTMLResponse)
-async def post_job_submit(
+# ---------------------------
+# POST A JOB (SUBMIT)
+# ---------------------------
+@app.post("/post-a-job")
+async def post_a_job_submit(
     request: Request,
     title: str = Form(...),
+    company: str = Form(...),
+    city: str = Form(...),
     category: str = Form(...),
-    city: str = Form(...),      # PAS location
-    pay: str = Form(...),
     description: str = Form(...),
 ):
-    # TODO: save to DB later if you want.
-    # For now show success page (adjust name if yours differs)
+    # ✅ ICI: garde ton code existant de création en DB si tu en as un
+    # Exemple pseudo:
+    # job_id = create_job_in_db(title, company, city, category, description)
+
+    # 🔁 Si tu n'as pas encore de DB et tu utilisais une liste/dict, garde pareil
+    # MAIS assure-toi de récupérer un job_id unique.
+    job_id = "new"  # <-- remplace par ton vrai job_id
+
+    # ✅ Redirect propre pour éviter que le navigateur re-POST au refresh
+    return RedirectResponse(url=f"/post-success/{job_id}", status_code=303)
+
+# ---------------------------
+# POST SUCCESS PAGE
+# ---------------------------
+@app.get("/post-success/{job_id}", response_class=HTMLResponse)
+async def post_success(request: Request, job_id: str):
     return templates.TemplateResponse(
         "post_success.html",
-        {"request": request, "title": title, "location": location, "pay": pay},
-    )
-
-
+        {
+            "request": request,
+            "job_id": job_id,
+        },
+    
 # -----------------------------
 # APPLY (KEEP)
 # Adjust template names to match your project.

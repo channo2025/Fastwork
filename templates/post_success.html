@@ -1,16 +1,13 @@
 {% extends "base.html" %}
-{% block body %}
+{% block content %}
+<div class="card">
+  <h1>✅ Job posted successfully!</h1>
+  <p>Your job has been published. You can share the link or view the job details now.</p>
 
-<section class="section">
-  <div class="container" style="max-width:720px;margin:0 auto;padding:24px;">
-    <h1>✅ Job posted</h1>
-    <p>Your job is live. Applicants can now find it and contact you.</p>
-
-    <div style="margin-top:16px;">
-      <a class="btn btn--primary" href="/jobs">View jobs</a>
-      <a class="btn btn--soft" href="/post" style="margin-left:10px;">Post another</a>
-    </div>
+  <div style="margin-top:16px; display:flex; gap:12px; flex-wrap:wrap;">
+    <a class="btn" href="/job/{{ job_id }}">View job</a>
+    <a class="btn btn-outline" href="/post-a-job">Post another job</a>
+    <a class="btn btn-outline" href="/">Back to Home</a>
   </div>
-</section>
-
+</div>
 {% endblock %}
