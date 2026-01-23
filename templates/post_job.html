@@ -1,36 +1,36 @@
 {% extends "base.html" %}
+
 {% block body %}
+<div class="container" style="max-width: 820px; margin: 0 auto; padding: 24px;">
+  <h1 style="margin-bottom:16px;">Post a job</h1>
 
-<section class="section">
-  <div class="container" style="max-width:720px;margin:0 auto;padding:24px;">
-    <h1>Post a job</h1>
-    <p>Describe the task, pay, and location.</p>
+  <form method="post" action="/post" style="display:grid; gap:12px;">
+    <div>
+      <label>Job title</label>
+      <input name="title" required style="width:100%; padding:10px;"/>
+    </div>
 
-    <form method="post" action="/post">
-      <label>Title</label>
-      <input name="title" required>
+    <div>
+      <label>Company</label>
+      <input name="company" required style="width:100%; padding:10px;"/>
+    </div>
 
-      <label>Category</label>
-      <select name="category" required>
-        <option value="">Select</option>
-        <option value="Moving">Moving</option>
-        <option value="Cleaning">Cleaning</option>
-        <option value="Delivery">Delivery</option>
-        <option value="Other">Other</option>
-      </select>
-
+    <div>
       <label>City</label>
-      <input name="city" required>
+      <input name="city" required style="width:100%; padding:10px;"/>
+    </div>
 
-      <label>Pay (USD)</label>
-      <input name="pay" type="number" required>
+    <div>
+      <label>Category</label>
+      <input name="category" required style="width:100%; padding:10px;"/>
+    </div>
 
+    <div>
       <label>Description</label>
-      <textarea name="description" required></textarea>
+      <textarea name="description" rows="6" required style="width:100%; padding:10px;"></textarea>
+    </div>
 
-      <button type="submit">Publish</button>
-    </form>
-  </div>
-</section>
-
+    <button type="submit" class="btn">Publish job</button>
+  </form>
+</div>
 {% endblock %}
