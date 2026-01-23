@@ -119,8 +119,8 @@ async def post_success(request: Request, job_id: str):
         {
             "request": request,
             "job_id": job_id,
-        },
-    
+        }
+    )
 # -----------------------------
 # APPLY (KEEP)
 # Adjust template names to match your project.
