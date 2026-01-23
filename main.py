@@ -89,9 +89,9 @@ async def post_a_job_page(request: Request):
 # ---------------------------
 # POST A JOB (SUBMIT)
 # ---------------------------
-@app.post("/post-a-job")
-async def post_a_job_submit(
-    request: Request,
+@app.get("/post", response_class=HTMLResponse)
+async def post_page(request: Request):
+    return templates.TemplateResponse("post.html", {"request": request})
     title: str = Form(...),
     company: str = Form(...),
     city: str = Form(...),
