@@ -100,46 +100,48 @@ async def post_submit(
     job_id = "new"
 
     return RedirectResponse(url=f"/post-success/{job_id}", status_code=303)
-# ---------------------------
-# POST A JOB (SUBMIT)
-# ---------------------------
+
+from fastapi import Request, Form
+from fastapi.responses import HTMLResponse, RedirectResponse
+
+# ✅ GET: afficher le formulaire
 @app.get("/post", response_class=HTMLResponse)
-async def post_page(request: Request):
+async def post_job_form(request: Request):
+    # categories safe (si CATEGORIES existe déjà dans ton code, ça marche)
+    categories = []
+    try:
+        # si tu as CATEGORIES = [(name, icon), ...]
+        categories = CATEGORIES
+    except Exception:
+        categories = [("Cleaning", "🧽"), ("Moving help", "📦"), ("Yard work", "🌿"), ("Delivery", "🚚"), ("Handyman", "🛠️")]
+
     return templates.TemplateResponse(
-        "post.html",
-        {"request": request}
+        "post_job.html",
+        {
+            "request": request,
+            "categories": categories,
+        },
     )
 
+# ✅ Alias si ton menu pointe vers /post-a-job
+@app.get("/post-a-job", response_class=HTMLResponse)
+async def post_job_form_alias(request: Request):
+    return await post_job_form(request)
+
+# ✅ POST: soumission du formulaire
 @app.post("/post")
-async def post_submit(
+async def post_job_submit(
     request: Request,
     title: str = Form(...),
-    company: str = Form(...),
     city: str = Form(...),
     category: str = Form(...),
+    pay: str = Form(...),
     description: str = Form(...),
 ):
-    # 👉 ici tu peux garder ton code DB existant
-    # job_id = create_job_in_db(...)
-
-    job_id = "new"  # temporaire si pas encore de DB
-
-    return RedirectResponse(
-        url=f"/post-success/{job_id}",
-        status_code=303
-    )
-
-    # ✅ ICI: garde ton code existant de création en DB si tu en as un
-    # Exemple pseudo:
-    # job_id = create_job_in_db(title, company, city, category, description)
-
-    # 🔁 Si tu n'as pas encore de DB et tu utilisais une liste/dict, garde pareil
-    # MAIS assure-toi de récupérer un job_id unique.
-    job_id = "new"  # <-- remplace par ton vrai job_id
-
-    # ✅ Redirect propre pour éviter que le navigateur re-POST au refresh
-    return RedirectResponse(url=f"/post-success/{job_id}", status_code=303)
-
+    # IMPORTANT: ne crash pas même sans DB
+    # Si tu as déjà une fonction DB create_job(), appelle-la ici.
+    # Sinon, on redirige juste vers /jobs (ou /post-success si tu l’as).
+    return RedirectResponse(url="/jobs", status_code=303)
 # ---------------------------
 # POST SUCCESS PAGE
 # ---------------------------
@@ -152,35 +154,17 @@ async def post_success(request: Request, job_id: str):
             "job_id": job_id,
         }
     )
-
-from fastapi.responses import RedirectResponse, HTMLResponse
-from fastapi import Request, Form
-
-@app.post("/apply/{job_id}")
-async def submit_application(
-    request: Request,
-    job_id: int,
-    full_name: str = Form(...),
-    phone: str = Form(...),
-    email: str = Form(None),
-    message: str = Form(None),
-):
-    # TODO: save to DB later (for now, no crash)
-    return RedirectResponse(url=f"/apply-success/{job_id}", status_code=303)
+# -----------------------------
+# APPLY (KEEP)
+# Adjust template names to match your project.
+# -----------------------------
+@app.get("/apply/{job_id}", response_class=HTMLResponse)
+async def apply_form(request: Request, job_id: str):
+    return templates.TemplateResponse("apply.html", {"request": request, "job_id": job_id})
 
 
-@app.get("/apply-success/{job_id}", response_class=HTMLResponse)
-async def apply_success(request: Request, job_id: int):
-    job = None
-    try:
-        job = get_job_by_id(job_id)  # if you have this function
-    except Exception:
-        job = None
-
-    return templates.TemplateResponse(
-        "apply_success.html",
-        {"request": request, "job": job, "job_id": job_id},
-    )
+@app.post("/apply/{job_id}", response_class=HTMLResponse)
+async dob_detail.html", {"request": request, "job_id": job_id})
 
 
 # -----------------------------
