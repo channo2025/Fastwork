@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import os
 from dataclasses import dataclass, asdict
 from typing import Dict, List, Optional
 
@@ -29,22 +28,22 @@ def template_exists(name: str) -> bool:
         return False
 
 
-def render(request: Request, preferred: List[str], context: dict) -> HTMLResponse:
+def render(request: Request, preferred: List[str], context: dict, status_code: int = 200) -> HTMLResponse:
     """
     Render the first template that exists from `preferred`.
     If none exists, render 404.html if available, else raise 404.
     """
     for t in preferred:
         if template_exists(t):
-            return templates.TemplateResponse(t, {"request": request, **context})
+            return templates.TemplateResponse(t, {"request": request, **context}, status_code=status_code)
 
-    # fallback
     if template_exists("404.html"):
         return templates.TemplateResponse(
             "404.html",
             {"request": request, "message": "Page not found (template missing)."},
             status_code=404,
         )
+
     raise HTTPException(status_code=404, detail="Template not found")
 
 
@@ -52,7 +51,7 @@ def render(request: Request, preferred: List[str], context: dict) -> HTMLRespons
 # Branding (available in Jinja)
 # -----------------------------
 BRAND_NAME = "Win-Win Job"
-BRAND_TAGLINE = "Fair jobs. Fast pay. Digital & simple."
+BRAND_TAGLINE = "Digital Job Center"
 
 templates.env.globals["BRAND_NAME"] = BRAND_NAME
 templates.env.globals["BRAND_TAGLINE"] = BRAND_TAGLINE
@@ -60,7 +59,7 @@ templates.env.globals["BRAND_TAGLINE"] = BRAND_TAGLINE
 
 # -----------------------------
 # In-memory demo data (safe)
-# Replace later with DB if you want
+# Replace later with DB
 # -----------------------------
 @dataclass
 class Job:
@@ -68,8 +67,9 @@ class Job:
     title: str
     city: str
     category: str
-    pay: str
     description: str
+    pay: str = ""
+    company: str = ""  # optional (some templates have it)
 
 
 @dataclass
@@ -78,8 +78,8 @@ class Application:
     job_id: int
     full_name: str
     phone: str
-    email: Optional[str]
-    message: Optional[str]
+    email: Optional[str] = None
+    message: Optional[str] = None
 
 
 JOB_SEQ = 3
@@ -92,6 +92,7 @@ JOBS: Dict[int, Job] = {
         city="Portland, OR",
         category="Moving help",
         pay="120",
+        company="",
         description="Need help moving a couch from apartment to storage. 1–2 hours.",
     ),
     2: Job(
@@ -100,6 +101,7 @@ JOBS: Dict[int, Job] = {
         city="Portland, OR",
         category="Cleaning",
         pay="80",
+        company="",
         description="General cleaning for small apartment. Bring your supplies if possible.",
     ),
     3: Job(
@@ -108,6 +110,7 @@ JOBS: Dict[int, Job] = {
         city="Vancouver, WA",
         category="Yard work",
         pay="100",
+        company="",
         description="Rake leaves + bagging. About 2 hours.",
     ),
 }
@@ -129,22 +132,32 @@ def get_job(job_id: int) -> Optional[Job]:
     return JOBS.get(job_id)
 
 
+def last_application_for_job(job_id: int) -> Optional[dict]:
+    for app_ in reversed(APPLICATIONS):
+        if app_.job_id == job_id:
+            return asdict(app_)
+    return None
+
+
 # -----------------------------
 # Routes
 # -----------------------------
 @app.get("/", response_class=HTMLResponse)
 def home(request: Request):
-    return render(request, ["index.html"], {"categories": CATEGORIES})
+    # give templates more context to avoid crashes
+    return render(
+        request,
+        ["index.html"],
+        {
+            "categories": CATEGORIES,
+            "tasks": CATEGORIES,  # some templates call them tasks
+            "popular_tasks": CATEGORIES,
+        },
+    )
 
 
 @app.get("/jobs", response_class=HTMLResponse)
-def jobs_list(
-    request: Request,
-    q: str = "",
-    city: str = "",
-    category: str = "",
-):
-    # filter
+def jobs_list(request: Request, q: str = "", city: str = "", category: str = ""):
     all_jobs = list(JOBS.values())
 
     def match(job: Job) -> bool:
@@ -158,7 +171,6 @@ def jobs_list(
 
     filtered = [asdict(j) for j in all_jobs if match(j)]
 
-    # Send categories to build dropdown
     return render(
         request,
         ["jobs.html"],
@@ -168,6 +180,7 @@ def jobs_list(
             "city": city,
             "category": category,
             "categories": CATEGORIES,
+            "tasks": CATEGORIES,
         },
     )
 
@@ -176,13 +189,17 @@ def jobs_list(
 def job_detail(request: Request, job_id: int):
     job = get_job(job_id)
     if not job:
-        # job not found -> show 404 page
-        return render(request, ["404.html"], {"message": "Job not found."})
+        return render(request, ["404.html"], {"message": "Job not found."}, status_code=404)
 
     return render(
         request,
         ["job_detail.html"],
-        {"job": asdict(job), "categories": CATEGORIES},
+        {
+            "job": asdict(job),
+            "job_id": job_id,
+            "categories": CATEGORIES,
+            "tasks": CATEGORIES,
+        },
     )
 
 
@@ -192,17 +209,25 @@ def categories_page(request: Request):
     return render(
         request,
         ["categories.html"],
-        {"categories": CATEGORIES, "mode": "categories"},
+        {
+            "categories": CATEGORIES,
+            "tasks": CATEGORIES,
+            "mode": "categories",
+        },
     )
 
 
 @app.get("/tasks", response_class=HTMLResponse)
 def tasks_page(request: Request):
-    # You don't have tasks.html in the screenshot, so we reuse categories.html safely
+    # If tasks.html doesn't exist, reuse categories.html
     return render(
         request,
-        ["categories.html"],
-        {"categories": CATEGORIES, "mode": "tasks"},
+        ["tasks.html", "categories.html"],
+        {
+            "categories": CATEGORIES,
+            "tasks": CATEGORIES,
+            "mode": "tasks",
+        },
     )
 
 
@@ -212,32 +237,42 @@ def post_job_form(request: Request):
     return render(
         request,
         ["post_job.html"],
-        {"categories": CATEGORIES},
+        {
+            "categories": CATEGORIES,
+            "tasks": CATEGORIES,
+        },
     )
 
 
 @app.post("/post")
 def post_job_submit(
     request: Request,
+    # required fields
     title: str = Form(...),
     city: str = Form(...),
     category: str = Form(...),
-    pay: str = Form(...),
     description: str = Form(...),
+    # optional fields (templates differ)
+    company: str = Form(""),
+    pay: str = Form(""),
 ):
     global JOB_SEQ
     JOB_SEQ += 1
+
+    pay_clean = (pay or "").strip().replace("$", "")
+    company_clean = (company or "").strip()
 
     JOBS[JOB_SEQ] = Job(
         id=JOB_SEQ,
         title=title.strip(),
         city=city.strip(),
         category=category.strip(),
-        pay=pay.strip().replace("$", ""),
         description=description.strip(),
+        pay=pay_clean,
+        company=company_clean,
     )
 
-    # redirect to new job detail
+    # Redirect to new job detail
     return RedirectResponse(url=f"/jobs/{JOB_SEQ}", status_code=303)
 
 
@@ -250,13 +285,16 @@ def apply_form(request: Request, job_id: int):
             request,
             ["apply_not_found.html", "404.html"],
             {"message": "This job no longer exists.", "job_id": job_id},
+            status_code=404,
         )
 
-    # You have multiple apply templates; we'll pick the best one that exists
     return render(
         request,
         ["apply_job.html", "apply.html", "applyy.html"],
-        {"job": asdict(job)},
+        {
+            "job": asdict(job),
+            "job_id": job_id,
+        },
     )
 
 
@@ -271,6 +309,7 @@ def apply_submit(
     message: str = Form(""),
 ):
     global APP_SEQ
+
     job = get_job(job_id)
     if not job:
         return RedirectResponse(url=f"/apply/{job_id}", status_code=303)
@@ -282,40 +321,45 @@ def apply_submit(
             job_id=job_id,
             full_name=full_name.strip(),
             phone=phone.strip(),
-            email=email.strip() or None,
-            message=message.strip() or None,
+            email=(email.strip() or None),
+            message=(message.strip() or None),
         )
     )
 
-    # IMPORTANT: this is the route your site needs
     return RedirectResponse(url=f"/apply-success/{job_id}", status_code=303)
 
 
-# ✅ Apply success route (this is what was missing/broken)
+# Apply success
 @app.get("/apply-success/{job_id}", response_class=HTMLResponse)
 def apply_success(request: Request, job_id: int):
     job = get_job(job_id)
+    app_last = last_application_for_job(job_id)
+
     if not job:
         return render(
             request,
             ["apply_not_found.html", "404.html"],
-            {"message": "Application saved, but job not found.", "job_id": job_id},
+            {"message": "Application saved, but job not found.", "job_id": job_id, "application": app_last},
+            status_code=404,
         )
 
     return render(
         request,
         ["apply_success.html"],
-        {"job": asdict(job)},
+        {
+            "job": asdict(job),
+            "job_id": job_id,
+            "application": app_last,  # template-friendly
+        },
     )
 
 
-# About
+# About / Contact
 @app.get("/about", response_class=HTMLResponse)
 def about(request: Request):
     return render(request, ["about.html"], {})
 
 
-# Contact
 @app.get("/contact", response_class=HTMLResponse)
 def contact(request: Request):
     return render(request, ["contact.html"], {})
@@ -328,7 +372,6 @@ def contact_submit(
     email: str = Form(...),
     message: str = Form(...),
 ):
-    # For now, we only redirect (safe). Later: send email / store in DB.
     return RedirectResponse(url="/contact/thank-you", status_code=303)
 
 
@@ -337,13 +380,24 @@ def contact_thank_you(request: Request):
     return render(request, ["contact_thank_you.html"], {})
 
 
-# Optional: health check (useful for Render)
+# Terms / Privacy (souvent linkés dans base.html)
+@app.get("/terms", response_class=HTMLResponse)
+def terms(request: Request):
+    return render(request, ["terms.html"], {})
+
+
+@app.get("/privacy", response_class=HTMLResponse)
+def privacy(request: Request):
+    return render(request, ["privacy.html"], {})
+
+
+# Health check (Render)
 @app.get("/health")
 def health():
     return {"status": "ok"}
 
 
-# Custom 404 (if you visit unknown page)
+# 404 page
 @app.exception_handler(404)
 async def not_found_handler(request: Request, exc):
     if template_exists("404.html"):
@@ -353,3 +407,19 @@ async def not_found_handler(request: Request, exc):
             status_code=404,
         )
     return HTMLResponse("404 Not Found", status_code=404)
+
+
+# 500 page (avoid blank white page)
+@app.exception_handler(500)
+async def server_error_handler(request: Request, exc):
+    # If you have 500.html you can use it; otherwise show a simple HTML.
+    if template_exists("500.html"):
+        return templates.TemplateResponse(
+            "500.html",
+            {"request": request, "message": "Internal Server Error"},
+            status_code=500,
+        )
+    return HTMLResponse(
+        "<h2>Internal Server Error</h2><p>Something broke on the server. Check Render logs.</p>",
+        status_code=500,
+    )
