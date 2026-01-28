@@ -1,142 +1,268 @@
-from fastapi import FastAPI, Request, Form
-from fastapi.responses import HTMLResponse, RedirectResponse
-from fastapi.staticfiles import StaticFiles
-from starlette.templating import Jinja2Templates
-from typing import List, Dict, Optional
+from __future__ import annotations
+
 import os
+from dataclasses import dataclass, asdict
+from typing import Dict, List, Optional
+
+from fastapi import FastAPI, Request, Form, HTTPException
+from fastapi.responses import RedirectResponse, HTMLResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
+
 
 app = FastAPI()
 
-# Templates + Static
+# Static (css, images, js)
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
 templates = Jinja2Templates(directory="templates")
 
-if os.path.isdir("static"):
-    app.mount("/static", StaticFiles(directory="static"), name="static")
 
-# Brand globals (safe)
+# -----------------------------
+# Helpers: safe template render
+# -----------------------------
+def template_exists(name: str) -> bool:
+    try:
+        templates.env.loader.get_source(templates.env, name)
+        return True
+    except Exception:
+        return False
+
+
+def render(request: Request, preferred: List[str], context: dict) -> HTMLResponse:
+    """
+    Render the first template that exists from `preferred`.
+    If none exists, render 404.html if available, else raise 404.
+    """
+    for t in preferred:
+        if template_exists(t):
+            return templates.TemplateResponse(t, {"request": request, **context})
+
+    # fallback
+    if template_exists("404.html"):
+        return templates.TemplateResponse(
+            "404.html",
+            {"request": request, "message": "Page not found (template missing)."},
+            status_code=404,
+        )
+    raise HTTPException(status_code=404, detail="Template not found")
+
+
+# -----------------------------
+# Branding (available in Jinja)
+# -----------------------------
 BRAND_NAME = "Win-Win Job"
 BRAND_TAGLINE = "Fair jobs. Fast pay. Digital & simple."
+
 templates.env.globals["BRAND_NAME"] = BRAND_NAME
 templates.env.globals["BRAND_TAGLINE"] = BRAND_TAGLINE
 
 
-# ----------------------------
-# DEMO DATA (remplace par DB plus tard)
-# ----------------------------
-CATEGORIES: List[Dict[str, str]] = [
-    {"name": "Cleaning", "icon": "🧽"},
-    {"name": "Moving help", "icon": "📦"},
-    {"name": "Yard work", "icon": "🌿"},
-    {"name": "Delivery", "icon": "🚗"},
-    {"name": "Handyman", "icon": "🛠️"},
-    {"name": "Babysitting", "icon": "🧸"},
+# -----------------------------
+# In-memory demo data (safe)
+# Replace later with DB if you want
+# -----------------------------
+@dataclass
+class Job:
+    id: int
+    title: str
+    city: str
+    category: str
+    pay: str
+    description: str
+
+
+@dataclass
+class Application:
+    id: int
+    job_id: int
+    full_name: str
+    phone: str
+    email: Optional[str]
+    message: Optional[str]
+
+
+JOB_SEQ = 3
+APP_SEQ = 0
+
+JOBS: Dict[int, Job] = {
+    1: Job(
+        id=1,
+        title="Help move a couch",
+        city="Portland, OR",
+        category="Moving help",
+        pay="120",
+        description="Need help moving a couch from apartment to storage. 1–2 hours.",
+    ),
+    2: Job(
+        id=2,
+        title="House cleaning (2 hours)",
+        city="Portland, OR",
+        category="Cleaning",
+        pay="80",
+        description="General cleaning for small apartment. Bring your supplies if possible.",
+    ),
+    3: Job(
+        id=3,
+        title="Yard work / leaves",
+        city="Vancouver, WA",
+        category="Yard work",
+        pay="100",
+        description="Rake leaves + bagging. About 2 hours.",
+    ),
+}
+
+APPLICATIONS: List[Application] = []
+
+CATEGORIES = [
+    ("Cleaning", "🧽"),
+    ("Moving help", "📦"),
+    ("Yard work", "🌿"),
+    ("Delivery", "🚚"),
+    ("Handyman", "🛠️"),
+    ("Babysitting", "👶"),
+    ("Shopping & errands", "🛒"),
 ]
 
-JOBS: List[Dict[str, object]] = [
-    {
-        "id": 1,
-        "title": "Move a couch",
-        "city": "Portland, OR",
-        "category": "Moving help",
-        "pay": 60,
-        "description": "Need help moving a couch from apartment to truck. 30–45 minutes.",
-        "contact_name": "Client",
-        "contact_phone": "(555) 123-4567",
-    },
-    {
-        "id": 2,
-        "title": "Clean small studio",
-        "city": "Vancouver, WA",
-        "category": "Cleaning",
-        "pay": 90,
-        "description": "Deep clean a small studio. Supplies provided. 2–3 hours.",
-        "contact_name": "Client",
-        "contact_phone": "(555) 222-3333",
-    },
-]
 
-APPLICATIONS: List[Dict[str, object]] = []
+def get_job(job_id: int) -> Optional[Job]:
+    return JOBS.get(job_id)
 
 
-def get_job_by_id(job_id: int) -> Optional[Dict[str, object]]:
-    for j in JOBS:
-        if int(j["id"]) == int(job_id):
-            return j
-    return None
-
-
-def filter_jobs(q: str = "", city: str = "", category: str = "") -> List[Dict[str, object]]:
-    q = (q or "").strip().lower()
-    city = (city or "").strip().lower()
-    category = (category or "").strip()
-
-    out = []
-    for j in JOBS:
-        ok = True
-        if q:
-            ok = ok and (q in str(j["title"]).lower() or q in str(j["description"]).lower())
-        if city:
-            ok = ok and (city in str(j["city"]).lower())
-        if category:
-            ok = ok and (category == str(j["category"]))
-        if ok:
-            out.append(j)
-    return out
-
-
-# ----------------------------
-# ROUTES
-# ----------------------------
+# -----------------------------
+# Routes
+# -----------------------------
 @app.get("/", response_class=HTMLResponse)
-async def index(request: Request):
-    # Home = index.html
-    return templates.TemplateResponse(
-        "index.html",
-        {
-            "request": request,
-            "categories": CATEGORIES,
-            "jobs": JOBS[:6],  # petit extrait
-        },
-    )
+def home(request: Request):
+    return render(request, ["index.html"], {"categories": CATEGORIES})
 
 
 @app.get("/jobs", response_class=HTMLResponse)
-async def jobs_page(request: Request, q: str = "", city: str = "", category: str = ""):
-    jobs = filter_jobs(q=q, city=city, category=category)
-    return templates.TemplateResponse(
-        "jobs.html",
+def jobs_list(
+    request: Request,
+    q: str = "",
+    city: str = "",
+    category: str = "",
+):
+    # filter
+    all_jobs = list(JOBS.values())
+
+    def match(job: Job) -> bool:
+        if q and q.lower() not in (job.title + " " + job.description).lower():
+            return False
+        if city and city.lower() not in job.city.lower():
+            return False
+        if category and category.lower() != job.category.lower():
+            return False
+        return True
+
+    filtered = [asdict(j) for j in all_jobs if match(j)]
+
+    # Send categories to build dropdown
+    return render(
+        request,
+        ["jobs.html"],
         {
-            "request": request,
-            "jobs": jobs,
+            "jobs": filtered,
             "q": q,
             "city": city,
             "category": category,
-            "categories": [(c["name"], c["icon"]) for c in CATEGORIES],
+            "categories": CATEGORIES,
         },
     )
 
 
 @app.get("/jobs/{job_id}", response_class=HTMLResponse)
-async def job_detail(request: Request, job_id: int):
-    job = get_job_by_id(job_id)
+def job_detail(request: Request, job_id: int):
+    job = get_job(job_id)
     if not job:
-        return templates.TemplateResponse(
-            "job_detail.html",
-            {"request": request, "job": None, "job_id": job_id},
-        )
-    return templates.TemplateResponse("job_detail.html", {"request": request, "job": job})
+        # job not found -> show 404 page
+        return render(request, ["404.html"], {"message": "Job not found."})
+
+    return render(
+        request,
+        ["job_detail.html"],
+        {"job": asdict(job), "categories": CATEGORIES},
+    )
 
 
+# Categories + Tasks
+@app.get("/categories", response_class=HTMLResponse)
+def categories_page(request: Request):
+    return render(
+        request,
+        ["categories.html"],
+        {"categories": CATEGORIES, "mode": "categories"},
+    )
+
+
+@app.get("/tasks", response_class=HTMLResponse)
+def tasks_page(request: Request):
+    # You don't have tasks.html in the screenshot, so we reuse categories.html safely
+    return render(
+        request,
+        ["categories.html"],
+        {"categories": CATEGORIES, "mode": "tasks"},
+    )
+
+
+# Post a job
+@app.get("/post", response_class=HTMLResponse)
+def post_job_form(request: Request):
+    return render(
+        request,
+        ["post_job.html"],
+        {"categories": CATEGORIES},
+    )
+
+
+@app.post("/post")
+def post_job_submit(
+    request: Request,
+    title: str = Form(...),
+    city: str = Form(...),
+    category: str = Form(...),
+    pay: str = Form(...),
+    description: str = Form(...),
+):
+    global JOB_SEQ
+    JOB_SEQ += 1
+
+    JOBS[JOB_SEQ] = Job(
+        id=JOB_SEQ,
+        title=title.strip(),
+        city=city.strip(),
+        category=category.strip(),
+        pay=pay.strip().replace("$", ""),
+        description=description.strip(),
+    )
+
+    # redirect to new job detail
+    return RedirectResponse(url=f"/jobs/{JOB_SEQ}", status_code=303)
+
+
+# Apply (GET)
 @app.get("/apply/{job_id}", response_class=HTMLResponse)
-async def apply_form(request: Request, job_id: int):
-    job = get_job_by_id(job_id)
+def apply_form(request: Request, job_id: int):
+    job = get_job(job_id)
     if not job:
-        return templates.TemplateResponse("apply.html", {"request": request, "job": None, "job_id": job_id})
-    return templates.TemplateResponse("apply.html", {"request": request, "job": job})
+        return render(
+            request,
+            ["apply_not_found.html", "404.html"],
+            {"message": "This job no longer exists.", "job_id": job_id},
+        )
+
+    # You have multiple apply templates; we'll pick the best one that exists
+    return render(
+        request,
+        ["apply_job.html", "apply.html", "applyy.html"],
+        {"job": asdict(job)},
+    )
 
 
+# Apply (POST)
 @app.post("/apply/{job_id}")
-async def apply_submit(
+def apply_submit(
     request: Request,
     job_id: int,
     full_name: str = Form(...),
@@ -144,91 +270,86 @@ async def apply_submit(
     email: str = Form(""),
     message: str = Form(""),
 ):
-    job = get_job_by_id(job_id)
+    global APP_SEQ
+    job = get_job(job_id)
     if not job:
-        # fallback safe (évite crash)
-        return RedirectResponse(url="/jobs", status_code=303)
+        return RedirectResponse(url=f"/apply/{job_id}", status_code=303)
 
+    APP_SEQ += 1
     APPLICATIONS.append(
-        {
-            "job_id": job_id,
-            "full_name": full_name,
-            "phone": phone,
-            "email": email,
-            "message": message,
-        }
+        Application(
+            id=APP_SEQ,
+            job_id=job_id,
+            full_name=full_name.strip(),
+            phone=phone.strip(),
+            email=email.strip() or None,
+            message=message.strip() or None,
+        )
     )
 
-    # IMPORTANT: redirection vers apply-success
+    # IMPORTANT: this is the route your site needs
     return RedirectResponse(url=f"/apply-success/{job_id}", status_code=303)
 
 
+# ✅ Apply success route (this is what was missing/broken)
 @app.get("/apply-success/{job_id}", response_class=HTMLResponse)
-async def apply_success(request: Request, job_id: int):
-    job = get_job_by_id(job_id)
-    return templates.TemplateResponse(
-        "apply_success.html",
-        {"request": request, "job": job, "job_id": job_id},
+def apply_success(request: Request, job_id: int):
+    job = get_job(job_id)
+    if not job:
+        return render(
+            request,
+            ["apply_not_found.html", "404.html"],
+            {"message": "Application saved, but job not found.", "job_id": job_id},
+        )
+
+    return render(
+        request,
+        ["apply_success.html"],
+        {"job": asdict(job)},
     )
 
 
-@app.get("/post", response_class=HTMLResponse)
-async def post_job_form(request: Request):
-    return templates.TemplateResponse(
-        "post.html",
-        {"request": request, "categories": CATEGORIES},
-    )
-
-
-@app.post("/post")
-async def post_job_submit(
-    request: Request,
-    title: str = Form(...),
-    city: str = Form(...),
-    category: str = Form(...),
-    pay: int = Form(...),
-    description: str = Form(...),
-    contact_name: str = Form(""),
-    contact_phone: str = Form(""),
-):
-    new_id = max([int(j["id"]) for j in JOBS] + [0]) + 1
-    JOBS.insert(
-        0,
-        {
-            "id": new_id,
-            "title": title,
-            "city": city,
-            "category": category,
-            "pay": int(pay),
-            "description": description,
-            "contact_name": contact_name or "Client",
-            "contact_phone": contact_phone or "",
-        },
-    )
-    return RedirectResponse(url=f"/post-success/{new_id}", status_code=303)
-
-
-@app.get("/post-success/{job_id}", response_class=HTMLResponse)
-async def post_success(request: Request, job_id: int):
-    job = get_job_by_id(job_id)
-    return templates.TemplateResponse("post_success.html", {"request": request, "job": job, "job_id": job_id})
-
-
+# About
 @app.get("/about", response_class=HTMLResponse)
-async def about(request: Request):
-    return templates.TemplateResponse("about.html", {"request": request})
+def about(request: Request):
+    return render(request, ["about.html"], {})
 
 
+# Contact
 @app.get("/contact", response_class=HTMLResponse)
-async def contact(request: Request):
-    return templates.TemplateResponse("contact.html", {"request": request})
+def contact(request: Request):
+    return render(request, ["contact.html"], {})
 
 
-@app.get("/terms", response_class=HTMLResponse)
-async def terms(request: Request):
-    return templates.TemplateResponse("terms.html", {"request": request})
+@app.post("/contact")
+def contact_submit(
+    request: Request,
+    name: str = Form(...),
+    email: str = Form(...),
+    message: str = Form(...),
+):
+    # For now, we only redirect (safe). Later: send email / store in DB.
+    return RedirectResponse(url="/contact/thank-you", status_code=303)
 
 
-@app.get("/privacy", response_class=HTMLResponse)
-async def privacy(request: Request):
-    return templates.TemplateResponse("privacy.html", {"request": request})
+@app.get("/contact/thank-you", response_class=HTMLResponse)
+def contact_thank_you(request: Request):
+    return render(request, ["contact_thank_you.html"], {})
+
+
+# Optional: health check (useful for Render)
+@app.get("/health")
+def health():
+    return {"status": "ok"}
+
+
+# Custom 404 (if you visit unknown page)
+@app.exception_handler(404)
+async def not_found_handler(request: Request, exc):
+    if template_exists("404.html"):
+        return templates.TemplateResponse(
+            "404.html",
+            {"request": request, "message": "Page not found."},
+            status_code=404,
+        )
+    return HTMLResponse("404 Not Found", status_code=404)
