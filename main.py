@@ -152,39 +152,35 @@ async def post_success(request: Request, job_id: str):
             "job_id": job_id,
         }
     )
-# -----------------------------
-# APPLY (KEEP)
-# Adjust template names to match your project.
-# -----------------------------
-@app.get("/apply/{job_id}", response_class=HTMLResponse)
-async def apply_form(request: Request, job_id: str):
-    return templates.TemplateResponse("apply.html", {"request": request, "job_id": job_id})
 
+from fastapi.responses import RedirectResponse, HTMLResponse
+from fastapi import Request, Form
 
-@app.post("/apply/{job_id}", response_class=HTMLResponse)
-async def apply_submit(
+@app.post("/apply/{job_id}")
+async def submit_application(
     request: Request,
-    job_id: str,
+    job_id: int,
     full_name: str = Form(...),
-    email: str = Form(...),
     phone: str = Form(...),
-    message: str = Form(...),
+    email: str = Form(None),
+    message: str = Form(None),
 ):
-    # TODO: save to DB later if you want.
+    # TODO: save to DB later (for now, no crash)
     return RedirectResponse(url=f"/apply-success/{job_id}", status_code=303)
 
 
 @app.get("/apply-success/{job_id}", response_class=HTMLResponse)
-async def apply_success(request: Request, job_id: str):
-    return templates.TemplateResponse("apply_success.html", {"request": request, "job_id": job_id})
+async def apply_success(request: Request, job_id: int):
+    job = None
+    try:
+        job = get_job_by_id(job_id)  # if you have this function
+    except Exception:
+        job = None
 
-
-# -----------------------------
-# JOB DETAIL (KEEP)
-# -----------------------------
-@app.get("/jobs/{job_id}", response_class=HTMLResponse)
-async def job_detail(request: Request, job_id: str):
-    return templates.TemplateResponse("job_detail.html", {"request": request, "job_id": job_id})
+    return templates.TemplateResponse(
+        "apply_success.html",
+        {"request": request, "job": job, "job_id": job_id},
+    )
 
 
 # -----------------------------

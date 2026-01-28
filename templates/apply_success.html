@@ -1,20 +1,28 @@
-{% extends "base.html" %}
+from fastapi.responses import RedirectResponse, HTMLResponse
+from fastapi import Request, Form
 
-{% block title %}Application sent{% endblock %}
+@app.post("/apply/{job_id}")
+async def submit_application(
+    request: Request,
+    job_id: int,
+    full_name: str = Form(...),
+    phone: str = Form(...),
+    email: str = Form(None),
+    message: str = Form(None),
+):
+    # TODO: save to DB later (for now, no crash)
+    return RedirectResponse(url=f"/apply-success/{job_id}", status_code=303)
 
-{% block body %}
-<section class="container">
-  <div class="card card--pad" style="max-width:600px;margin:auto;">
-    <h1 class="h2">✅ Application sent</h1>
-    <p class="muted">
-      Your application was successfully submitted.
-      The employer will contact you if selected.
-    </p>
 
-    <div class="cta" style="margin-top:16px;">
-      <a href="/jobs" class="btn btn--primary">Browse more jobs</a>
-      <a href="/" class="btn btn--ghost">Back home</a>
-    </div>
-  </div>
-</section>
-{% endblock %}
+@app.get("/apply-success/{job_id}", response_class=HTMLResponse)
+async def apply_success(request: Request, job_id: int):
+    job = None
+    try:
+        job = get_job_by_id(job_id)  # if you have this function
+    except Exception:
+        job = None
+
+    return templates.TemplateResponse(
+        "apply_success.html",
+        {"request": request, "job": job, "job_id": job_id},
+    )
