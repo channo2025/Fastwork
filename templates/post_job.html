@@ -1,36 +1,77 @@
 {% extends "base.html" %}
 
-{% block body %}
-<div class="container" style="max-width: 820px; margin: 0 auto; padding: 24px;">
-  <h1 style="margin-bottom:16px;">Post a job</h1>
+{% block title %}Post a job – Win-Win Job{% endblock %}
 
-  <form method="post" action="/post" style="display:grid; gap:12px;">
+{% block body %}
+<div class="container" style="max-width:820px; margin:0 auto; padding:24px;">
+  <h1>Post a job</h1>
+  <p style="color:#666">Post a local task and connect directly with workers.</p>
+
+  <form method="post" action="/post" style="display:grid; gap:14px; margin-top:20px;">
+
     <div>
       <label>Job title</label>
-      <input name="title" required style="width:100%; padding:10px;"/>
-    </div>
-
-    <div>
-      <label>Company</label>
-      <input name="company" required style="width:100%; padding:10px;"/>
+      <input
+        class="input"
+        name="title"
+        required
+        placeholder="e.g. Help move a couch"
+        style="width:100%; padding:10px;"
+      />
     </div>
 
     <div>
       <label>City</label>
-      <input name="city" required style="width:100%; padding:10px;"/>
+      <input
+        class="input"
+        name="city"
+        required
+        placeholder="Portland, OR"
+        style="width:100%; padding:10px;"
+      />
     </div>
 
     <div>
       <label>Category</label>
-      <input name="category" required style="width:100%; padding:10px;"/>
+      <input
+        class="input"
+        name="category"
+        required
+        placeholder="Moving help, Cleaning, Yard work…"
+        style="width:100%; padding:10px;"
+      />
+    </div>
+
+    <div>
+      <label>Pay (optional)</label>
+      <input
+        class="input"
+        name="pay"
+        placeholder="$80"
+        style="width:100%; padding:10px;"
+      />
     </div>
 
     <div>
       <label>Description</label>
-      <textarea name="description" rows="6" required style="width:100%; padding:10px;"></textarea>
+      <textarea
+        class="input"
+        name="description"
+        rows="6"
+        required
+        placeholder="Describe the task, duration, tools needed…"
+        style="width:100%; padding:10px;"
+      ></textarea>
     </div>
 
-    <button type="submit" class="btn">Publish job</button>
+    <button
+      type="submit"
+      class="btn-primary"
+      style="margin-top:10px; padding:12px;"
+    >
+      Publish job
+    </button>
+
   </form>
 </div>
 {% endblock %}
