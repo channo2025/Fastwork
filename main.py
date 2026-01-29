@@ -302,4 +302,12 @@ async def not_found_handler(request: Request, exc):
             {"request": request, "message": "Page not found."},
             status_code=404,
         )
+
+@app.get("/privacy", response_class=HTMLResponse)
+def privacy(request: Request):
+    return render(request, ["privacy.html"], {})
+
+@app.get("/terms", response_class=HTMLResponse)
+def terms(request: Request):
+    return render(request, ["terms.html"], {})     
     return HTMLResponse("404 Not Found", status_code=404)
