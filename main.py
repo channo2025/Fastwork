@@ -1,110 +1,87 @@
 import os
 import smtplib
 from email.message import EmailMessage
+from datetime import datetime
 
 from flask import Flask, render_template, request, redirect, url_for, flash
 from sqlalchemy.orm import Session
-from sqlalchemy import or_
 
 from database import SessionLocal, engine
 from models import Base, Job, Application
 
-# Create tables if they don't exist (safe)
+# --------------------
+# App config
+# --------------------
+app = Flask(__name__)
+app.secret_key = os.environ.get("SECRET_KEY", "dev-secret")
+
+# Create tables (safe)
 Base.metadata.create_all(bind=engine)
 
-app = Flask(__name__)
-app.secret_key = os.getenv("SECRET_KEY", "dev-secret-change-me")
-
-
-# -----------------------
-# SMTP / EMAIL UTILITIES
-# -----------------------
-def _get_env(name: str, default: str = "") -> str:
-    return (os.getenv(name, default) or "").strip()
-
-def send_email(to_email: str, subject: str, body: str) -> None:
-    """
-    Uses SMTP variables (Render Environment Variables):
-    SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, FROM_EMAIL
-    """
-    smtp_host = _get_env("SMTP_HOST")
-    smtp_port = int(_get_env("SMTP_PORT", "587") or "587")
-    smtp_user = _get_env("SMTP_USER")
-    smtp_pass = _get_env("SMTP_PASS")
-    from_email = _get_env("FROM_EMAIL", smtp_user)
-
-    if not (smtp_host and smtp_user and smtp_pass and from_email):
-        # Pas d'email configuré => on évite crash, mais on log/flash
-        raise RuntimeError("SMTP not configured. Missing SMTP_HOST/SMTP_USER/SMTP_PASS/FROM_EMAIL")
-
-    msg = EmailMessage()
-    msg["Subject"] = subject
-    msg["From"] = from_email
-    msg["To"] = to_email
-    msg.set_content(body)
-
-    # TLS standard (587)
-    with smtplib.SMTP(smtp_host, smtp_port) as server:
-        server.ehlo()
-        server.starttls()
-        server.login(smtp_user, smtp_pass)
-        server.send_message(msg)
-
-
-# -----------------------
-# DB helper
-# -----------------------
-def get_db() -> Session:
+# --------------------
+# Helpers
+# --------------------
+def get_db():
     return SessionLocal()
 
+def send_email(to_email, subject, body):
+    SMTP_HOST = os.environ.get("SMTP_HOST")
+    SMTP_PORT = int(os.environ.get("SMTP_PORT", "587"))
+    SMTP_USER = os.environ.get("SMTP_USER")
+    SMTP_PASS = os.environ.get("SMTP_PASS")
+    FROM_EMAIL = os.environ.get("FROM_EMAIL")
 
-# -----------------------
-# ROUTES
-# -----------------------
+    if not all([SMTP_HOST, SMTP_USER, SMTP_PASS, FROM_EMAIL]):
+        print("⚠️ SMTP not configured, email skipped")
+        return
+
+    msg = EmailMessage()
+    msg["From"] = FROM_EMAIL
+    msg["To"] = to_email
+    msg["Subject"] = subject
+    msg.set_content(body)
+
+    with smtplib.SMTP(SMTP_HOST, SMTP_PORT) as server:
+        server.starttls()
+        server.login(SMTP_USER, SMTP_PASS)
+        server.send_message(msg)
+
+# --------------------
+# Routes
+# --------------------
+
 @app.route("/")
 def home():
-    q = (request.args.get("q") or "").strip()
-    city = (request.args.get("city") or "").strip()
-    category = (request.args.get("category") or "").strip()
+    return redirect(url_for("list_jobs"))
 
+@app.route("/jobs")
+def list_jobs():
     db = get_db()
     try:
-        query = db.query(Job)
-
-        if q:
-            like = f"%{q}%"
-            query = query.filter(or_(Job.title.ilike(like), Job.description.ilike(like), Job.category.ilike(like)))
-
-        if city:
-            query = query.filter(Job.city.ilike(f"%{city}%"))
-
-        if category and category.lower() != "all":
-            query = query.filter(Job.category.ilike(f"%{category}%"))
-
-        jobs = query.order_by(Job.created_at.desc()).all()
-        return render_template("index.html", jobs=jobs, q=q, city=city, category=category)
+        jobs = db.query(Job).order_by(Job.id.desc()).all()
+        return render_template("jobs.html", jobs=jobs)
     finally:
         db.close()
 
-
+# --------------------
+# POST A JOB
+# --------------------
 @app.route("/post", methods=["GET"])
 def post_job_form():
     return render_template("post_job.html")
 
-
 @app.route("/post", methods=["POST"])
 def post_job_submit():
-    title = (request.form.get("title") or "").strip()
-    city = (request.form.get("city") or "").strip()
-    category = (request.form.get("category") or "").strip()
+    title = request.form.get("title", "").strip()
+    city = request.form.get("city", "").strip()
+    category = request.form.get("category", "").strip()
     pay = (request.form.get("pay") or "").strip()
-    description = (request.form.get("description") or "").strip()
-
-    poster_email = (request.form.get("poster_email") or "").strip()
+    description = request.form.get("description", "").strip()
+    poster_email = request.form.get("poster_email", "").strip()
     poster_phone = (request.form.get("poster_phone") or "").strip()
 
     if not title or not city or not category or not description or not poster_email:
-        flash("Please fill required fields (including your email).", "error")
+        flash("Please fill all required fields (including email).", "error")
         return redirect(url_for("post_job_form"))
 
     db = get_db()
@@ -117,30 +94,25 @@ def post_job_submit():
             description=description,
             poster_email=poster_email,
             poster_phone=poster_phone if poster_phone else None,
+            created_at=datetime.utcnow()
         )
         db.add(job)
         db.commit()
-        db.refresh(job)
-
-        return redirect(url_for("job_detail", job_id=job.id))
+        flash("Job published successfully!", "success")
+        return redirect(url_for("list_jobs"))
+    except Exception as e:
+        db.rollback()
+        print("POST JOB ERROR:", e)
+        flash("Something went wrong.", "error")
+        return redirect(url_for("post_job_form"))
     finally:
         db.close()
 
-
-@app.route("/jobs/<int:job_id>")
-def job_detail(job_id: int):
-    db = get_db()
-    try:
-        job = db.query(Job).filter(Job.id == job_id).first()
-        if not job:
-            return render_template("404.html"), 404
-        return render_template("job_detail.html", job=job)
-    finally:
-        db.close()
-
-
+# --------------------
+# APPLY TO JOB
+# --------------------
 @app.route("/apply/<int:job_id>", methods=["GET"])
-def apply_form(job_id: int):
+def apply_form(job_id):
     db = get_db()
     try:
         job = db.query(Job).filter(Job.id == job_id).first()
@@ -151,9 +123,9 @@ def apply_form(job_id: int):
         db.close()
 
 @app.route("/apply/<int:job_id>", methods=["POST"])
-def apply_submit(job_id: int):
-    applicant_name = (request.form.get("applicant_name") or "").strip()
-    applicant_email = (request.form.get("applicant_email") or "").strip()
+def apply_submit(job_id):
+    applicant_name = request.form.get("applicant_name", "").strip()
+    applicant_email = request.form.get("applicant_email", "").strip()
     applicant_phone = (request.form.get("applicant_phone") or "").strip()
     message = (request.form.get("message") or "").strip()
 
@@ -165,102 +137,49 @@ def apply_submit(job_id: int):
     try:
         job = db.query(Job).filter(Job.id == job_id).first()
         if not job:
-            flash("Job not found.", "error")
-            return redirect(url_for("jobs"))
+            return render_template("404.html"), 404
 
-        # 1️⃣ Save application
         application = Application(
             job_id=job.id,
             applicant_name=applicant_name,
             applicant_email=applicant_email,
-            applicant_phone=applicant_phone or None,
-            message=message or None,
+            applicant_phone=applicant_phone if applicant_phone else None,
+            message=message,
+            created_at=datetime.utcnow()
         )
         db.add(application)
         db.commit()
 
-        # 2️⃣ Send email to employer (job poster)
-        subject = f"New application for your job: {job.title}"
-        body = f"""
-Hi,
+        # Email employer
+        email_body = f"""
+New applicant for your job: {job.title}
 
-Someone just applied to your job on Win-Win Job.
+Name: {applicant_name}
+Email: {applicant_email}
+Phone: {applicant_phone}
 
-JOB
-• Title: {job.title}
-• City: {job.city}
-• Category: {job.category}
-• Pay: {job.pay or "N/A"}
-
-APPLICANT
-• Name: {applicant_name}
-• Email: {applicant_email}
-• Phone: {applicant_phone or "N/A"}
-• Message: {message or "No message"}
-
-You can reply directly to the applicant to connect.
-
-— Win-Win Job
+Message:
+{message}
 """
+        send_email(
+            job.poster_email,
+            f"New applicant for: {job.title}",
+            email_body
+        )
 
-        try:
-            send_email(job.poster_email, subject, body)
-        except Exception as e:
-            print("EMAIL ERROR:", e)
+        flash("Application sent successfully!", "success")
+        return redirect(url_for("list_jobs"))
 
-        flash("Your application has been sent successfully!", "success")
-        return redirect(url_for("job_detail", job_id=job.id))
-
-    finally:
-        db.close()
-        
-
-        # ✅ Notify employer (poster)
-        try:
-            subject = f"New application: {job.title} ({job.city})"
-            body = (
-                f"Hello,\n\n"
-                f"Someone applied to your job on Win-Win Job.\n\n"
-                f"JOB\n"
-                f"- Title: {job.title}\n"
-                f"- City: {job.city}\n"
-                f"- Category: {job.category}\n"
-                f"- Pay: {job.pay or 'N/A'}\n\n"
-                f"APPLICANT\n"
-                f"- Name: {applicant_name}\n"
-                f"- Email: {applicant_email}\n"
-                f"- Phone: {applicant_phone or 'N/A'}\n\n"
-                f"Message:\n{message or '(No message)'}\n\n"
-                f"Tip: You can reply directly to the applicant by email.\n"
-            )
-            send_email(job.poster_email, subject, body)
-        except Exception as e:
-            # On ne bloque pas la candidature si l'email échoue
-            print("EMAIL ERROR:", str(e))
-
-        return render_template("apply_success.html", job=job)
-
+    except Exception as e:
+        db.rollback()
+        print("APPLY ERROR:", e)
+        flash("Something went wrong.", "error")
+        return redirect(url_for("apply_form", job_id=job_id))
     finally:
         db.close()
 
-
-# Simple pages (optionnel)
-@app.route("/privacy")
-def privacy():
-    return render_template("privacy.html")
-
-@app.route("/terms")
-def terms():
-    return render_template("terms.html")
-
-@app.route("/about")
-def about():
-    return render_template("about.html")
-
-@app.route("/contact")
-def contact():
-    return render_template("contact.html")
-
-
+# --------------------
+# Run
+# --------------------
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=int(os.getenv("PORT", "5000")))
+    app.run(debug=True)
