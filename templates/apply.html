@@ -1,44 +1,33 @@
 {% extends "base.html" %}
-{% block title %}Apply – Win-Win Job{% endblock %}
+{% block content %}
 
-{% block body %}
-<section class="container">
-  <div class="card card--pad" style="max-width:760px;">
-    <div class="badge">
-      <span class="dot"></span>
-      Apply in 60 seconds
-    </div>
+<div class="container" style="max-width:720px; margin:0 auto; padding:24px;">
+  <h2>Apply for {{ job.title }}</h2>
 
-    <h1 class="h2" style="margin-top:14px;">Apply for: {{ job.title }}</h1>
-    <p class="muted">{{ job.city }} • {{ job.category }} • <b>${{ job.pay }}</b></p>
+  <form method="post" action="/apply/{{ job.id }}" style="display:grid; gap:14px;">
 
-    <div class="divider"></div>
+    <input
+      name="applicant_name"
+      placeholder="Your name"
+      required
+    />
 
-    <form action="/apply/{{ job.id }}" method="post" class="form">
-      <label class="label">Full name</label>
-      <input class="input" name="full_name" placeholder="Your name" required>
+    <input
+      name="applicant_phone"
+      placeholder="Your phone"
+      required
+    />
 
-      <label class="label">Phone</label>
-      <input class="input" name="phone" placeholder="(555) 555-5555" required>
+    <textarea
+      name="applicant_message"
+      placeholder="Message (optional)"
+    ></textarea>
 
-      <label class="label">Email (optional)</label>
-      <input class="input" type="email" name="email" placeholder="you@email.com">
+    <button type="submit" class="btn-primary">
+      Apply
+    </button>
 
-      <label class="label">Message (optional)</label>
-      <textarea class="input" name="message" rows="5" placeholder="Availability, experience, questions…"></textarea>
+  </form>
+</div>
 
-      <div class="divider"></div>
-
-      <p class="muted" style="font-size:13px;">
-        By applying, you agree to our <a class="link" href="/terms">Terms</a> and <a class="link" href="/privacy">Privacy</a>.
-        Never share sensitive information (SSN, bank details). Keep communication professional.
-      </p>
-
-      <div class="cta" style="margin-top:14px;">
-        <button class="btn btn--primary" type="submit">Submit application</button>
-        <a class="btn btn--ghost" href="/jobs/{{ job.id }}">Back</a>
-      </div>
-    </form>
-  </div>
-</section>
 {% endblock %}

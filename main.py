@@ -1,320 +1,266 @@
-from __future__ import annotations
+import os
+import smtplib
+from email.message import EmailMessage
 
-from dataclasses import asdict
-from typing import List
-
-from fastapi import FastAPI, Request, Form, HTTPException, Depends
-from fastapi.responses import RedirectResponse, HTMLResponse
-from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
+from flask import Flask, render_template, request, redirect, url_for, flash
 from sqlalchemy.orm import Session
+from sqlalchemy import or_
 
-from database import engine, Base, get_db
-from crud import create_job, get_job, list_jobs, create_application
+from database import SessionLocal, engine
+from models import Base, Job, Application
 
+# Create tables if they don't exist (safe)
+Base.metadata.create_all(bind=engine)
 
-app = FastAPI()
-
-# Static
-app.mount("/static", StaticFiles(directory="static"), name="static")
-templates = Jinja2Templates(directory="templates")
-
-
-# -----------------------------
-# Create tables at startup
-# -----------------------------
-@app.on_event("startup")
-def _startup():
-    Base.metadata.create_all(bind=engine)
+app = Flask(__name__)
+app.secret_key = os.getenv("SECRET_KEY", "dev-secret-change-me")
 
 
-# -----------------------------
-# Helpers: safe template render
-# -----------------------------
-def template_exists(name: str) -> bool:
+# -----------------------
+# SMTP / EMAIL UTILITIES
+# -----------------------
+def _get_env(name: str, default: str = "") -> str:
+    return (os.getenv(name, default) or "").strip()
+
+def send_email(to_email: str, subject: str, body: str) -> None:
+    """
+    Uses SMTP variables (Render Environment Variables):
+    SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, FROM_EMAIL
+    """
+    smtp_host = _get_env("SMTP_HOST")
+    smtp_port = int(_get_env("SMTP_PORT", "587") or "587")
+    smtp_user = _get_env("SMTP_USER")
+    smtp_pass = _get_env("SMTP_PASS")
+    from_email = _get_env("FROM_EMAIL", smtp_user)
+
+    if not (smtp_host and smtp_user and smtp_pass and from_email):
+        # Pas d'email configuré => on évite crash, mais on log/flash
+        raise RuntimeError("SMTP not configured. Missing SMTP_HOST/SMTP_USER/SMTP_PASS/FROM_EMAIL")
+
+    msg = EmailMessage()
+    msg["Subject"] = subject
+    msg["From"] = from_email
+    msg["To"] = to_email
+    msg.set_content(body)
+
+    # TLS standard (587)
+    with smtplib.SMTP(smtp_host, smtp_port) as server:
+        server.ehlo()
+        server.starttls()
+        server.login(smtp_user, smtp_pass)
+        server.send_message(msg)
+
+
+# -----------------------
+# DB helper
+# -----------------------
+def get_db() -> Session:
+    return SessionLocal()
+
+
+# -----------------------
+# ROUTES
+# -----------------------
+@app.route("/")
+def home():
+    q = (request.args.get("q") or "").strip()
+    city = (request.args.get("city") or "").strip()
+    category = (request.args.get("category") or "").strip()
+
+    db = get_db()
     try:
-        templates.env.loader.get_source(templates.env, name)
-        return True
-    except Exception:
-        return False
+        query = db.query(Job)
+
+        if q:
+            like = f"%{q}%"
+            query = query.filter(or_(Job.title.ilike(like), Job.description.ilike(like), Job.category.ilike(like)))
+
+        if city:
+            query = query.filter(Job.city.ilike(f"%{city}%"))
+
+        if category and category.lower() != "all":
+            query = query.filter(Job.category.ilike(f"%{category}%"))
+
+        jobs = query.order_by(Job.created_at.desc()).all()
+        return render_template("index.html", jobs=jobs, q=q, city=city, category=category)
+    finally:
+        db.close()
 
 
-def render(request: Request, preferred: List[str], context: dict) -> HTMLResponse:
-    for t in preferred:
-        if template_exists(t):
-            return templates.TemplateResponse(t, {"request": request, **context})
+@app.route("/post", methods=["GET"])
+def post_job_form():
+    return render_template("post_job.html")
 
-    if template_exists("404.html"):
-        return templates.TemplateResponse(
-            "404.html",
-            {"request": request, "message": "Page not found (template missing)."},
-            status_code=404,
+
+@app.route("/post", methods=["POST"])
+def post_job_submit():
+    title = (request.form.get("title") or "").strip()
+    city = (request.form.get("city") or "").strip()
+    category = (request.form.get("category") or "").strip()
+    pay = (request.form.get("pay") or "").strip()
+    description = (request.form.get("description") or "").strip()
+
+    poster_email = (request.form.get("poster_email") or "").strip()
+    poster_phone = (request.form.get("poster_phone") or "").strip()
+
+    if not title or not city or not category or not description or not poster_email:
+        flash("Please fill required fields (including your email).", "error")
+        return redirect(url_for("post_job_form"))
+
+    db = get_db()
+    try:
+        job = Job(
+            title=title,
+            city=city,
+            category=category,
+            pay=pay if pay else None,
+            description=description,
+            poster_email=poster_email,
+            poster_phone=poster_phone if poster_phone else None,
         )
-    raise HTTPException(status_code=404, detail="Template not found")
+        db.add(job)
+        db.commit()
+        db.refresh(job)
+
+        return redirect(url_for("job_detail", job_id=job.id))
+    finally:
+        db.close()
 
 
-# -----------------------------
-# Branding (available in Jinja)
-# -----------------------------
-BRAND_NAME = "Win-Win Job"
-BRAND_TAGLINE = "Fair jobs. Fast pay. Digital & simple."
-
-templates.env.globals["BRAND_NAME"] = BRAND_NAME
-templates.env.globals["BRAND_TAGLINE"] = BRAND_TAGLINE
-
-
-# -----------------------------
-# Categories (for UI)
-# -----------------------------
-CATEGORIES = [
-    ("Cleaning", "🧽"),
-    ("Moving help", "📦"),
-    ("Yard work", "🌿"),
-    ("Delivery", "🚚"),
-    ("Handyman", "🛠️"),
-    ("Babysitting", "👶"),
-    ("Shopping & errands", "🛒"),
-]
+@app.route("/jobs/<int:job_id>")
+def job_detail(job_id: int):
+    db = get_db()
+    try:
+        job = db.query(Job).filter(Job.id == job_id).first()
+        if not job:
+            return render_template("404.html"), 404
+        return render_template("job_detail.html", job=job)
+    finally:
+        db.close()
 
 
-# -----------------------------
-# Routes
-# -----------------------------
-@app.get("/", response_class=HTMLResponse)
-def home(request: Request):
-    return render(request, ["index.html"], {"categories": CATEGORIES})
+@app.route("/apply/<int:job_id>", methods=["GET"])
+def apply_form(job_id: int):
+    db = get_db()
+    try:
+        job = db.query(Job).filter(Job.id == job_id).first()
+        if not job:
+            return render_template("404.html"), 404
+        return render_template("apply_job.html", job=job)
+    finally:
+        db.close()
 
+@app.route("/apply/<int:job_id>", methods=["POST"])
+def apply_submit(job_id: int):
+    applicant_name = (request.form.get("applicant_name") or "").strip()
+    applicant_email = (request.form.get("applicant_email") or "").strip()
+    applicant_phone = (request.form.get("applicant_phone") or "").strip()
+    message = (request.form.get("message") or "").strip()
 
-@app.get("/jobs", response_class=HTMLResponse)
-def jobs_list_page(
-    request: Request,
-    q: str = "",
-    city: str = "",
-    category: str = "",
-    db: Session = Depends(get_db),
-):
-    jobs = list_jobs(db, q=q, city=city, category=category)
+    if not applicant_name or not applicant_email:
+        flash("Name and email are required.", "error")
+        return redirect(url_for("apply_form", job_id=job_id))
 
-    # templates might expect dicts
-    jobs_dicts = [
-        {
-            "id": j.id,
-            "title": j.title,
-            "city": j.city,
-            "category": j.category,
-            "pay": j.pay,
-            "description": j.description,
-        }
-        for j in jobs
-    ]
+    db = get_db()
+    try:
+        job = db.query(Job).filter(Job.id == job_id).first()
+        if not job:
+            flash("Job not found.", "error")
+            return redirect(url_for("jobs"))
 
-    return render(
-        request,
-        ["jobs.html"],
-        {
-            "jobs": jobs_dicts,
-            "q": q,
-            "city": city,
-            "category": category,
-            "categories": CATEGORIES,
-        },
-    )
-
-
-@app.get("/jobs/{job_id}", response_class=HTMLResponse)
-def job_detail_page(request: Request, job_id: int, db: Session = Depends(get_db)):
-    job = get_job(db, job_id)
-    if not job:
-        return render(request, ["404.html"], {"message": "Job not found."})
-
-    job_dict = {
-        "id": job.id,
-        "title": job.title,
-        "city": job.city,
-        "category": job.category,
-        "pay": job.pay,
-        "description": job.description,
-    }
-
-    return render(request, ["job_detail.html"], {"job": job_dict, "categories": CATEGORIES})
-
-
-@app.get("/categories", response_class=HTMLResponse)
-def categories_page(request: Request):
-    return render(request, ["categories.html"], {"categories": CATEGORIES, "mode": "categories"})
-
-
-@app.get("/tasks", response_class=HTMLResponse)
-def tasks_page(request: Request):
-    # If you don't have tasks.html, reuse categories.html safely
-    return render(request, ["tasks.html", "categories.html"], {"categories": CATEGORIES, "mode": "tasks"})
-
-
-# -----------------------------
-# Post a job
-# -----------------------------
-@app.get("/post", response_class=HTMLResponse)
-def post_job_form(request: Request):
-    return render(request, ["post_job.html"], {"categories": CATEGORIES})
-
-
-@app.post("/post")
-def post_job_submit(
-    request: Request,
-    title: str = Form(...),
-    city: str = Form(...),
-    category: str = Form(...),
-    description: str = Form(...),
-    pay: str = Form(""),
-    # Compatibility: if template still sends company, we ignore it
-    company: str = Form("", include_in_schema=False),
-    db: Session = Depends(get_db),
-):
-    job = create_job(db, title=title, city=city, category=category, pay=pay, description=description)
-    return RedirectResponse(url=f"/jobs/{job.id}", status_code=303)
-
-
-# -----------------------------
-# Apply (GET)
-# -----------------------------
-@app.get("/apply/{job_id}", response_class=HTMLResponse)
-def apply_form(request: Request, job_id: int, db: Session = Depends(get_db)):
-    job = get_job(db, job_id)
-    if not job:
-        return render(
-            request,
-            ["apply_not_found.html", "404.html"],
-            {"message": "This job no longer exists.", "job_id": job_id},
+        # 1️⃣ Save application
+        application = Application(
+            job_id=job.id,
+            applicant_name=applicant_name,
+            applicant_email=applicant_email,
+            applicant_phone=applicant_phone or None,
+            message=message or None,
         )
+        db.add(application)
+        db.commit()
 
-    job_dict = {
-        "id": job.id,
-        "title": job.title,
-        "city": job.city,
-        "category": job.category,
-        "pay": job.pay,
-        "description": job.description,
-    }
+        # 2️⃣ Send email to employer (job poster)
+        subject = f"New application for your job: {job.title}"
+        body = f"""
+Hi,
 
-    # Use the first apply template that exists
-    return render(
-        request,
-        ["apply_job.html", "apply.html", "applyy.html"],
-        {"job": job_dict},
-    )
+Someone just applied to your job on Win-Win Job.
 
+JOB
+• Title: {job.title}
+• City: {job.city}
+• Category: {job.category}
+• Pay: {job.pay or "N/A"}
 
-# -----------------------------
-# Apply (POST) — super tolerant (fixes the crash)
-# -----------------------------
-@app.post("/apply/{job_id}")
-def apply_submit(
-    request: Request,
-    job_id: int,
-    # Some templates use name="full_name", others use name="name"
-    full_name: str = Form(""),
-    name: str = Form("", include_in_schema=False),
-    # Some templates use phone required, some optional
-    phone: str = Form(""),
-    email: str = Form(""),
-    message: str = Form(""),
-    db: Session = Depends(get_db),
-):
-    job = get_job(db, job_id)
-    if not job:
-        return RedirectResponse(url=f"/apply/{job_id}", status_code=303)
+APPLICANT
+• Name: {applicant_name}
+• Email: {applicant_email}
+• Phone: {applicant_phone or "N/A"}
+• Message: {message or "No message"}
 
-    # pick whichever field is filled
-    real_name = (full_name or "").strip() or (name or "").strip()
-    real_phone = (phone or "").strip()
+You can reply directly to the applicant to connect.
 
-    # If missing required, just redirect back (no JSON crash)
-    if not real_name or not real_phone:
-        return RedirectResponse(url=f"/apply/{job_id}", status_code=303)
+— Win-Win Job
+"""
 
-    create_application(
-        db,
-        job_id=job_id,
-        full_name=real_name,
-        phone=real_phone,
-        email=email,
-        message=message,
-    )
+        try:
+            send_email(job.poster_email, subject, body)
+        except Exception as e:
+            print("EMAIL ERROR:", e)
 
-    return RedirectResponse(url=f"/apply-success/{job_id}", status_code=303)
+        flash("Your application has been sent successfully!", "success")
+        return redirect(url_for("job_detail", job_id=job.id))
 
+    finally:
+        db.close()
+        
 
-@app.get("/apply-success/{job_id}", response_class=HTMLResponse)
-def apply_success(request: Request, job_id: int, db: Session = Depends(get_db)):
-    job = get_job(db, job_id)
-    if not job:
-        return render(
-            request,
-            ["apply_not_found.html", "404.html"],
-            {"message": "Application saved, but job not found.", "job_id": job_id},
-        )
+        # ✅ Notify employer (poster)
+        try:
+            subject = f"New application: {job.title} ({job.city})"
+            body = (
+                f"Hello,\n\n"
+                f"Someone applied to your job on Win-Win Job.\n\n"
+                f"JOB\n"
+                f"- Title: {job.title}\n"
+                f"- City: {job.city}\n"
+                f"- Category: {job.category}\n"
+                f"- Pay: {job.pay or 'N/A'}\n\n"
+                f"APPLICANT\n"
+                f"- Name: {applicant_name}\n"
+                f"- Email: {applicant_email}\n"
+                f"- Phone: {applicant_phone or 'N/A'}\n\n"
+                f"Message:\n{message or '(No message)'}\n\n"
+                f"Tip: You can reply directly to the applicant by email.\n"
+            )
+            send_email(job.poster_email, subject, body)
+        except Exception as e:
+            # On ne bloque pas la candidature si l'email échoue
+            print("EMAIL ERROR:", str(e))
 
-    job_dict = {
-        "id": job.id,
-        "title": job.title,
-        "city": job.city,
-        "category": job.category,
-        "pay": job.pay,
-        "description": job.description,
-    }
+        return render_template("apply_success.html", job=job)
 
-    return render(request, ["apply_success.html"], {"job": job_dict})
+    finally:
+        db.close()
 
 
-# About
-@app.get("/about", response_class=HTMLResponse)
-def about(request: Request):
-    return render(request, ["about.html"], {})
+# Simple pages (optionnel)
+@app.route("/privacy")
+def privacy():
+    return render_template("privacy.html")
+
+@app.route("/terms")
+def terms():
+    return render_template("terms.html")
+
+@app.route("/about")
+def about():
+    return render_template("about.html")
+
+@app.route("/contact")
+def contact():
+    return render_template("contact.html")
 
 
-# Contact
-@app.get("/contact", response_class=HTMLResponse)
-def contact(request: Request):
-    return render(request, ["contact.html"], {})
-
-
-@app.post("/contact")
-def contact_submit(
-    request: Request,
-    name: str = Form(...),
-    email: str = Form(...),
-    message: str = Form(...),
-):
-    return RedirectResponse(url="/contact/thank-you", status_code=303)
-
-
-@app.get("/contact/thank-you", response_class=HTMLResponse)
-def contact_thank_you(request: Request):
-    return render(request, ["contact_thank_you.html"], {})
-
-
-# Terms / Privacy (if templates exist)
-@app.get("/terms", response_class=HTMLResponse)
-def terms(request: Request):
-    return render(request, ["terms.html"], {})
-
-@app.get("/privacy", response_class=HTMLResponse)
-def privacy(request: Request):
-    return render(request, ["privacy.html"], {})
-
-
-# Health check
-@app.get("/health")
-def health():
-    return {"status": "ok"}
-
-
-@app.exception_handler(404)
-async def not_found_handler(request: Request, exc):
-    if template_exists("404.html"):
-        return templates.TemplateResponse(
-            "404.html",
-            {"request": request, "message": "Page not found."},
-            status_code=404,
-        )
-    return HTMLResponse("404 Not Found", status_code=404)
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=int(os.getenv("PORT", "5000")))

@@ -1,60 +1,102 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Post a job</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-{% block content %}
-<div class="container" style="max-width:820px; margin:0 auto; padding:24px;">
+  <!-- CSS GLOBAL (le même que les autres pages) -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
 
-  <h1 style="font-size:44px; margin:0 0 6px 0;">Post a job</h1>
-  <p style="margin:0 0 22px 0; color:#666;">
-    Post a local task and connect directly with workers.
-  </p>
+  {% include "navbar.html" %}
 
-  <!-- IMPORTANT: tout doit être DANS ce form -->
-  <form method="post" action="/post" style="display:grid; gap:14px; margin-top:10px;">
+  <div class="page">
+    <div class="container">
 
-    <div>
-      <label>Job title</label>
-      <input type="text" name="title" placeholder="e.g. Help move a couch" required>
+      <h1>Post a job</h1>
+      <p class="subtitle">
+        Post a local task and connect directly with workers.
+      </p>
+
+      <form method="post" action="/post" class="form">
+
+        <label>Job title</label>
+        <input
+          type="text"
+          name="title"
+          class="input"
+          placeholder="Help move a couch"
+          required
+        >
+
+        <label>City</label>
+        <input
+          type="text"
+          name="city"
+          class="input"
+          placeholder="Portland, OR"
+          required
+        >
+
+        <label>Category</label>
+        <input
+          type="text"
+          name="category"
+          class="input"
+          placeholder="Moving help, Cleaning, Yard work"
+          required
+        >
+
+        <label>Pay (optional)</label>
+        <input
+          type="text"
+          name="pay"
+          class="input"
+          placeholder="$80"
+        >
+
+        <label>Description</label>
+        <textarea
+          name="description"
+          class="textarea"
+          rows="5"
+          placeholder="Describe the task, duration, tools needed..."
+          required
+        ></textarea>
+
+        <label>Your email *</label>
+        <input
+          type="email"
+          name="poster_email"
+          class="input"
+          placeholder="example@email.com"
+          required
+        >
+
+        <label>Your phone (optional)</label>
+        <input
+          type="tel"
+          name="poster_phone"
+          class="input"
+          placeholder="+1 503..."
+        >
+
+        <button type="submit" class="btn btn-primary">
+          Publish job
+        </button>
+
+        <p class="hint">
+          🔒 Your contact details are only shared with applicants.
+        </p>
+
+      </form>
+
     </div>
+  </div>
 
-    <div>
-      <label>City</label>
-      <input type="text" name="city" placeholder="Portland, OR" required>
-    </div>
+  {% include "footer.html" %}
 
-    <div>
-      <label>Category</label>
-      <input type="text" name="category" placeholder="Moving help, Cleaning, Yard work..." required>
-    </div>
-
-    <div>
-      <label>Pay (optional)</label>
-      <input type="text" name="pay" placeholder="$80">
-    </div>
-
-    <div>
-      <label>Description</label>
-      <textarea name="description" rows="6" placeholder="Describe the task, duration, tools needed..." required></textarea>
-    </div>
-
-    <!-- ✅ ICI tes champs contact employeur -->
-    <div>
-      <label>Your email *</label>
-      <input type="email" name="poster_email" placeholder="example@email.com" required>
-    </div>
-
-    <div>
-      <label>Your phone (optional)</label>
-      <input type="tel" name="poster_phone" placeholder="+1 503...">
-    </div>
-
-    <button
-      type="submit"
-      class="btn-primary"
-      style="margin-top:10px; padding:12px;"
-    >
-      Publish job
-    </button>
-
-  </form>
-</div>
-{% endblock %}
+</body>
+</html>

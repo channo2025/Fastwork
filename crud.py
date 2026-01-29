@@ -1,56 +1,82 @@
-from typing import Optional, List
 from sqlalchemy.orm import Session
-from sqlalchemy import select, desc
+from sqlalchemy import or_
 
 from models import Job, Application
 
-def create_job(db: Session, title: str, city: str, category: str, pay: str, description: str) -> Job:
+
+def create_job(
+    db: Session,
+    title: str,
+    city: str,
+    category: str,
+    pay: str | None,
+    description: str,
+    poster_email: str,
+    poster_phone: str | None
+) -> Job:
     job = Job(
         title=title.strip(),
         city=city.strip(),
         category=category.strip(),
-        pay=(pay or "").strip().replace("$", ""),
+        pay=(pay.strip() if pay else None),
         description=description.strip(),
+        poster_email=poster_email.strip().lower(),
+        poster_phone=(poster_phone.strip() if poster_phone else None),
     )
     db.add(job)
     db.commit()
     db.refresh(job)
     return job
 
-def get_job(db: Session, job_id: int) -> Optional[Job]:
-    return db.get(Job, job_id)
 
-def list_jobs(db: Session, q: str = "", city: str = "", category: str = "") -> List[Job]:
-    stmt = select(Job)
+def search_jobs(db: Session, q: str | None, city: str | None, category: str | None) -> list[Job]:
+    query = db.query(Job)
 
     if q:
-        qv = f"%{q.lower()}%"
-        stmt = stmt.where((Job.title.ilike(qv)) | (Job.description.ilike(qv)))
-    if city:
-        cv = f"%{city.lower()}%"
-        stmt = stmt.where(Job.city.ilike(cv))
-    if category:
-        stmt = stmt.where(Job.category.ilike(category))
+        q = q.strip()
+        query = query.filter(
+            or_(
+                Job.title.ilike(f"%{q}%"),
+                Job.description.ilike(f"%{q}%"),
+                Job.category.ilike(f"%{q}%"),
+            )
+        )
 
-    stmt = stmt.order_by(desc(Job.id))
-    return list(db.execute(stmt).scalars().all())
+    if city:
+        city = city.strip()
+        query = query.filter(Job.city.ilike(f"%{city}%"))
+
+    if category and category != "All categories":
+        category = category.strip()
+        query = query.filter(Job.category == category)
+
+    return query.order_by(Job.created_at.desc()).all()
+
+
+def get_job(db: Session, job_id: int) -> Job | None:
+    return db.query(Job).filter(Job.id == job_id).first()
+
 
 def create_application(
     db: Session,
     job_id: int,
-    full_name: str,
-    phone: str,
-    email: Optional[str] = None,
-    message: Optional[str] = None,
+    applicant_name: str,
+    applicant_email: str,
+    applicant_phone: str | None,
+    message: str | None
 ) -> Application:
     app = Application(
         job_id=job_id,
-        full_name=full_name.strip(),
-        phone=phone.strip(),
-        email=(email or "").strip() or None,
-        message=(message or "").strip() or None,
+        applicant_name=applicant_name.strip(),
+        applicant_email=applicant_email.strip().lower(),
+        applicant_phone=(applicant_phone.strip() if applicant_phone else None),
+        message=(message.strip() if message else None),
     )
     db.add(app)
     db.commit()
     db.refresh(app)
     return app
+
+
+def list_applications_for_job(db: Session, job_id: int) -> list[Application]:
+    return db.query(Application).filter(Application.job_id == job_id).order_by(Application.created_at.desc()).all()
