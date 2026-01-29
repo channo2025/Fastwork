@@ -62,3 +62,73 @@
   </div>
 </div>
 {% endblock %}
+
+{% extends "base.html" %}
+{% block title %}Apply — Win-Win Job{% endblock %}
+
+{% block body %}
+<div class="content">
+  <div class="container">
+    <div class="grid">
+      <div class="card card-pad">
+        <h1>Apply for this job</h1>
+
+        {% if job %}
+          <div class="notice" style="margin-top:10px">
+            Applying to: <strong>{{ job.title }}</strong> — {{ job.city or "Local" }}
+          </div>
+        {% endif %}
+
+        <!-- ✅ IMPORTANT: action must point to /apply/{{ job.id }} -->
+        <form
+          class="form"
+          action="/apply/{{ job.id }}"
+          method="post"
+          enctype="multipart/form-data"
+        >
+          <div>
+            <label>Your name</label>
+            <!-- ✅ FastAPI expects full_name -->
+            <input class="input" name="full_name" required placeholder="Full name" />
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div>
+              <label>Email (optional)</label>
+              <input class="input" name="email" type="email" placeholder="you@email.com" />
+            </div>
+
+            <div>
+              <label>Phone</label>
+              <!-- ✅ FastAPI expects phone and it's required -->
+              <input class="input" name="phone" required placeholder="(555) 123-4567" />
+            </div>
+          </div>
+
+          <div>
+            <label>Message (optional)</label>
+            <textarea class="input" name="message" rows="4" placeholder="Availability, questions..."></textarea>
+          </div>
+
+          <div style="margin-top:12px">
+            <button class="btn btn-primary" type="submit">Submit application</button>
+          </div>
+
+          <p class="muted" style="margin-top:12px">
+            Do not include sensitive information (SSN, passport, banking).
+          </p>
+        </form>
+      </div>
+
+      <div class="card card-pad">
+        <h3>Application tips</h3>
+        <ul>
+          <li>State availability clearly.</li>
+          <li>Ask clarifying questions about the task.</li>
+          <li>Confirm pay and timing before starting.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
