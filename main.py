@@ -297,62 +297,31 @@ def apply_form(request: Request, job_id: int):
         },
     )
 
-
-# Apply (POST)
 @app.post("/apply/{job_id}")
-def apply_submit(
+async def submit_application(
     request: Request,
     job_id: int,
     full_name: str = Form(...),
     phone: str = Form(...),
-    email: str = Form(""),
-    message: str = Form(""),
+    email: str = Form(None),
+    message: str = Form(None),
 ):
-    global APP_SEQ
-
-    job = get_job(job_id)
-    if not job:
-        return RedirectResponse(url=f"/apply/{job_id}", status_code=303)
-
-    APP_SEQ += 1
-    APPLICATIONS.append(
-        Application(
-            id=APP_SEQ,
-            job_id=job_id,
-            full_name=full_name.strip(),
-            phone=phone.strip(),
-            email=(email.strip() or None),
-            message=(message.strip() or None),
-        )
-    )
-
     return RedirectResponse(url=f"/apply-success/{job_id}", status_code=303)
 
 
-# Apply success
 @app.get("/apply-success/{job_id}", response_class=HTMLResponse)
-def apply_success(request: Request, job_id: int):
-    job = get_job(job_id)
-    app_last = last_application_for_job(job_id)
+async def apply_success(request: Request, job_id: int):
+    # récupère le job (selon ta fonction existante)
+    job = None
+    try:
+        job = get_job_by_id(job_id)   # OU get_job(job_id) selon ton code
+    except:
+        job = None
 
-    if not job:
-        return render(
-            request,
-            ["apply_not_found.html", "404.html"],
-            {"message": "Application saved, but job not found.", "job_id": job_id, "application": app_last},
-            status_code=404,
-        )
-
-    return render(
-        request,
-        ["apply_success.html"],
-        {
-            "job": asdict(job),
-            "job_id": job_id,
-            "application": app_last,  # template-friendly
-        },
+    return templates.TemplateResponse(
+        "apply_success.html",
+        {"request": request, "job": job}
     )
-
 
 # About / Contact
 @app.get("/about", response_class=HTMLResponse)

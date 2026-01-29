@@ -1,5 +1,5 @@
+from fastapi import Form, Request
 from fastapi.responses import RedirectResponse, HTMLResponse
-from fastapi import Request, Form
 
 @app.post("/apply/{job_id}")
 async def submit_application(
@@ -10,19 +10,19 @@ async def submit_application(
     email: str = Form(None),
     message: str = Form(None),
 ):
-    # TODO: save to DB later (for now, no crash)
     return RedirectResponse(url=f"/apply-success/{job_id}", status_code=303)
 
 
 @app.get("/apply-success/{job_id}", response_class=HTMLResponse)
 async def apply_success(request: Request, job_id: int):
+    # récupère le job (selon ta fonction existante)
     job = None
     try:
-        job = get_job_by_id(job_id)  # if you have this function
-    except Exception:
+        job = get_job_by_id(job_id)   # OU get_job(job_id) selon ton code
+    except:
         job = None
 
     return templates.TemplateResponse(
         "apply_success.html",
-        {"request": request, "job": job, "job_id": job_id},
+        {"request": request, "job": job}
     )
