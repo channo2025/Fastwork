@@ -1,7 +1,6 @@
-fastapi
-uvicorn[standard]
+ffastapi
+uvicorn
 jinja2
-sqlalchemy
-psycopg[binary]
 python-multipart
-python-dotenv
+SQLAlchemy>=2.0
+psycopg2-binary
