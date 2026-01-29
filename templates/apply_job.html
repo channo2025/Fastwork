@@ -1,5 +1,6 @@
 {% extends "base.html" %}
-{% block title %}Apply — JOBCENTA{% endblock %}
+
+{% block title %}Apply – Win-Win Job{% endblock %}
 
 {% block body %}
 <div class="content">
@@ -9,158 +10,81 @@
         <h1>Apply for this job</h1>
 
         {% if job %}
-          <div class="notice" style="margin-top:10px">
-            Applying to: <strong>{{ job.title }}</strong> — {{ job.city or "Local" }}
-          </div>
+        <div class="notice" style="margin-top:10px">
+          Applying to:
+          <strong>{{ job["title"] }}</strong>
+          — {{ job["city"] or "Local" }}
+        </div>
         {% endif %}
 
-        <form class="form" action="" method="post" enctype="multipart/form-data">
-          <div>
-            <label>Your name</label>
-            <input class="input" name="name" required placeholder="Full name" />
-          </div>
-
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-            <div>
-              <label>Email</label>
-              <input class="input" name="email" type="email" required placeholder="you@email.com" />
-            </div>
-            <div>
-              <label>Phone (optional)</label>
-              <input class="input" name="phone" placeholder="(555) 123-4567" />
-            </div>
-          </div>
-
-          <div>
-            <label>Message</label>
-            <textarea class="input" name="message" required placeholder="Tell them why you're a good fit, availability, etc."></textarea>
-          </div>
-
-          <div>
-            <label>Optional: Upload a file (resume / photo)</label>
-            <input class="input" name="file" type="file" />
-          </div>
-
-          <div class="notice">
-            Do not include sensitive information (SSN, passport, banking). By applying you agree to our
-            <a href="/terms" style="text-decoration:underline">Terms</a>.
-          </div>
-
-          <button class="btn btn-primary" type="submit">Submit application</button>
-        </form>
-      </div>
-
-      <div class="card card-pad">
-        <h2 style="margin:0 0 8px">Application tips</h2>
-        <ul>
-          <li>State availability clearly.</li>
-          <li>Ask clarifying questions about the task.</li>
-          <li>Confirm pay and timing before starting.</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</div>
-{% endblock %}
-
-{% extends "base.html" %}
-{% block title %}Apply — Win-Win Job{% endblock %}
-
-{% block body %}
-<div class="content">
-  <div class="container">
-    <div class="grid">
-      <div class="card card-pad">
-        <h1>Apply for this job</h1>
-
-        {% if job %}
-          <div class="notice" style="margin-top:10px">
-            Applying to: <strong>{{ job.title }}</strong> — {{ job.city or "Local" }}
-          </div>
-        {% endif %}
-
-        <!-- ✅ IMPORTANT: action must point to /apply/{{ job.id }} -->
+        <!-- ✅ IMPORTANT: job is a DICT, so job['id'] -->
         <form
           class="form"
-          action="/apply/{{ job.id }}"
+          action="/apply/{{ job['id'] }}"
           method="post"
-          enctype="multipart/form-data"
         >
+
           <div>
             <label>Your name</label>
-            <!-- ✅ FastAPI expects full_name -->
-            <input class="input" name="full_name" required placeholder="Full name" />
+            <input
+              class="input"
+              name="full_name"
+              required
+              placeholder="Full name"
+            />
           </div>
 
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
             <div>
               <label>Email (optional)</label>
-              <input class="input" name="email" type="email" placeholder="you@email.com" />
+              <input
+                class="input"
+                name="email"
+                type="email"
+                placeholder="you@email.com"
+              />
             </div>
 
             <div>
               <label>Phone</label>
-              <!-- ✅ FastAPI expects phone and it's required -->
-              <input class="input" name="phone" required placeholder="(555) 123-4567" />
+              <input
+                class="input"
+                name="phone"
+                required
+                placeholder="(555) 123-4567"
+              />
             </div>
           </div>
 
           <div>
-            <label>Message (optional)</label>
-            <textarea class="input" name="message" rows="4" placeholder="Availability, questions..."></textarea>
+            <label>Message</label>
+            <textarea
+              class="input"
+              name="message"
+              rows="4"
+              placeholder="Tell the client why you’re a good fit"
+            ></textarea>
           </div>
 
-          <div style="margin-top:12px">
-            <button class="btn btn-primary" type="submit">Submit application</button>
-          </div>
-
-          <p class="muted" style="margin-top:12px">
+          <p class="muted" style="font-size:13px;margin-top:10px">
             Do not include sensitive information (SSN, passport, banking).
           </p>
+
+          <button class="btn btn-primary" type="submit">
+            Submit application
+          </button>
         </form>
       </div>
 
       <div class="card card-pad">
         <h3>Application tips</h3>
-        <ul>
-          <li>State availability clearly.</li>
-          <li>Ask clarifying questions about the task.</li>
-          <li>Confirm pay and timing before starting.</li>
+        <ul class="list">
+          <li>State your availability clearly</li>
+          <li>Ask questions if anything is unclear</li>
+          <li>Confirm pay and timing before starting</li>
         </ul>
       </div>
     </div>
   </div>
 </div>
 {% endblock %}
-
-<form
-  class="form"
-  action="/apply/{{ job['id'] }}"
-  method="post"
->
-  <div>
-    <label>Your name</label>
-    <input class="input" name="full_name" required placeholder="Full name" />
-  </div>
-
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-    <div>
-      <label>Email (optional)</label>
-      <input class="input" name="email" type="email" placeholder="you@email.com" />
-    </div>
-
-    <div>
-      <label>Phone</label>
-      <input class="input" name="phone" required placeholder="(555) 123-4567" />
-    </div>
-  </div>
-
-  <div>
-    <label>Message</label>
-    <textarea class="input" name="message" rows="4"></textarea>
-  </div>
-
-  <button class="btn btn-primary" type="submit">
-    Submit application
-  </button>
-</form>
