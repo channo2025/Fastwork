@@ -1,28 +1,32 @@
-from fastapi import Form, Request
-from fastapi.responses import RedirectResponse, HTMLResponse
+{% extends "base.html" %}
 
-@app.post("/apply/{job_id}")
-async def submit_application(
-    request: Request,
-    job_id: int,
-    full_name: str = Form(...),
-    phone: str = Form(...),
-    email: str = Form(None),
-    message: str = Form(None),
-):
-    return RedirectResponse(url=f"/apply-success/{job_id}", status_code=303)
+{% block title %}Application sent – Win-Win Job{% endblock %}
 
+{% block body %}
+<div class="content">
+  <div class="container">
+    <div class="card card-pad" style="max-width:600px;margin:auto;text-align:center">
 
-@app.get("/apply-success/{job_id}", response_class=HTMLResponse)
-async def apply_success(request: Request, job_id: int):
-    # récupère le job (selon ta fonction existante)
-    job = None
-    try:
-        job = get_job_by_id(job_id)   # OU get_job(job_id) selon ton code
-    except:
-        job = None
+      <h1>✅ Application sent!</h1>
 
-    return templates.TemplateResponse(
-        "apply_success.html",
-        {"request": request, "job": job}
-    )
+      {% if job %}
+        <p style="margin-top:10px">
+          You successfully applied for:
+        </p>
+        <h3>{{ job["title"] }}</h3>
+        <p class="muted">{{ job["city"] }}</p>
+      {% endif %}
+
+      <p style="margin-top:20px">
+        The job poster will contact you directly if they are interested.
+      </p>
+
+      <div style="margin-top:30px">
+        <a href="/jobs" class="btn btn-primary">Browse more jobs</a>
+        <a href="/" class="btn">Go home</a>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}
